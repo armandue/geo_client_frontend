@@ -204,8 +204,9 @@
 
                 const loginResult = await loginResponse.json();
 
-                if (loginResult.success && loginResult.data?.token) {
+                if (loginResult.success) {
                     localStorage.setItem('authToken', loginResult.data.token);
+                    localStorage.setItem('userInfo', JSON.stringify(result.data.user));
                     window.location.href = '/index.html';
                 } else {
                     throw new Error(loginResult.message || '登录失败');

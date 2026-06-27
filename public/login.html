@@ -164,7 +164,7 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'https://geoclientbackend.shandong-buxie.workers.dev';
+        const API_BASE_URL = 'https://geobackend.shandong-buxie.workers.dev';
         
         const loginForm = document.getElementById('loginForm');
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -185,13 +185,21 @@
             showLoading(true);
             errorMessage.classList.remove('show');
 
+            // 简单的 SHA-256 哈希函数
+            async function simpleHash(password) {
+                const msgUint8 = new TextEncoder().encode(password);
+                const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+            }
+
             try {
                 const loginResponse = await fetch(`${API_BASE_URL}/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ email, password: await simpleHash(password) })
                 });
 
                 const loginResult = await loginResponse.json();

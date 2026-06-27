@@ -100,6 +100,7 @@
                         </div>
                     </div>
                 </div>
+                <button class="login-btn" id="logoutBtn">退出登录</button>
             </div>
         </div>
     </nav>
@@ -124,6 +125,7 @@
         const currentLangSpan = document.getElementById('currentLang');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const brandNameEl = document.getElementById('brandName');
+        const logoutBtn = document.getElementById('logoutBtn');
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -172,12 +174,18 @@
             }
         });
 
+        // Logout button click
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('brandData');
+            window.location.href = '/login.html';
+        });
+
         // Fetch brand data
         async function fetchBrandData() {
             const jwtToken = localStorage.getItem('authToken');
             if (!jwtToken) {
-                const lang = localStorage.getItem('lang') || 'zh';
-                brandNameEl.textContent = lang === 'zh' ? '请设置认证令牌' : 'Please set auth token';
+                window.location.href = '/login.html';
                 return;
             }
 
@@ -202,8 +210,10 @@
                 }
             } catch (error) {
                 console.error('Fetch brand error:', error);
-                const lang = localStorage.getItem('lang') || 'zh';
-                brandNameEl.textContent = lang === 'zh' ? '获取品牌信息失败' : 'Failed to get brand info';
+                // Clear invalid token and redirect to login
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('brandData');
+                window.location.href = '/login.html';
             } finally {
                 showLoading(false);
             }

@@ -117,7 +117,7 @@
     </footer>
 
     <script>
-        const API_BASE_URL = 'https://geobackend.shandong-buxie.workers.dev';
+        const API_BASE_URL = 'https://geoclientbackend.shandong-buxie.workers.dev';
 
         const langDropdown = document.querySelector('.lang-dropdown');
         const langToggle = document.getElementById('langToggle');
@@ -210,10 +210,7 @@
                 }
             } catch (error) {
                 console.error('Fetch brand error:', error);
-                // Clear invalid token and redirect to login
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('brandData');
-                window.location.href = '/login.html';
+                // window.location.href = '/login.html';
             } finally {
                 showLoading(false);
             }

@@ -72,9 +72,23 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Page transition */
+        .page-transition {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+
+        .page-transition.fade-in {
+            opacity: 1;
+        }
+
+        .page-transition.fade-out {
+            opacity: 0;
+        }
     </style>
 </head>
-<body>
+<body class="page-transition">
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay" style="display: none;">
         <div class="loading-spinner"></div>
@@ -127,18 +141,45 @@
         const brandNameEl = document.getElementById('brandName');
         const logoutBtn = document.getElementById('logoutBtn');
 
+        // Get language from URL
+        function getLangFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('lang');
+        }
+
+        // Update URL with language parameter
+        function updateUrlWithLang(lang) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url.toString());
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            // Load saved language
-            const savedLang = localStorage.getItem('lang');
-            if (savedLang) {
-                langOptions.forEach(option => {
-                    option.classList.remove('active');
-                    if (option.dataset.lang === savedLang) {
-                        option.classList.add('active');
-                        currentLangSpan.textContent = option.textContent.trim();
-                    }
-                });
+            // Fade in effect
+            setTimeout(() => {
+                document.body.classList.add('fade-in');
+            }, 50);
+
+            // First check URL for language
+            const urlLang = getLangFromUrl();
+            let langToUse = urlLang || localStorage.getItem('lang') || 'zh';
+            
+            // Sync to localStorage
+            localStorage.setItem('lang', langToUse);
+            
+            // Update UI
+            langOptions.forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.lang === langToUse) {
+                    option.classList.add('active');
+                    currentLangSpan.textContent = option.textContent.trim();
+                }
+            });
+            
+            // Update URL if language was from localStorage
+            if (!urlLang) {
+                updateUrlWithLang(langToUse);
             }
 
             // Fetch brand data directly
@@ -158,6 +199,7 @@
                 option.classList.add('active');
                 currentLangSpan.textContent = option.textContent.trim();
                 localStorage.setItem('lang', option.dataset.lang);
+                updateUrlWithLang(option.dataset.lang);
                 langDropdown.classList.remove('open');
                 langToggle.classList.remove('active');
                 
@@ -178,7 +220,12 @@
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem('authToken');
             localStorage.removeItem('brandData');
-            window.location.href = '/login.html';
+            const currentLang = localStorage.getItem('lang') || 'zh';
+            document.body.classList.remove('fade-in');
+            document.body.classList.add('fade-out');
+            setTimeout(() => {
+                window.location.href = `/login.html?lang=${currentLang}`;
+            }, 300);
         });
 
         // Fetch brand data

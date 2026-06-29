@@ -167,9 +167,23 @@
             margin-bottom: 32px;
             display: inline-block;
         }
+
+        /* Page transition */
+        .page-transition {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+
+        .page-transition.fade-in {
+            opacity: 1;
+        }
+
+        .page-transition.fade-out {
+            opacity: 0;
+        }
     </style>
 </head>
-<body>
+<body class="page-transition">
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay" style="display: none;">
         <div class="loading-spinner"></div>
@@ -270,20 +284,48 @@
             });
         }
 
+        // Get language from URL
+        function getLangFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('lang');
+        }
+
+        // Update URL with language parameter
+        function updateUrlWithLang(lang) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url.toString());
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            // Load saved language
-            const savedLang = localStorage.getItem('lang');
-            if (savedLang) {
-                langOptions.forEach(option => {
-                    option.classList.remove('active');
-                    if (option.dataset.lang === savedLang) {
-                        option.classList.add('active');
-                        currentLangSpan.textContent = option.textContent.trim();
-                    }
-                });
-                applyTranslations(savedLang);
+            // Fade in effect
+            setTimeout(() => {
+                document.body.classList.add('fade-in');
+            }, 50);
+
+            // First check URL for language
+            const urlLang = getLangFromUrl();
+            let langToUse = urlLang || localStorage.getItem('lang') || 'zh';
+            
+            // Sync to localStorage
+            localStorage.setItem('lang', langToUse);
+            
+            // Update UI
+            langOptions.forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.lang === langToUse) {
+                    option.classList.add('active');
+                    currentLangSpan.textContent = option.textContent.trim();
+                }
+            });
+            
+            // Update URL if language was from localStorage
+            if (!urlLang) {
+                updateUrlWithLang(langToUse);
             }
+            
+            applyTranslations(langToUse);
         });
 
         // Toggle dropdown
@@ -299,6 +341,7 @@
                 option.classList.add('active');
                 currentLangSpan.textContent = option.textContent.trim();
                 localStorage.setItem('lang', option.dataset.lang);
+                updateUrlWithLang(option.dataset.lang);
                 applyTranslations(option.dataset.lang);
                 langDropdown.classList.remove('open');
                 langToggle.classList.remove('active');
@@ -313,11 +356,6 @@
             }
         });
 
-        // Show/hide loading
-        function showLoading(show) {
-            loadingOverlay.style.display = show ? 'flex' : 'none';
-        }
-
         // Login form submit
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -325,7 +363,6 @@
             const email = formData.get('email');
             const password = formData.get('password');
 
-            showLoading(true);
             errorMessage.classList.remove('show');
 
             // 简单的 SHA-256 哈希函数
@@ -349,7 +386,11 @@
 
                 if (loginResponse.ok && loginResult.access_token) {
                     localStorage.setItem('authToken', `${loginResult.token_type} ${loginResult.access_token}`);
-                    window.location.href = '/index.html';
+                    const currentLang = localStorage.getItem('lang') || 'zh';
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => {
+                        window.location.href = `/index.html?lang=${currentLang}`;
+                    }, 300);
                 } else {
                     throw new Error(loginResult.message || '登录失败');
                 }
@@ -357,8 +398,6 @@
                 console.error('Login error:', error);
                 errorMessage.textContent = error.message || '登录失败，请检查您的邮箱和密码';
                 errorMessage.classList.add('show');
-            } finally {
-                showLoading(false);
             }
         });
     </script>

@@ -219,7 +219,10 @@
         // Logout button click
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem('authToken');
-            localStorage.removeItem('brandData');
+            localStorage.removeItem('tokenType');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('expiresIn');
+            localStorage.removeItem('brandInfo');
             const currentLang = localStorage.getItem('lang') || 'zh';
             document.body.classList.remove('fade-in');
             document.body.classList.add('fade-out');
@@ -249,8 +252,8 @@
 
                 const result = await response.json();
 
-                if (result.success && result.data) {
-                    localStorage.setItem('brandData', JSON.stringify(result.data));
+                if (result.success && result.brand) {
+                    localStorage.setItem('brandInfo', JSON.stringify(result.brand));
                     updateBrandNameDisplay();
                 } else {
                     throw new Error(result.message || '获取品牌信息失败');
@@ -265,7 +268,7 @@
 
         // Update brand name display based on language
         function updateBrandNameDisplay() {
-            const brandDataStr = localStorage.getItem('brandData');
+            const brandDataStr = localStorage.getItem('brandInfo');
             if (!brandDataStr) {
                 fetchBrandData();
                 return;
@@ -274,7 +277,7 @@
             try {
                 const brandData = JSON.parse(brandDataStr);
                 const lang = localStorage.getItem('lang') || 'zh';
-                const brandName = lang === 'zh' ? brandData.name_zh : brandData.name_en;
+                const brandName = lang === 'zh' ? brandData.nameZh : brandData.nameEn;
                 brandNameEl.textContent = brandName || (lang === 'zh' ? '品牌名称' : 'Brand Name');
             } catch (e) {
                 console.error('Error parsing brand data:', e);

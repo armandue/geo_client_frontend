@@ -365,27 +365,23 @@
 
             errorMessage.classList.remove('show');
 
-            // 简单的 SHA-256 哈希函数
-            async function simpleHash(password) {
-                const msgUint8 = new TextEncoder().encode(password);
-                const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-            }
-
             try {
                 const loginResponse = await fetch(`${API_BASE_URL}/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, password: await simpleHash(password) })
+                    body: JSON.stringify({ email, password })
                 });
 
                 const loginResult = await loginResponse.json();
 
                 if (loginResponse.ok && loginResult.access_token) {
                     localStorage.setItem('authToken', `${loginResult.token_type} ${loginResult.access_token}`);
+                    localStorage.setItem('tokenType', loginResult.token_type);
+                    localStorage.setItem('accessToken', loginResult.access_token);
+                    localStorage.setItem('expiresIn', loginResult.expires_in);
+                    localStorage.setItem('brandInfo', JSON.stringify(loginResult.brand));
                     const currentLang = localStorage.getItem('lang') || 'zh';
                     document.body.classList.add('fade-out');
                     setTimeout(() => {

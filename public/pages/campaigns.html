@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动召集 - 智优传媒</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="page-transition">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <div class="nav-left">
+                <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="/index.html" class="nav-brand">智优传媒</a>
+            </div>
+            <div class="nav-right">
+                <div class="brand-indicator">
+                    <span class="brand-indicator-dot"></span>
+                    <span id="navBrandName">加载中...</span>
+                </div>
+                <div class="language-switcher">
+                    <div class="lang-dropdown">
+                        <button class="lang-btn lang-toggle" id="langToggle">
+                            <span id="currentLang">中文</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="lang-options" id="langOptions">
+                            <button class="lang-option active" data-lang="zh">中文</button>
+                            <button class="lang-option" data-lang="en">English</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="login-btn" id="logoutBtn">退出登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Left Panel / Sidebar -->
+        <aside class="sidebar-panel" id="sidebarPanel">
+            <div class="sidebar-top">
+                <div class="sidebar-brand-card">
+                    <div class="brand-avatar" id="brandInitial">智</div>
+                    <div class="brand-meta">
+                        <span class="brand-meta-name" id="sidebarBrandName">加载中...</span>
+                        <span class="brand-meta-status" id="sidebarBrandStatus">● 认证商家</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section-title" id="menuTitle">控制台菜单</div>
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="/index.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelHome">主页</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/analytics.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelAnalytics">智能分析</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/campaigns.html" class="menu-item active">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelCampaigns">活动召集</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/influencers.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelInfluencers">网红推广</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/messages.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelMessages">消息</span>
+                            <span class="menu-badge">3</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/merchant.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l1-5h16l1 5"></path>
+                                    <path d="M4 9v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"></path>
+                                    <path d="M9 22V12h6v10"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelMerchant">商家详情</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-footer">
+                &copy; 2026 智优传媒 GeoMedia
+            </div>
+        </aside>
+
+        <!-- Right Main View Area -->
+        <main class="dashboard-main">
+            <div class="pane-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+                <div>
+                    <h2 class="pane-title" id="pageMainTitle">活动召集</h2>
+                    <p class="pane-subtitle" id="pageMainSubtitle">规划并发布达人探店、体验召集与推广任务</p>
+                </div>
+                <button class="login-btn" style="padding: 10px 20px;" id="btnCreateCampaign">+ 发起新活动</button>
+            </div>
+
+            <div class="content-card">
+                <div class="message-list">
+                    <div class="message-item">
+                        <div class="message-avatar" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="message-content" style="flex: 1;">
+                            <h5 id="camp1Title">夏日新品限定品鉴专场（进行中）</h5>
+                            <p id="camp1Desc">面向小红书美食/生活方式类达人，提供免费到店霸王餐体验，要求发布深度图文笔记。</p>
+                            <span class="message-time" id="camp1Time">报名中 · 已报名 18 位达人 / 拟录用 10 位</span>
+                        </div>
+                    </div>
+                    <div class="message-item">
+                        <div class="message-avatar" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                        </div>
+                        <div class="message-content" style="flex: 1;">
+                            <h5 id="camp2Title">周末聚会打卡短视频征集（筹备中）</h5>
+                            <p id="camp2Desc">抖音/TikTok 达人探店视频召集，围绕品牌氛围感与招牌菜品拍摄。</p>
+                            <span class="message-time" id="camp2Time">待发布 · 预计下周一开始招募</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== 发起新活动 Modal ===== -->
+    <div id="createCampaignModal" style="display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); overflow-y:auto;">
+        <div style="margin: 40px auto; max-width:600px; background:#1a1f2e; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:32px; position:relative;">
+            <!-- Close Button -->
+            <button id="closeModalBtn" style="position:absolute;top:16px;right:16px;background:transparent;border:none;color:#9ca3af;cursor:pointer;font-size:20px;line-height:1;">✕</button>
+
+            <h3 style="margin:0 0 6px; font-size:1.2rem; color:#f9fafb;" id="modalTitle">发起新活动</h3>
+            <p style="margin:0 0 24px; color:#6b7280; font-size:0.85rem;" id="modalSubtitle">填写以下信息创建一个品牌达人招募活动</p>
+
+            <form id="createCampaignForm" autocomplete="off">
+                <!-- 活动标题 -->
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;" id="labelTitle">活动标题 *</label>
+                    <input id="fieldTitle" type="text" required placeholder="例：夏日探店体验招募" style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                </div>
+
+                <!-- 活动描述 -->
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;" id="labelDesc">活动描述 *</label>
+                    <textarea id="fieldDesc" required rows="3" placeholder="描述活动目标、达人要求、发布内容等..." style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;resize:vertical;"></textarea>
+                </div>
+
+                <!-- 奖励类型 & 预算 -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;" id="labelReward">奖励类型</label>
+                        <select id="fieldReward" style="width:100%;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                            <option value="free_meal">免费餐饮</option>
+                            <option value="cash">现金红包</option>
+                            <option value="discount">折扣优惠</option>
+                            <option value="gift">礼品赠送</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;" id="labelBudget">预算金额（元）</label>
+                        <input id="fieldBudget" type="number" min="0" value="0" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                    </div>
+                </div>
+
+                <!-- 福利说明 -->
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;" id="labelPerks">福利说明（可选）</label>
+                    <input id="fieldPerks" type="text" placeholder="例：双人套餐+指定菜品免费" style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                </div>
+
+                <!-- 开始/结束日期 -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;" id="labelStart">开始日期 *</label>
+                        <input id="fieldStart" type="date" required style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;color-scheme:dark;">
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;" id="labelEnd">结束日期 *</label>
+                        <input id="fieldEnd" type="date" required style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;color-scheme:dark;">
+                    </div>
+                </div>
+
+                <!-- 平台招募要求 -->
+                <div style="margin-bottom:24px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                        <label style="font-size:0.85rem;color:#d1d5db;" id="labelRequirements">平台招募要求（可选）</label>
+                        <button type="button" id="addReqBtn" style="padding:4px 12px;background:rgba(102,126,234,0.15);border:1px solid rgba(102,126,234,0.4);border-radius:6px;color:#818cf8;cursor:pointer;font-size:0.8rem;">+ 添加平台</button>
+                    </div>
+
+                    <!-- 要求行容器 -->
+                    <div id="requirementsList" style="display:flex;flex-direction:column;gap:10px;"></div>
+
+                    <!-- 空状态提示 -->
+                    <div id="reqEmptyHint" style="padding:12px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);border-radius:8px;text-align:center;color:#4b5563;font-size:0.8rem;">
+                        点击「+ 添加平台」指定各平台的达人数量与内容类型
+                    </div>
+                </div>
+
+                <!-- 错误提示 -->
+                <div id="modalError" style="display:none;padding:10px 14px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#f87171;font-size:0.85rem;margin-bottom:16px;"></div>
+
+                <!-- 提交按钮 -->
+                <div style="display:flex;gap:12px;justify-content:flex-end;">
+                    <button type="button" id="cancelModalBtn" style="padding:10px 20px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#9ca3af;cursor:pointer;font-size:0.9rem;" id="btnCancel">取消</button>
+                    <button type="submit" id="submitCampaignBtn" style="padding:10px 24px;background:linear-gradient(135deg,#667eea,#764ba2);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:0.9rem;font-weight:600;" id="btnSubmit">发布活动</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+    <script>
+        const pageI18n = {
+            zh: {
+                pageTitle: '活动召集 - 智优传媒',
+                pageMainTitle: '活动召集',
+                pageMainSubtitle: '规划并发布达人探店、体验召集与推广任务',
+                btnCreateCampaign: '+ 发起新活动',
+                camp1Title: '夏日新品限定品鉴专场（进行中）',
+                camp1Desc: '面向小红书美食/生活方式类达人，提供免费到店霸王餐体验，要求发布深度图文笔记。',
+                camp1Time: '报名中 · 已报名 18 位达人 / 拟录用 10 位',
+                camp2Title: '周末聚会打卡短视频征集（筹备中）',
+                camp2Desc: '抖音/TikTok 达人探店视频召集，围绕品牌氛围感与招牌菜品拍摄。',
+                camp2Time: '待发布 · 预计下周一开始招募'
+            },
+            en: {
+                pageTitle: 'Campaigns - GeoMedia',
+                pageMainTitle: 'Campaign Recruitment',
+                pageMainSubtitle: 'Schedule and coordinate store reviews and influencer campaigns',
+                btnCreateCampaign: '+ Create Campaign',
+                camp1Title: 'Summer Signature Tasting Event (Active)',
+                camp1Desc: 'Complimentary tasting invitations for verified lifestyle creators to create comprehensive review posts.',
+                camp1Time: 'Recruiting · 18 applied / 10 spots',
+                camp2Title: 'Weekend Dining Short Video Challenge (Upcoming)',
+                camp2Desc: 'Creator video campaigns focused on dining ambiance and signature menu highlights.',
+                camp2Time: 'Drafting · Scheduled for next Monday'
+            }
+        };
+
+        window.onPageLanguageChange = function(lang) {
+            const t = pageI18n[lang] || pageI18n.zh;
+            document.title = t.pageTitle;
+            document.getElementById('pageMainTitle').textContent = t.pageMainTitle;
+            document.getElementById('pageMainSubtitle').textContent = t.pageMainSubtitle;
+            document.getElementById('btnCreateCampaign').textContent = t.btnCreateCampaign;
+            document.getElementById('camp1Title').textContent = t.camp1Title;
+            document.getElementById('camp1Desc').textContent = t.camp1Desc;
+            document.getElementById('camp1Time').textContent = t.camp1Time;
+            document.getElementById('camp2Title').textContent = t.camp2Title;
+            document.getElementById('camp2Desc').textContent = t.camp2Desc;
+            document.getElementById('camp2Time').textContent = t.camp2Time;
+        };
+
+        // ===== Modal Logic =====
+        const modal = document.getElementById('createCampaignModal');
+        const form  = document.getElementById('createCampaignForm');
+        const errorBox = document.getElementById('modalError');
+        const submitBtn = document.getElementById('submitCampaignBtn');
+        const reqList = document.getElementById('requirementsList');
+        const reqEmptyHint = document.getElementById('reqEmptyHint');
+
+        // ── 平台配置数据 ──────────────────────────────────────────
+        const PLATFORMS = [
+            { key: 'xiaohongshu', label: '小红书' },
+            { key: 'douyin',      label: '抖音' },
+            { key: 'tiktok',      label: 'TikTok' },
+            { key: 'instagram',   label: 'Instagram' },
+            { key: 'youtube',     label: 'YouTube' },
+            { key: 'weibo',       label: '微博' },
+            { key: 'wechat',      label: '微信视频号' },
+            { key: 'twitter',     label: 'X / Twitter' },
+        ];
+
+        const CONTENT_TYPES = [
+            { value: 'both',  label: '图文 + 视频' },
+            { value: 'video', label: '仅视频' },
+            { value: 'image', label: '仅图文' },
+        ];
+
+        // ── 添加一行平台要求 ──────────────────────────────────────
+        function addRequirementRow() {
+            reqEmptyHint.style.display = 'none';
+
+            const row = document.createElement('div');
+            row.className = 'req-row';
+            row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1.4fr auto;gap:8px;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 12px;';
+
+            const inputStyle = 'padding:7px 10px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#f9fafb;font-size:0.82rem;outline:none;width:100%;box-sizing:border-box;';
+
+            // 平台选择
+            const selPlatform = document.createElement('select');
+            selPlatform.style.cssText = inputStyle;
+            PLATFORMS.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.key;
+                opt.textContent = p.label;
+                selPlatform.appendChild(opt);
+            });
+
+            // 达人数量
+            const inpCount = document.createElement('input');
+            inpCount.type = 'number';
+            inpCount.min = '1';
+            inpCount.value = '1';
+            inpCount.placeholder = '数量';
+            inpCount.style.cssText = inputStyle;
+
+            // 内容类型
+            const selContent = document.createElement('select');
+            selContent.style.cssText = inputStyle;
+            CONTENT_TYPES.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.value;
+                opt.textContent = c.label;
+                selContent.appendChild(opt);
+            });
+
+            // 删除按钮
+            const delBtn = document.createElement('button');
+            delBtn.type = 'button';
+            delBtn.textContent = '✕';
+            delBtn.style.cssText = 'background:transparent;border:none;color:#6b7280;cursor:pointer;font-size:16px;padding:0 4px;line-height:1;';
+            delBtn.addEventListener('click', () => {
+                row.remove();
+                if (reqList.children.length === 0) reqEmptyHint.style.display = 'block';
+            });
+
+            row.appendChild(selPlatform);
+            row.appendChild(inpCount);
+            row.appendChild(selContent);
+            row.appendChild(delBtn);
+            reqList.appendChild(row);
+        }
+
+        // ── 收集所有平台要求行数据 ───────────────────────────────
+        function collectRequirements() {
+            const rows = reqList.querySelectorAll('.req-row');
+            const result = [];
+            rows.forEach(row => {
+                const [selPlatform, inpCount, selContent] = row.querySelectorAll('select, input');
+                const platformKey = selPlatform.value;
+                const influencerCount = parseInt(inpCount.value) || 1;
+                const contentType = selContent.value;
+                if (platformKey) result.push({ platformKey, influencerCount, contentType });
+            });
+            return result;
+        }
+
+        // ── 打开 / 关闭弹窗 ──────────────────────────────────────
+        function openModal() {
+            form.reset();
+            reqList.innerHTML = '';
+            reqEmptyHint.style.display = 'block';
+            errorBox.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.textContent = '发布活动';
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        document.getElementById('btnCreateCampaign').addEventListener('click', openModal);
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+        document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+        document.getElementById('addReqBtn').addEventListener('click', addRequirementRow);
+
+        // Click outside to close
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+
+        // ── 表单提交 → POST /api/requests ───────────────────────
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            errorBox.style.display = 'none';
+
+            const title        = document.getElementById('fieldTitle').value.trim();
+            const description  = document.getElementById('fieldDesc').value.trim();
+            const rewardType   = document.getElementById('fieldReward').value;
+            const budgetAmount = parseFloat(document.getElementById('fieldBudget').value) || 0;
+            const perks        = document.getElementById('fieldPerks').value.trim() || undefined;
+            const startDate    = document.getElementById('fieldStart').value;
+            const endDate      = document.getElementById('fieldEnd').value;
+            const requirements = collectRequirements();  // ← 收集平台要求
+
+            if (!title || !description || !startDate || !endDate) {
+                errorBox.textContent = '请填写所有必填项（标题、描述、开始/结束日期）';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            if (endDate < startDate) {
+                errorBox.textContent = '结束日期不能早于开始日期';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            if (!token) {
+                errorBox.textContent = '登录状态已过期，请重新登录';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = '提交中...';
+
+            try {
+                const resp = await fetch(`${API_BASE_URL}/api/requests`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        title, description, rewardType, budgetAmount, perks,
+                        startDate, endDate,
+                        requirements: requirements.length > 0 ? requirements : undefined
+                    })
+                });
+
+                const data = await resp.json();
+
+                if (!resp.ok || !data.success) {
+                    throw new Error(data.error || `服务器错误 (${resp.status})`);
+                }
+
+                // 成功：关闭弹窗，把新活动插入列表顶部
+                closeModal();
+                prependCampaignCard(data.request);
+
+            } catch (err) {
+                errorBox.textContent = err.message || '提交失败，请稍后重试';
+                errorBox.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = '发布活动';
+            }
+        });
+
+        // ── 新活动插入列表顶部 ────────────────────────────────────
+        function prependCampaignCard(req) {
+            const list = document.querySelector('.message-list');
+            if (!list) return;
+
+            // 构建平台标签摘要
+            let platformSummary = '';
+            if (req.requirements && req.requirements.length > 0) {
+                const platformNames = { xiaohongshu:'小红书', douyin:'抖音', tiktok:'TikTok', instagram:'Instagram', youtube:'YouTube', weibo:'微博', wechat:'视频号', twitter:'X/Twitter' };
+                platformSummary = ' · ' + req.requirements.map(r =>
+                    `${platformNames[r.platformKey] || r.platformKey} ×${r.influencerCount}`
+                ).join(' / ');
+            }
+
+            const item = document.createElement('div');
+            item.className = 'message-item';
+            item.style.borderLeft = '3px solid #667eea';
+            item.innerHTML = `
+                <div class="message-avatar" style="background:rgba(102,126,234,0.15);color:#667eea;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                </div>
+                <div class="message-content" style="flex:1;">
+                    <h5>${escapeHtml(req.title)}</h5>
+                    <p>${escapeHtml(req.description)}</p>
+                    <span class="message-time">刚刚发布 · ${req.startDate} 至 ${req.endDate}${platformSummary}</span>
+                </div>
+            `;
+            list.prepend(item);
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, s =>
+                ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+        }
+    </script>
+</body>
+</html>

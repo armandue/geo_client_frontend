@@ -3,90 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="icon" type="image/png" href="favicon.png">
+    <title>控制台 - 智优传媒</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 80px 24px;
-        }
-        
-        .brand-name {
-            font-size: 32px;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 24px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .work-in-progress {
-            font-size: 72px;
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-            letter-spacing: -2px;
-        }
-        
-        .footer {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #e2e8f0;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Page transition */
-        .page-transition {
-            transition: opacity 0.3s ease-in-out;
-            opacity: 0;
-        }
-
-        .page-transition.fade-in {
-            opacity: 1;
-        }
-
-        .page-transition.fade-out {
-            opacity: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body class="page-transition">
     <!-- Loading Overlay -->
@@ -94,10 +17,27 @@
         <div class="loading-spinner"></div>
     </div>
 
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Top Navigation Bar -->
     <nav class="navbar">
-        <div class="container">
-            <a href="#" class="nav-brand">智优传媒</a>
+        <div class="navbar-inner">
+            <div class="nav-left">
+                <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="/index.html" class="nav-brand">智优传媒</a>
+            </div>
             <div class="nav-right">
+                <div class="brand-indicator">
+                    <span class="brand-indicator-dot"></span>
+                    <span id="navBrandName">加载中...</span>
+                </div>
                 <div class="language-switcher">
                     <div class="lang-dropdown">
                         <button class="lang-btn lang-toggle" id="langToggle">
@@ -105,12 +45,8 @@
                             <span class="dropdown-arrow">▼</span>
                         </button>
                         <div class="lang-options" id="langOptions">
-                            <button class="lang-option active" data-lang="zh">
-                                中文
-                            </button>
-                            <button class="lang-option" data-lang="en">
-                                English
-                            </button>
+                            <button class="lang-option active" data-lang="zh">中文</button>
+                            <button class="lang-option" data-lang="en">English</button>
                         </div>
                     </div>
                 </div>
@@ -119,174 +55,836 @@
         </div>
     </nav>
 
-    <div class="main-content">
-        <div class="brand-name" id="brandName">加载中...</div>
-        <div class="work-in-progress">WORK IN PROGRESS</div>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Left Panel / Sidebar -->
+        <aside class="sidebar-panel" id="sidebarPanel">
+            <div class="sidebar-top">
+                <div class="sidebar-brand-card">
+                    <div class="brand-avatar" id="brandInitial">智</div>
+                    <div class="brand-meta">
+                        <span class="brand-meta-name" id="sidebarBrandName">加载中...</span>
+                        <span class="brand-meta-status" id="sidebarBrandStatus">● 认证商家</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section-title" id="menuTitle">控制台菜单</div>
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="#" class="menu-item" data-section="home">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelHome">主页</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-section="analytics">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelAnalytics">智能分析</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-section="campaigns">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelCampaigns">活动召集</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-section="influencers">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelInfluencers">网红推广</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-section="messages">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelMessages">消息</span>
+                            <span class="menu-badge">3</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-section="merchant">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l1-5h16l1 5"></path>
+                                    <path d="M4 9v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"></path>
+                                    <path d="M9 22V12h6v10"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelMerchant">商家详情</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-footer">
+                &copy; 2026 智优传媒 GeoMedia
+            </div>
+        </aside>
+
+        <!-- Right Main View Area — all sections live here -->
+        <main class="dashboard-main">
+
+            <!-- ═══════════════════════════════════════════
+                 SECTION: home
+            ════════════════════════════════════════════ -->
+            <section id="section-home" class="spa-section" style="display:none;">
+                <div class="wip-banner">
+                    <div class="wip-banner-left">
+                        <span class="wip-badge">WORK IN PROGRESS</span>
+                        <h2 class="wip-banner-title" id="homeBannerTitle">欢迎回来，加载中...</h2>
+                        <p class="wip-banner-desc" id="homeBannerDesc">
+                            您的GEO搜索优化与社交媒体增长控制中心正在加速部署，核心模块已全面就绪。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value">86,420</span>
+                            <span class="stat-label" id="statLabelImpressions">总曝光量</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value">12</span>
+                            <span class="stat-label" id="statLabelCampaigns">进行中活动</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value">48</span>
+                            <span class="stat-label" id="statLabelKols">合作网红</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon amber">
+                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value">34.6%</span>
+                            <span class="stat-label" id="statLabelRate">转化增长率</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700;" id="quickActionsTitle">常用功能快捷入口</h3>
+                    <div class="feature-grid">
+                        <a href="#" class="feature-box" data-section="analytics">
+                            <h4 id="boxAnalyticsTitle">📈 智能分析</h4>
+                            <p id="boxAnalyticsDesc">查看GEO搜索权重评估、关键词覆盖率与大模型抓取表现。</p>
+                        </a>
+                        <a href="#" class="feature-box" data-section="campaigns">
+                            <h4 id="boxCampaignsTitle">📢 活动召集</h4>
+                            <p id="boxCampaignsDesc">发布门店探店、新品种草任务，召集本地高匹配度创作者。</p>
+                        </a>
+                        <a href="#" class="feature-box" data-section="influencers">
+                            <h4 id="boxInfluencersTitle">✨ 网红推广</h4>
+                            <p id="boxInfluencersDesc">精准匹配小红书、抖音、大众点评垂直达人，高效触达受众。</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════
+                 SECTION: analytics
+            ════════════════════════════════════════════ -->
+            <section id="section-analytics" class="spa-section" style="display:none;">
+                <div class="pane-header">
+                    <h2 class="pane-title" id="analyticsTitle">智能分析</h2>
+                    <p class="pane-subtitle" id="analyticsSubtitle">基于AI大语言模型检索与地理空间语义排名的全景分析数据</p>
+                </div>
+
+                <div class="content-card">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon purple">
+                                <span style="font-size: 20px; font-weight: 800;">92</span>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-value">A+</span>
+                                <span class="stat-label" id="labelGeoScore">GEO推荐得分</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
+                                <span style="font-size: 18px;">TOP3</span>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-value">78%</span>
+                                <span class="stat-label" id="labelTopShare">AI生成摘要命中率</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">
+                                <span style="font-size: 18px;">↑15%</span>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-value">124 个</span>
+                                <span class="stat-label" id="labelKeywords">核心关键词收录</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f8fafc; border-radius: 12px; padding: 24px; border: 1px solid var(--border-color); margin-top: 16px;">
+                        <h4 style="margin: 0 0 10px 0; font-size: 16px; color: var(--primary-color);" id="analyticsAdviceTitle">💡 AI 智能优化建议</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: var(--text-muted); font-size: 14px; line-height: 1.8;" id="analyticsAdviceList">
+                            <li id="advice1">您当前的品牌在本地美食搜索类目中的AI大模型引用频次位居前列。</li>
+                            <li id="advice2">建议在即将推出的新品中补充特色食材与地理定位标签，以进一步提升高意向客群曝光。</li>
+                            <li id="advice3">配合探店达人发布测评内容，可将语义问答搜索推荐度再提升 20% 以上。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════
+                 SECTION: campaigns
+            ════════════════════════════════════════════ -->
+            <section id="section-campaigns" class="spa-section" style="display:none;">
+                <div class="pane-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 class="pane-title" id="campaignsTitle">活动召集</h2>
+                        <p class="pane-subtitle" id="campaignsSubtitle">规划并发布达人探店、体验召集与推广任务</p>
+                    </div>
+                    <button class="login-btn" style="padding: 10px 20px;" id="btnCreateCampaign">+ 发起新活动</button>
+                </div>
+
+                <div class="content-card">
+                    <div class="message-list" id="campaignList">
+                        <!-- 初始加载状态 -->
+                        <div id="campaignLoading" style="text-align:center;padding:32px;color:#6b7280;font-size:0.9rem;">
+                            <svg style="animation:spin 1s linear infinite;display:inline-block;margin-bottom:8px;" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                                <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                            </svg>
+                            <br>加载活动列表...
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════
+                 SECTION: influencers
+            ════════════════════════════════════════════ -->
+            <section id="section-influencers" class="spa-section" style="display:none;">
+                <div class="pane-header">
+                    <h2 class="pane-title" id="influencersTitle">网红推广</h2>
+                    <p class="pane-subtitle" id="influencersSubtitle">覆盖多主流社交平台的专业内容创作者资源库</p>
+                </div>
+
+                <div class="content-card">
+                    <div class="feature-grid">
+                        <div class="feature-box">
+                            <h4 id="infRedTitle">📕 小红书优质探店达人</h4>
+                            <p id="infRedDesc">图文审美出众、粉丝互动率高，擅长打造本地生活潮流爆款笔记。</p>
+                        </div>
+                        <div class="feature-box">
+                            <h4 id="infVideoTitle">📱 抖音 / TikTok 视频创作者</h4>
+                            <p id="infVideoDesc">沉浸式视觉探店、剧情互动体验，快速放大品牌区域声量与到店意愿。</p>
+                        </div>
+                        <div class="feature-box">
+                            <h4 id="infReviewTitle">⭐ 大众点评 / Google 达人</h4>
+                            <p id="infReviewDesc">LV6+ 高等级会员真实测评，稳固提升品牌好评度与地理搜索权重。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════
+                 SECTION: messages
+            ════════════════════════════════════════════ -->
+            <section id="section-messages" class="spa-section" style="display:none;">
+                <div class="pane-header">
+                    <h2 class="pane-title" id="messagesTitle">消息中心</h2>
+                    <p class="pane-subtitle" id="messagesSubtitle">系统提醒、合作申请与活动动态通知</p>
+                </div>
+
+                <div class="content-card">
+                    <div class="message-list">
+                        <div class="message-item">
+                            <div class="message-avatar">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                </svg>
+                            </div>
+                            <div class="message-content">
+                                <h5 id="msg1Title">新达人报名提醒</h5>
+                                <p id="msg1Content">达人 @伦敦吃喝指南 申请加入您的"夏日新品限定品鉴专场"活动，请前往审核。</p>
+                                <span class="message-time" id="msg1Time">10 分钟前</span>
+                            </div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="message-content">
+                                <h5 id="msg2Title">本周GEO数据周报已生成</h5>
+                                <p id="msg2Content">您的品牌本周在AI大模型中的提及率环比提升 12%，点击"智能分析"查看详细报告。</p>
+                                <span class="message-time" id="msg2Time">今天 09:30</span>
+                            </div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                            </div>
+                            <div class="message-content">
+                                <h5 id="msg3Title">商家认证通过</h5>
+                                <p id="msg3Content">您的品牌入驻信息已通过官方审核，享受专属流量倾斜与达人召集服务。</p>
+                                <span class="message-time" id="msg3Time">昨天 16:45</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════
+                 SECTION: merchant
+            ════════════════════════════════════════════ -->
+            <section id="section-merchant" class="spa-section" style="display:none;">
+                <div class="pane-header">
+                    <h2 class="pane-title" id="merchantTitle">商家详情</h2>
+                    <p class="pane-subtitle" id="merchantSubtitle">查看与管理您的品牌入驻档案与账户配置</p>
+                </div>
+
+                <div class="content-card">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label" id="detLabelNameZh">品牌名称（中文）</span>
+                            <span class="detail-value" id="detValueNameZh">加载中...</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label" id="detLabelNameEn">品牌名称（英文）</span>
+                            <span class="detail-value" id="detValueNameEn">Loading...</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label" id="detLabelStatus">合作状态</span>
+                            <span class="detail-value" style="color: #10b981; font-weight: 700;" id="detValueStatus">● 合作认证商家</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label" id="detLabelSupport">专属客户顾问</span>
+                            <span class="detail-value" id="detValueSupport">智优传媒 GEO优化团队</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════
+                 SECTION: campaign-detail
+            ════════════════════════════════════════════ -->
+            <section id="section-campaign-detail" class="spa-section" style="display:none;">
+                <!-- 返回按钮 -->
+                <div style="margin-bottom:20px;">
+                    <button id="detailBackBtn" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#9ca3af;cursor:pointer;font-size:0.85rem;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        <span id="detailBackLabel">返回活动列表</span>
+                    </button>
+                </div>
+
+                <!-- 标题区 -->
+                <div class="pane-header" style="margin-bottom:20px;">
+                    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                        <span id="detailRewardIcon" style="font-size:28px;">🍽️</span>
+                        <div>
+                            <h2 class="pane-title" id="detailTitle" style="margin:0 0 4px;">活动详情</h2>
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                                <span id="detailStatusBadge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;background:rgba(16,185,129,0.15);color:#10b981;">🟢 招募中</span>
+                                <span id="detailRewardBadge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,0.07);color:#9ca3af;">免费餐饮</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 信息卡片 -->
+                <div class="content-card" style="margin-bottom:16px;">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label" id="detailLabelDate">活动时间</span>
+                            <span class="detail-value" id="detailDateRange">—</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label" id="detailLabelBudget">预算金额</span>
+                            <span class="detail-value" id="detailBudget">—</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label" id="detailLabelPerks">活动福利</span>
+                            <span class="detail-value" id="detailPerks">—</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label" id="detailLabelCreated">创建时间</span>
+                            <span class="detail-value" id="detailCreatedAt">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 活动描述 -->
+                <div class="content-card" style="margin-bottom:16px;">
+                    <h4 style="margin:0 0 12px;font-size:0.95rem;color:#d1d5db;" id="detailLabelDesc">活动描述</h4>
+                    <p id="detailDescription" style="margin:0;color:#9ca3af;font-size:0.9rem;line-height:1.7;white-space:pre-wrap;"></p>
+                </div>
+
+                <!-- 平台招募要求 -->
+                <div class="content-card" id="detailRequirementsCard">
+                    <h4 style="margin:0 0 14px;font-size:0.95rem;color:#d1d5db;" id="detailLabelReqs">平台招募要求</h4>
+                    <div id="detailRequirementsList"></div>
+                </div>
+            </section>
+
+        </main>
+
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 智优传媒. 保留所有权利。</p>
+    <!-- ===== 发起新活动 Modal ===== -->
+    <div id="createCampaignModal" style="display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); overflow-y:auto;">
+        <div style="margin: 40px auto; max-width:600px; background:#1a1f2e; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:32px; position:relative;">
+            <button id="closeModalBtn" style="position:absolute;top:16px;right:16px;background:transparent;border:none;color:#9ca3af;cursor:pointer;font-size:20px;line-height:1;">✕</button>
+
+            <h3 style="margin:0 0 6px; font-size:1.2rem; color:#f9fafb;">发起新活动</h3>
+            <p style="margin:0 0 24px; color:#6b7280; font-size:0.85rem;">填写以下信息创建一个品牌达人招募活动</p>
+
+            <form id="createCampaignForm" autocomplete="off">
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">活动标题 *</label>
+                    <input id="fieldTitle" type="text" required placeholder="例：夏日探店体验招募" style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                </div>
+
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">活动描述 *</label>
+                    <textarea id="fieldDesc" required rows="3" placeholder="描述活动目标、达人要求、发布内容等..." style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;resize:vertical;"></textarea>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">奖励类型</label>
+                        <select id="fieldReward" style="width:100%;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                            <option value="free_meal">免费餐饮</option>
+                            <option value="cash">现金红包</option>
+                            <option value="discount">折扣优惠</option>
+                            <option value="gift">礼品赠送</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">预算金额（元）</label>
+                        <input id="fieldBudget" type="number" min="0" value="0" style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">福利说明（可选）</label>
+                    <input id="fieldPerks" type="text" placeholder="例：双人套餐+指定菜品免费" style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">开始日期 *</label>
+                        <input id="fieldStart" type="date" required style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;color-scheme:dark;">
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">结束日期 *</label>
+                        <input id="fieldEnd" type="date" required style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;color-scheme:dark;">
+                    </div>
+                </div>
+
+                <!-- 平台招募要求 -->
+                <div style="margin-bottom:24px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                        <label style="font-size:0.85rem;color:#d1d5db;">平台招募要求（可选）</label>
+                        <button type="button" id="addReqBtn" style="padding:4px 12px;background:rgba(102,126,234,0.15);border:1px solid rgba(102,126,234,0.4);border-radius:6px;color:#818cf8;cursor:pointer;font-size:0.8rem;">+ 添加平台</button>
+                    </div>
+                    <div id="requirementsList" style="display:flex;flex-direction:column;gap:10px;"></div>
+                    <div id="reqEmptyHint" style="padding:12px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);border-radius:8px;text-align:center;color:#4b5563;font-size:0.8rem;">
+                        点击「+ 添加平台」指定各平台的达人数量与内容类型
+                    </div>
+                </div>
+
+                <div id="modalError" style="display:none;padding:10px 14px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#f87171;font-size:0.85rem;margin-bottom:16px;"></div>
+
+                <div style="display:flex;gap:12px;justify-content:flex-end;">
+                    <button type="button" id="cancelModalBtn" style="padding:10px 20px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#9ca3af;cursor:pointer;font-size:0.9rem;">取消</button>
+                    <button type="submit" id="submitCampaignBtn" style="padding:10px 24px;background:linear-gradient(135deg,#667eea,#764ba2);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:0.9rem;font-weight:600;">发布活动</button>
+                </div>
+            </form>
         </div>
-    </footer>
+    </div>
 
+    <script src="/js/dashboard.js"></script>
     <script>
-        const API_BASE_URL = 'https://geoclientbackend.shandong-buxie.workers.dev';
+        // ── 全部 section 的 i18n 文案 ──────────────────────────────
+        const pageI18n = {
+            zh: {
+                // home
+                pageTitle: '控制台主页 - 智优传媒',
+                homeBannerDesc: '您的GEO搜索优化与社交媒体增长控制中心正在加速部署，核心模块已全面就绪。',
+                statImpressions: '总曝光量', statCampaigns: '进行中活动', statKols: '合作网红', statRate: '转化增长率',
+                quickActions: '常用功能快捷入口',
+                boxAnalyticsTitle: '📈 智能分析', boxAnalyticsDesc: '查看GEO搜索权重评估、关键词覆盖率与大模型抓取表现。',
+                boxCampaignsTitle: '📢 活动召集', boxCampaignsDesc: '发布门店探店、新品种草任务，召集本地高匹配度创作者。',
+                boxInfluencersTitle: '✨ 网红推广', boxInfluencersDesc: '精准匹配小红书、抖音、大众点评垂直达人，高效触达受众。',
+                // analytics
+                analyticsTitle: '智能分析', analyticsSubtitle: '基于AI大语言模型检索与地理空间语义排名的全景分析数据',
+                geoScore: 'GEO推荐得分', topShare: 'AI生成摘要命中率', keywords: '核心关键词收录',
+                adviceTitle: '💡 AI 智能优化建议',
+                advice1: '您当前的品牌在本地美食搜索类目中的AI大模型引用频次位居前列。',
+                advice2: '建议在即将推出的新品中补充特色食材与地理定位标签，以进一步提升高意向客群曝光。',
+                advice3: '配合探店达人发布测评内容，可将语义问答搜索推荐度再提升 20% 以上。',
+                // campaigns
+                campaignsTitle: '活动召集', campaignsSubtitle: '规划并发布达人探店、体验召集与推广任务',
+                btnCreateCampaign: '+ 发起新活动',
+                campEmpty: '暂无活动，点击「发起新活动」开始第一个招募！',
+                campLoadError: '加载失败，请稍后重试',
+                campStatusOpen: '招募中', campStatusClosed: '已结束', campStatusDraft: '筹备中',
+                campRewardFreeMeal: '免费餐饮', campRewardCash: '现金红包', campRewardDiscount: '折扣优惠', campRewardGift: '礼品赠送',
+                // influencers
+                influencersTitle: '网红推广', influencersSubtitle: '覆盖多主流社交平台的专业内容创作者资源库',
+                infRedTitle: '📕 小红书优质探店达人', infRedDesc: '图文审美出众、粉丝互动率高，擅长打造本地生活潮流爆款笔记。',
+                infVideoTitle: '📱 抖音 / TikTok 视频创作者', infVideoDesc: '沉浸式视觉探店、剧情互动体验，快速放大品牌区域声量与到店意愿。',
+                infReviewTitle: '⭐ 大众点评 / Google 达人', infReviewDesc: 'LV6+ 高等级会员真实测评，稳固提升品牌好评度与地理搜索权重。',
+                // messages
+                messagesTitle: '消息中心', messagesSubtitle: '系统提醒、合作申请与活动动态通知',
+                msg1Title: '新达人报名提醒', msg1Content: '达人 @伦敦吃喝指南 申请加入您的"夏日新品限定品鉴专场"活动，请前往审核。', msg1Time: '10 分钟前',
+                msg2Title: '本周GEO数据周报已生成', msg2Content: '您的品牌本周在AI大模型中的提及率环比提升 12%，点击"智能分析"查看详细报告。', msg2Time: '今天 09:30',
+                msg3Title: '商家认证通过', msg3Content: '您的品牌入驻信息已通过官方审核，享受专属流量倾斜与达人召集服务。', msg3Time: '昨天 16:45',
+                // merchant
+                merchantTitle: '商家详情', merchantSubtitle: '查看与管理您的品牌入驻档案与账户配置',
+                detLabelNameZh: '品牌名称（中文）', detLabelNameEn: '品牌名称（英文）',
+                detLabelStatus: '合作状态', detValueStatus: '● 合作认证商家',
+                detLabelSupport: '专属客户顾问', detValueSupport: '智优传媒 GEO优化团队'
+            },
+            en: {
+                // home
+                pageTitle: 'Dashboard - GeoMedia',
+                homeBannerDesc: 'Your GEO search optimization and social media growth hub is actively operating.',
+                statImpressions: 'Total Impressions', statCampaigns: 'Active Campaigns', statKols: 'Partner KOLs', statRate: 'Conversion Growth',
+                quickActions: 'Quick Navigation',
+                boxAnalyticsTitle: '📈 Smart Analysis', boxAnalyticsDesc: 'Examine GEO ranking metrics, keyword visibility, and LLM retrieval performance.',
+                boxCampaignsTitle: '📢 Campaigns', boxCampaignsDesc: 'Launch store visits, product reviews, and recruitment tasks for verified creators.',
+                boxInfluencersTitle: '✨ Influencer Marketing', boxInfluencersDesc: 'Match targeted RED, Douyin, TikTok and Dianping creators to amplify influence.',
+                // analytics
+                analyticsTitle: 'Smart Analysis', analyticsSubtitle: 'Comprehensive metrics from AI LLM query indices and spatial semantic ranking',
+                geoScore: 'GEO Health Score', topShare: 'AI Summary Mention Rate', keywords: 'Indexed Keywords',
+                adviceTitle: '💡 AI Growth Recommendations',
+                advice1: 'Your brand ranks among the top cited in local food and lifestyle AI searches.',
+                advice2: 'We recommend tagging signature dishes and geographical landmarks in upcoming updates.',
+                advice3: 'Coordinating with local creators for verified tasting reviews will further boost your prompt rank by 20%+',
+                // campaigns
+                campaignsTitle: 'Campaign Recruitment', campaignsSubtitle: 'Schedule and coordinate store reviews and influencer campaigns',
+                btnCreateCampaign: '+ Create Campaign',
+                campEmpty: 'No campaigns yet. Click "+ Create Campaign" to start your first recruitment!',
+                campLoadError: 'Failed to load. Please try again.',
+                campStatusOpen: 'Recruiting', campStatusClosed: 'Closed', campStatusDraft: 'Draft',
+                campRewardFreeMeal: 'Free Dining', campRewardCash: 'Cash Reward', campRewardDiscount: 'Discount', campRewardGift: 'Gift',
+                // influencers
+                influencersTitle: 'Influencer Marketing', influencersSubtitle: 'Premium content creators across major social platforms',
+                infRedTitle: '📕 Verified RED Creators', infRedDesc: 'High visual aesthetics and engagement, adept at crafting viral lifestyle & dining content.',
+                infVideoTitle: '📱 Douyin & TikTok Video Creators', infVideoDesc: 'Dynamic dining vlogs and authentic video storytelling that drive visits and recognition.',
+                infReviewTitle: '⭐ Dianping & Google Local Guides', infReviewDesc: 'High-tier authentic customer reviews to strengthen credibility and map search rankings.',
+                // messages
+                messagesTitle: 'Messages', messagesSubtitle: 'System notices, partner requests, and campaign updates',
+                msg1Title: 'New Creator Application', msg1Content: 'Creator @LondonDiningGuide applied to join your "Summer Signature Tasting Event".', msg1Time: '10 mins ago',
+                msg2Title: 'Weekly GEO Performance Report Ready', msg2Content: 'Your brand AI prompt citation rate grew +12% this week. Check Smart Analysis for details.', msg2Time: 'Today 09:30',
+                msg3Title: 'Merchant Verification Approved', msg3Content: 'Your brand verification has succeeded. You now enjoy priority search boosting and creator discovery.', msg3Time: 'Yesterday 16:45',
+                // merchant
+                merchantTitle: 'Merchant Details', merchantSubtitle: 'Review and manage your brand registration profile and account settings',
+                detLabelNameZh: 'Brand Name (Chinese)', detLabelNameEn: 'Brand Name (English)',
+                detLabelStatus: 'Partnership Status', detValueStatus: '● Verified Active Merchant',
+                detLabelSupport: 'Dedicated Consultant', detValueSupport: 'GeoMedia Optimization Team'
+            }
+        };
 
-        const langDropdown = document.querySelector('.lang-dropdown');
-        const langToggle = document.getElementById('langToggle');
-        const langOptions = document.querySelectorAll('.lang-option');
-        const currentLangSpan = document.getElementById('currentLang');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const brandNameEl = document.getElementById('brandName');
-        const logoutBtn = document.getElementById('logoutBtn');
+        // ── 根据当前语言更新所有 section 文案 ─────────────────────
+        window.onPageLanguageChange = function(lang) {
+            const t = pageI18n[lang] || pageI18n.zh;
+            document.title = t.pageTitle;
+            const s = (id) => { const el = document.getElementById(id); if (el && t[id] !== undefined) el.textContent = t[id]; };
+            // home
+            s('homeBannerDesc'); s('statLabelImpressions'); s('statLabelCampaigns'); s('statLabelKols'); s('statLabelRate');
+            s('quickActionsTitle'); s('boxAnalyticsTitle'); s('boxAnalyticsDesc'); s('boxCampaignsTitle'); s('boxCampaignsDesc'); s('boxInfluencersTitle'); s('boxInfluencersDesc');
+            // analytics
+            s('analyticsTitle'); s('analyticsSubtitle'); s('labelGeoScore'); s('labelTopShare'); s('labelKeywords');
+            s('analyticsAdviceTitle'); s('advice1'); s('advice2'); s('advice3');
+            // campaigns — only static labels, list is rendered by API
+            s('campaignsTitle'); s('campaignsSubtitle');
+            const btnCC = document.getElementById('btnCreateCampaign'); if (btnCC) btnCC.textContent = t.btnCreateCampaign;
+            // influencers
+            s('influencersTitle'); s('influencersSubtitle'); s('infRedTitle'); s('infRedDesc'); s('infVideoTitle'); s('infVideoDesc'); s('infReviewTitle'); s('infReviewDesc');
+            // messages
+            s('messagesTitle'); s('messagesSubtitle');
+            s('msg1Title'); s('msg1Content'); s('msg1Time'); s('msg2Title'); s('msg2Content'); s('msg2Time'); s('msg3Title'); s('msg3Content'); s('msg3Time');
+            // merchant
+            s('merchantTitle'); s('merchantSubtitle');
+            s('detLabelNameZh'); s('detLabelNameEn'); s('detLabelStatus'); s('detValueStatus'); s('detLabelSupport'); s('detValueSupport');
+        };
 
-        // Get language from URL
-        function getLangFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('lang');
+        // ── loadCampaigns: GET /api/requests ───────────────────────
+        let _campaignsLoaded = false;   // 防止重复请求
+
+        const REWARD_ICONS = {
+            free_meal: { icon: '🍽️', color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
+            cash:      { icon: '💰', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
+            discount:  { icon: '🎫', color: '#3b82f6', bg: 'rgba(59,130,246,0.15)' },
+            gift:      { icon: '🎁', color: '#8b5cf6', bg: 'rgba(139,92,246,0.15)' }
+        };
+
+        const STATUS_CONFIG = {
+            open:   { key: 'campStatusOpen',   dot: '🟢' },
+            closed: { key: 'campStatusClosed', dot: '🔴' },
+            draft:  { key: 'campStatusDraft',  dot: '🟡' }
+        };
+
+        function formatDate(iso) {
+            // "2026-08-06T00:00:00.000Z" → "2026-08-06"
+            return iso ? iso.slice(0, 10) : '';
         }
 
-        // Update URL with language parameter
-        function updateUrlWithLang(lang) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('lang', lang);
-            window.history.replaceState({}, '', url.toString());
+        function renderCampaignCard(req) {
+            const lang = (document.documentElement.lang === 'en' || localStorage.getItem('lang') === 'en') ? 'en' : 'zh';
+            const t = pageI18n[lang] || pageI18n.zh;
+            const rw = REWARD_ICONS[req.rewardType] || REWARD_ICONS.gift;
+            const st = STATUS_CONFIG[req.status] || STATUS_CONFIG.open;
+            const statusLabel = t[st.key] || req.status;
+            const rewardLabels = { free_meal: t.campRewardFreeMeal, cash: t.campRewardCash, discount: t.campRewardDiscount, gift: t.campRewardGift };
+            const rewardLabel = rewardLabels[req.rewardType] || req.rewardType;
+            const start = formatDate(req.startDate);
+            const end   = formatDate(req.endDate);
+            const perksHTML = req.perks ? `<span style="font-size:0.78rem;color:#818cf8;background:rgba(102,126,234,0.12);padding:2px 8px;border-radius:4px;margin-left:6px;">${escHtml(req.perks)}</span>` : '';
+
+            const item = document.createElement('div');
+            item.className = 'message-item';
+            item.dataset.requestId = req.id;
+            item.innerHTML = `
+                <div class="message-avatar" style="background:${rw.bg};color:${rw.color};font-size:20px;display:flex;align-items:center;justify-content:center;">
+                    ${rw.icon}
+                </div>
+                <div class="message-content" style="flex:1;min-width:0;">
+                    <h5 style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                        ${escHtml(req.title)}
+                        <span style="font-size:0.72rem;font-weight:500;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,0.07);color:#9ca3af;">${st.dot} ${statusLabel}</span>
+                        ${perksHTML}
+                    </h5>
+                    <p style="margin:4px 0 6px;">${escHtml(req.description)}</p>
+                    <span class="message-time">${rewardLabel} · ${start} → ${end}</span>
+                </div>`;
+            return item;
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Fade in effect
-            setTimeout(() => {
-                document.body.classList.add('fade-in');
-            }, 50);
+        async function loadCampaigns(forceReload = false) {
+            if (_campaignsLoaded && !forceReload) return;
+            const list = document.getElementById('campaignList');
+            const loading = document.getElementById('campaignLoading');
+            if (!list) return;
 
-            // First check URL for language
-            const urlLang = getLangFromUrl();
-            let langToUse = urlLang || localStorage.getItem('lang') || 'zh';
-            
-            // Sync to localStorage
-            localStorage.setItem('lang', langToUse);
-            
-            // Update UI
-            langOptions.forEach(option => {
-                option.classList.remove('active');
-                if (option.dataset.lang === langToUse) {
-                    option.classList.add('active');
-                    currentLangSpan.textContent = option.textContent.trim();
-                }
-            });
-            
-            // Update URL if language was from localStorage
-            if (!urlLang) {
-                updateUrlWithLang(langToUse);
-            }
+            // 显示加载状态
+            if (loading) loading.style.display = 'block';
 
-            // Fetch brand data directly
-            fetchBrandData();
-        });
-
-        // Toggle dropdown
-        langToggle.addEventListener('click', () => {
-            langDropdown.classList.toggle('open');
-            langToggle.classList.toggle('active');
-        });
-
-        // Select language
-        langOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                langOptions.forEach(opt => opt.classList.remove('active'));
-                option.classList.add('active');
-                currentLangSpan.textContent = option.textContent.trim();
-                localStorage.setItem('lang', option.dataset.lang);
-                updateUrlWithLang(option.dataset.lang);
-                langDropdown.classList.remove('open');
-                langToggle.classList.remove('active');
-                
-                // Update brand name display based on language
-                updateBrandNameDisplay();
-            });
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!langDropdown.contains(e.target)) {
-                langDropdown.classList.remove('open');
-                langToggle.classList.remove('active');
-            }
-        });
-
-        // Logout button click
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('tokenType');
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('expiresIn');
-            localStorage.removeItem('brandInfo');
-            const currentLang = localStorage.getItem('lang') || 'zh';
-            document.body.classList.remove('fade-in');
-            document.body.classList.add('fade-out');
-            setTimeout(() => {
-                window.location.href = `/login.html?lang=${currentLang}`;
-            }, 300);
-        });
-
-        // Fetch brand data
-        async function fetchBrandData() {
-            const jwtToken = localStorage.getItem('authToken');
-            if (!jwtToken) {
-                window.location.href = '/login.html';
-                return;
-            }
-
-            showLoading(true);
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/api/my-brand`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': jwtToken,
-                        'Content-Type': 'application/json'
-                    }
+                const resp = await fetch(`${API_BASE_URL}/api/requests`, {
+                    headers: { 'Authorization': token, 'Content-Type': 'application/json' }
+                });
+                const data = await resp.json();
+
+                if (!resp.ok || !data.success) throw new Error(data.error || 'API error');
+
+                // 清空列表（保留 loading 元素）
+                Array.from(list.children).forEach(el => {
+                    if (el.id !== 'campaignLoading') el.remove();
                 });
 
-                const result = await response.json();
-
-                if (result.success && result.brand) {
-                    localStorage.setItem('brandInfo', JSON.stringify(result.brand));
-                    updateBrandNameDisplay();
+                const requests = data.requests || [];
+                if (requests.length === 0) {
+                    const lang = localStorage.getItem('lang') || 'zh';
+                    const t = pageI18n[lang] || pageI18n.zh;
+                    const empty = document.createElement('div');
+                    empty.style.cssText = 'text-align:center;padding:40px 20px;color:#4b5563;font-size:0.9rem;';
+                    empty.textContent = t.campEmpty;
+                    list.appendChild(empty);
                 } else {
-                    throw new Error(result.message || '获取品牌信息失败');
+                    requests.forEach(req => list.appendChild(renderCampaignCard(req)));
                 }
-            } catch (error) {
-                console.error('Fetch brand error:', error);
-                // window.location.href = '/login.html';
-            } finally {
-                showLoading(false);
-            }
-        }
 
-        // Update brand name display based on language
-        function updateBrandNameDisplay() {
-            const brandDataStr = localStorage.getItem('brandInfo');
-            if (!brandDataStr) {
-                fetchBrandData();
+                _campaignsLoaded = true;
+            } catch (err) {
+                const lang = localStorage.getItem('lang') || 'zh';
+                const t = pageI18n[lang] || pageI18n.zh;
+                if (loading) {
+                    loading.innerHTML = `<span style="color:#f87171;">⚠ ${t.campLoadError}</span>`;
+                }
+                console.error('loadCampaigns error:', err);
                 return;
             }
 
-            try {
-                const brandData = JSON.parse(brandDataStr);
-                const lang = localStorage.getItem('lang') || 'zh';
-                const brandName = lang === 'zh' ? brandData.nameZh : brandData.nameEn;
-                brandNameEl.textContent = brandName || (lang === 'zh' ? '品牌名称' : 'Brand Name');
-            } catch (e) {
-                console.error('Error parsing brand data:', e);
-            }
+            if (loading) loading.style.display = 'none';
         }
 
-        // Show/hide loading
-        function showLoading(show) {
-            loadingOverlay.style.display = show ? 'flex' : 'none';
+        // ── Section 切换钩子 ────────────────────────────────────────
+        window.onSectionShow = function(section) {
+            if (section === 'campaigns') loadCampaigns();
+        };
+
+
+        const modal = document.getElementById('createCampaignModal');
+        const form  = document.getElementById('createCampaignForm');
+        const errorBox = document.getElementById('modalError');
+        const submitBtn = document.getElementById('submitCampaignBtn');
+        const reqList = document.getElementById('requirementsList');
+        const reqEmptyHint = document.getElementById('reqEmptyHint');
+
+        const PLATFORMS = [
+            { key: 'xiaohongshu', label: '小红书' }, { key: 'douyin', label: '抖音' },
+            { key: 'tiktok', label: 'TikTok' }, { key: 'instagram', label: 'Instagram' },
+            { key: 'youtube', label: 'YouTube' }, { key: 'weibo', label: '微博' },
+            { key: 'wechat', label: '微信视频号' }, { key: 'twitter', label: 'X / Twitter' }
+        ];
+        const CONTENT_TYPES = [
+            { value: 'both', label: '图文 + 视频' }, { value: 'video', label: '仅视频' }, { value: 'image', label: '仅图文' }
+        ];
+
+        function addRequirementRow() {
+            reqEmptyHint.style.display = 'none';
+            const row = document.createElement('div');
+            row.className = 'req-row';
+            row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1.4fr auto;gap:8px;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 12px;';
+            const is = 'padding:7px 10px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#f9fafb;font-size:0.82rem;outline:none;width:100%;box-sizing:border-box;';
+            const selP = document.createElement('select'); selP.style.cssText = is;
+            PLATFORMS.forEach(p => { const o = document.createElement('option'); o.value = p.key; o.textContent = p.label; selP.appendChild(o); });
+            const inpC = document.createElement('input'); inpC.type = 'number'; inpC.min = '1'; inpC.value = '1'; inpC.style.cssText = is;
+            const selC = document.createElement('select'); selC.style.cssText = is;
+            CONTENT_TYPES.forEach(c => { const o = document.createElement('option'); o.value = c.value; o.textContent = c.label; selC.appendChild(o); });
+            const del = document.createElement('button'); del.type = 'button'; del.textContent = '✕';
+            del.style.cssText = 'background:transparent;border:none;color:#6b7280;cursor:pointer;font-size:16px;padding:0 4px;';
+            del.addEventListener('click', () => { row.remove(); if (!reqList.children.length) reqEmptyHint.style.display = 'block'; });
+            [selP, inpC, selC, del].forEach(el => row.appendChild(el));
+            reqList.appendChild(row);
+        }
+
+        function collectRequirements() {
+            return Array.from(reqList.querySelectorAll('.req-row')).map(row => {
+                const [selP, inpC, selC] = row.querySelectorAll('select, input');
+                return { platformKey: selP.value, influencerCount: parseInt(inpC.value) || 1, contentType: selC.value };
+            }).filter(r => r.platformKey);
+        }
+
+        function openModal() {
+            form.reset(); reqList.innerHTML = ''; reqEmptyHint.style.display = 'block';
+            errorBox.style.display = 'none'; submitBtn.disabled = false; submitBtn.textContent = '发布活动';
+            modal.style.display = 'block';
+        }
+        function closeModal() { modal.style.display = 'none'; }
+
+        document.getElementById('btnCreateCampaign').addEventListener('click', openModal);
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+        document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+        document.getElementById('addReqBtn').addEventListener('click', addRequirementRow);
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            errorBox.style.display = 'none';
+            const title = document.getElementById('fieldTitle').value.trim();
+            const description = document.getElementById('fieldDesc').value.trim();
+            const rewardType = document.getElementById('fieldReward').value;
+            const budgetAmount = parseFloat(document.getElementById('fieldBudget').value) || 0;
+            const perks = document.getElementById('fieldPerks').value.trim() || undefined;
+            const startDate = document.getElementById('fieldStart').value;
+            const endDate = document.getElementById('fieldEnd').value;
+            const requirements = collectRequirements();
+
+            if (!title || !description || !startDate || !endDate) {
+                errorBox.textContent = '请填写所有必填项（标题、描述、开始/结束日期）';
+                errorBox.style.display = 'block'; return;
+            }
+            if (endDate < startDate) { errorBox.textContent = '结束日期不能早于开始日期'; errorBox.style.display = 'block'; return; }
+            const token = localStorage.getItem('authToken');
+            if (!token) { errorBox.textContent = '登录状态已过期，请重新登录'; errorBox.style.display = 'block'; return; }
+
+            submitBtn.disabled = true; submitBtn.textContent = '提交中...';
+            try {
+                const resp = await fetch(`${API_BASE_URL}/api/requests`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                    body: JSON.stringify({ title, description, rewardType, budgetAmount, perks, startDate, endDate, requirements: requirements.length ? requirements : undefined })
+                });
+                const data = await resp.json();
+                if (!resp.ok || !data.success) throw new Error(data.error || `服务器错误 (${resp.status})`);
+                closeModal();
+                prependCampaignCard(data.request);
+            } catch (err) {
+                errorBox.textContent = err.message || '提交失败，请稍后重试';
+                errorBox.style.display = 'block'; submitBtn.disabled = false; submitBtn.textContent = '发布活动';
+            }
+        });
+
+        function prependCampaignCard(req) {
+            const list = document.getElementById('campaignList');
+            if (!list) return;
+            // 移除空状态提示（如果有）
+            const empty = list.querySelector('[data-empty]');
+            if (empty) empty.remove();
+            // 使用统一渲染函数，插入顶部
+            const item = renderCampaignCard(req);
+            item.style.borderLeft = '3px solid #667eea';
+            list.prepend(item);
+            // 标记需要下次重新加载（因服务端数据已变）
+            _campaignsLoaded = false;
+        }
+
+        function escHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
         }
     </script>
 </body>

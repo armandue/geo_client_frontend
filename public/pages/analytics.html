@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能分析 - 智优传媒</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="page-transition">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <div class="nav-left">
+                <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="/index.html" class="nav-brand">智优传媒</a>
+            </div>
+            <div class="nav-right">
+                <div class="brand-indicator">
+                    <span class="brand-indicator-dot"></span>
+                    <span id="navBrandName">加载中...</span>
+                </div>
+                <div class="language-switcher">
+                    <div class="lang-dropdown">
+                        <button class="lang-btn lang-toggle" id="langToggle">
+                            <span id="currentLang">中文</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="lang-options" id="langOptions">
+                            <button class="lang-option active" data-lang="zh">中文</button>
+                            <button class="lang-option" data-lang="en">English</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="login-btn" id="logoutBtn">退出登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Left Panel / Sidebar -->
+        <aside class="sidebar-panel" id="sidebarPanel">
+            <div class="sidebar-top">
+                <div class="sidebar-brand-card">
+                    <div class="brand-avatar" id="brandInitial">智</div>
+                    <div class="brand-meta">
+                        <span class="brand-meta-name" id="sidebarBrandName">加载中...</span>
+                        <span class="brand-meta-status" id="sidebarBrandStatus">● 认证商家</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section-title" id="menuTitle">控制台菜单</div>
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="/index.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelHome">主页</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/analytics.html" class="menu-item active">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelAnalytics">智能分析</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/campaigns.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelCampaigns">活动召集</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/influencers.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelInfluencers">网红推广</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/messages.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelMessages">消息</span>
+                            <span class="menu-badge">3</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/merchant.html" class="menu-item">
+                            <span class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l1-5h16l1 5"></path>
+                                    <path d="M4 9v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"></path>
+                                    <path d="M9 22V12h6v10"></path>
+                                </svg>
+                            </span>
+                            <span class="menu-text" id="navLabelMerchant">商家详情</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-footer">
+                &copy; 2026 智优传媒 GeoMedia
+            </div>
+        </aside>
+
+        <!-- Right Main View Area -->
+        <main class="dashboard-main">
+            <div class="pane-header">
+                <h2 class="pane-title" id="pageMainTitle">智能分析</h2>
+                <p class="pane-subtitle" id="pageMainSubtitle">基于AI大语言模型检索与地理空间语义排名的全景分析数据</p>
+            </div>
+
+            <div class="content-card">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <span style="font-size: 20px; font-weight: 800;">92</span>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value">A+</span>
+                            <span class="stat-label" id="labelGeoScore">GEO推荐得分</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <span style="font-size: 18px;">TOP3</span>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value">78%</span>
+                            <span class="stat-label" id="labelTopShare">AI生成摘要命中率</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <span style="font-size: 18px;">↑15%</span>
+                        </div>
+                        <div class="stat-details">
+                            <span class="stat-value">124 个</span>
+                            <span class="stat-label" id="labelKeywords">核心关键词收录</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border-radius: 12px; padding: 24px; border: 1px solid var(--border-color); margin-top: 16px;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 16px; color: var(--primary-color);" id="analyticsAdviceTitle">💡 AI 智能优化建议</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: var(--text-muted); font-size: 14px; line-height: 1.8;" id="analyticsAdviceList">
+                        <li id="advice1">您当前的品牌在本地美食搜索类目中的AI大模型引用频次位居前列。</li>
+                        <li id="advice2">建议在即将推出的新品中补充特色食材与地理定位标签，以进一步提升高意向客群曝光。</li>
+                        <li id="advice3">配合探店达人发布测评内容，可将语义问答搜索推荐度再提升 20% 以上。</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+    <script>
+        const pageI18n = {
+            zh: {
+                pageTitle: '智能分析 - 智优传媒',
+                pageMainTitle: '智能分析',
+                pageMainSubtitle: '基于AI大语言模型检索与地理空间语义排名的全景分析数据',
+                geoScore: 'GEO推荐得分',
+                topShare: 'AI生成摘要命中率',
+                keywords: '核心关键词收录',
+                adviceTitle: '💡 AI 智能优化建议',
+                advice1: '您当前的品牌在本地美食搜索类目中的AI大模型引用频次位居前列。',
+                advice2: '建议在即将推出的新品中补充特色食材与地理定位标签，以进一步提升高意向客群曝光。',
+                advice3: '配合探店达人发布测评内容，可将语义问答搜索推荐度再提升 20% 以上。'
+            },
+            en: {
+                pageTitle: 'Smart Analysis - GeoMedia',
+                pageMainTitle: 'Smart Analysis',
+                pageMainSubtitle: 'Comprehensive metrics from AI LLM query indices and spatial semantic ranking',
+                geoScore: 'GEO Health Score',
+                topShare: 'AI Summary Mention Rate',
+                keywords: 'Indexed Keywords',
+                adviceTitle: '💡 AI Growth Recommendations',
+                advice1: 'Your brand ranks among the top cited in local food and lifestyle AI searches.',
+                advice2: 'We recommend tagging signature dishes and geographical landmarks in upcoming updates.',
+                advice3: 'Coordinating with local creators for verified tasting reviews will further boost your prompt rank by 20%+'
+            }
+        };
+
+        window.onPageLanguageChange = function(lang) {
+            const t = pageI18n[lang] || pageI18n.zh;
+            document.title = t.pageTitle;
+            document.getElementById('pageMainTitle').textContent = t.pageMainTitle;
+            document.getElementById('pageMainSubtitle').textContent = t.pageMainSubtitle;
+            document.getElementById('labelGeoScore').textContent = t.geoScore;
+            document.getElementById('labelTopShare').textContent = t.topShare;
+            document.getElementById('labelKeywords').textContent = t.keywords;
+            document.getElementById('analyticsAdviceTitle').textContent = t.adviceTitle;
+            document.getElementById('advice1').textContent = t.advice1;
+            document.getElementById('advice2').textContent = t.advice2;
+            document.getElementById('advice3').textContent = t.advice3;
+        };
+    </script>
+</body>
+</html>

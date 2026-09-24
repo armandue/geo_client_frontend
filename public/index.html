@@ -428,59 +428,74 @@
             <section id="section-campaign-detail" class="spa-section" style="display:none;">
                 <!-- 返回按钮 -->
                 <div style="margin-bottom:20px;">
-                    <button id="detailBackBtn" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#9ca3af;cursor:pointer;font-size:0.85rem;">
+                    <button id="detailBackBtn" onclick="showSection('campaigns')" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#9ca3af;cursor:pointer;font-size:0.85rem;">
                         <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
                         <span id="detailBackLabel">返回活动列表</span>
                     </button>
                 </div>
 
-                <!-- 标题区 -->
-                <div class="pane-header" style="margin-bottom:20px;">
-                    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                        <span id="detailRewardIcon" style="font-size:28px;">🍽️</span>
-                        <div>
-                            <h2 class="pane-title" id="detailTitle" style="margin:0 0 4px;">活动详情</h2>
-                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                                <span id="detailStatusBadge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;background:rgba(16,185,129,0.15);color:#10b981;">🟢 招募中</span>
-                                <span id="detailRewardBadge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,0.07);color:#9ca3af;">免费餐饮</span>
+                <!-- 内容区：最大宽度 680px，左对齐，不撑满 -->
+                <div style="max-width:680px;">
+
+                    <!-- 标题区 -->
+                    <div class="pane-header" style="margin-bottom:24px;">
+                        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                            <span id="detailRewardIcon" style="font-size:32px;">🍽️</span>
+                            <div>
+                                <h2 class="pane-title" id="detailTitle" style="margin:0 0 6px;">活动详情</h2>
+                                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                                    <span id="detailStatusBadge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;background:rgba(16,185,129,0.15);color:#10b981;">🟢 招募中</span>
+                                    <span id="detailRewardBadge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,0.07);color:#d1d5db;">免费餐饮</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 信息卡片 -->
-                <div class="content-card" style="margin-bottom:16px;">
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <span class="detail-label" id="detailLabelDate">活动时间</span>
-                            <span class="detail-value" id="detailDateRange">—</span>
+                    <!-- 基本信息：竖向列表 -->
+                    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;margin-bottom:16px;display:flex;flex-direction:column;gap:16px;">
+
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <span style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">活动时间</span>
+                            <span id="detailDateRange" style="font-size:0.97rem;font-weight:500;">—</span>
                         </div>
-                        <div class="detail-item">
-                            <span class="detail-label" id="detailLabelBudget">预算金额</span>
-                            <span class="detail-value" id="detailBudget">—</span>
+
+                        <div style="height:1px;background:rgba(255,255,255,0.08);"></div>
+
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <span style="font-size:0.75rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelBudget">预算金额</span>
+                            <span id="detailBudget" style="font-size:0.97rem;font-weight:500;">—</span>
                         </div>
-                        <div class="detail-item">
-                            <span class="detail-label" id="detailLabelPerks">活动福利</span>
-                            <span class="detail-value" id="detailPerks">—</span>
+
+                        <div style="height:1px;background:rgba(255,255,255,0.08);"></div>
+
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <span style="font-size:0.75rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelPerks">活动福利</span>
+                            <span id="detailPerks" style="font-size:0.97rem;font-weight:500;">—</span>
                         </div>
-                        <div class="detail-item">
-                            <span class="detail-label" id="detailLabelCreated">创建时间</span>
-                            <span class="detail-value" id="detailCreatedAt">—</span>
+
+                        <div style="height:1px;background:rgba(255,255,255,0.08);"></div>
+
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <span style="font-size:0.75rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelCreated">创建时间</span>
+                            <span id="detailCreatedAt" style="font-size:0.97rem;font-weight:500;">—</span>
                         </div>
+
                     </div>
-                </div>
 
-                <!-- 活动描述 -->
-                <div class="content-card" style="margin-bottom:16px;">
-                    <h4 style="margin:0 0 12px;font-size:0.95rem;color:#d1d5db;" id="detailLabelDesc">活动描述</h4>
-                    <p id="detailDescription" style="margin:0;color:#9ca3af;font-size:0.9rem;line-height:1.7;white-space:pre-wrap;"></p>
-                </div>
+                    <!-- 活动描述 -->
+                    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;margin-bottom:16px;">
+                        <h4 style="margin:0 0 12px;font-size:0.75rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelDesc">活动描述</h4>
+                        <p id="detailDescription" style="margin:0;font-size:0.95rem;line-height:1.8;white-space:pre-wrap;"></p>
+                    </div>
 
-                <!-- 平台招募要求 -->
-                <div class="content-card" id="detailRequirementsCard">
-                    <h4 style="margin:0 0 14px;font-size:0.95rem;color:#d1d5db;" id="detailLabelReqs">平台招募要求</h4>
-                    <div id="detailRequirementsList"></div>
-                </div>
+                    <!-- 平台招募要求 -->
+                    <div id="detailRequirementsCard" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;">
+                        <h4 style="margin:0 0 14px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelReqs">平台招募要求</h4>
+                        <div id="detailRequirementsList"></div>
+                    </div>
+
+                </div><!-- /max-width wrapper -->
+
             </section>
 
         </main>
@@ -523,8 +538,8 @@
                 </div>
 
                 <div style="margin-bottom:16px;">
-                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">福利说明（可选）</label>
-                    <input id="fieldPerks" type="text" placeholder="例：双人套餐+指定菜品免费" style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;" id="labelPerks">福利说明（可选）</label>
+                    <textarea id="fieldPerks" rows="3" placeholder="例：双人套餐+指定菜品免费、专属折扣券、优先体验新品..." style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;resize:vertical;"></textarea>
                 </div>
 
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
@@ -689,6 +704,126 @@
             return iso ? iso.slice(0, 10) : '';
         }
 
+        // ── loadPlatforms: GET /api/platforms ──────────────────────
+        let PLATFORMS_CACHE = [];
+
+        async function loadPlatformsFromApi() {
+            if (PLATFORMS_CACHE.length > 0) return PLATFORMS_CACHE;
+            try {
+                const resp = await fetch(`${API_BASE_URL}/api/platforms`);
+                const data = await resp.json();
+                if (data && data.success && Array.isArray(data.platforms) && data.platforms.length > 0) {
+                    PLATFORMS_CACHE = data.platforms;
+                    return PLATFORMS_CACHE;
+                }
+            } catch (e) {
+                console.warn('Failed to fetch platforms from API:', e);
+            }
+            return [];
+        }
+
+        function getPlatformDisplayName(key, lang) {
+            const found = PLATFORMS_CACHE.find(p => p.platformKey === key);
+            if (found) {
+                return lang === 'en' ? (found.nameEn || found.nameZh || key) : (found.nameZh || found.nameEn || key);
+            }
+            const defaultNames = {
+                xiaohongshu: '小红书', douyin: '抖音', tiktok: 'TikTok',
+                instagram: 'Instagram', youtube: 'YouTube', facebook: 'Facebook',
+                twitter: 'X (Twitter)', weibo: '微博', wechat: '微信视频号'
+            };
+            return defaultNames[key] || key;
+        }
+
+        function showCampaignDetail(req, preventPush = false) {
+            const lang = (document.documentElement.lang === 'en' || localStorage.getItem('lang') === 'en') ? 'en' : 'zh';
+            const t = pageI18n[lang] || pageI18n.zh;
+            const rw = REWARD_ICONS[req.rewardType] || REWARD_ICONS.gift;
+            const st = STATUS_CONFIG[req.status] || STATUS_CONFIG.open;
+            const statusLabel = t[st.key] || req.status;
+            const rewardLabels = { free_meal: t.campRewardFreeMeal, cash: t.campRewardCash, discount: t.campRewardDiscount, gift: t.campRewardGift };
+            const rewardLabel = rewardLabels[req.rewardType] || req.rewardType;
+
+            const iconEl = document.getElementById('detailRewardIcon');
+            if (iconEl) iconEl.textContent = rw.icon;
+
+            const titleEl = document.getElementById('detailTitle');
+            if (titleEl) titleEl.textContent = req.title || t.detailTitle;
+
+            const statusBadge = document.getElementById('detailStatusBadge');
+            if (statusBadge) statusBadge.textContent = `${st.dot} ${statusLabel}`;
+
+            const rewardBadge = document.getElementById('detailRewardBadge');
+            if (rewardBadge) {
+                rewardBadge.textContent = rewardLabel;
+                rewardBadge.style.color = rw.color;
+                rewardBadge.style.background = rw.bg;
+            }
+
+            const start = formatDate(req.startDate);
+            const end   = formatDate(req.endDate);
+            const dateEl = document.getElementById('detailDateRange');
+            if (dateEl) dateEl.textContent = `${start} 至 ${end}`;
+
+            const budgetEl = document.getElementById('detailBudget');
+            if (budgetEl) budgetEl.textContent = req.budgetAmount ? `￥${req.budgetAmount}` : (lang === 'en' ? 'Free Meal / Flexible' : '免费餐饮 / 无硬性预算');
+
+            const perksEl = document.getElementById('detailPerks');
+            if (perksEl) perksEl.textContent = req.perks || (lang === 'en' ? 'None' : '无');
+
+            const createdEl = document.getElementById('detailCreatedAt');
+            if (createdEl) createdEl.textContent = req.createdAt || (start ? start : '-');
+
+            const descEl = document.getElementById('detailDescription');
+            if (descEl) descEl.textContent = req.description || (lang === 'en' ? 'No detailed description.' : '暂无详细描述。');
+
+            // 渲染平台招募要求与 extraRequirements
+            const reqListEl = document.getElementById('detailRequirementsList');
+            if (reqListEl) {
+                reqListEl.innerHTML = '';
+                if (req.requirements && req.requirements.length > 0) {
+                    const cNames = { both: (lang==='en'?'Image + Video':'图文 + 视频'), video: (lang==='en'?'Video Only':'仅视频'), image: (lang==='en'?'Image Only':'仅图文') };
+
+                    req.requirements.forEach(r => {
+                        const row = document.createElement('div');
+                        row.style.cssText = 'padding:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;margin-bottom:10px;';
+                        const pName = getPlatformDisplayName(r.platformKey, lang);
+                        const cName = cNames[r.contentType] || r.contentType;
+
+                        // 处理 extraRequirements (minFollowers & note)
+                        let extraObj = r.extraRequirements || {};
+                        if (typeof extraObj === 'string') {
+                            try { extraObj = JSON.parse(extraObj); } catch(e) { extraObj = {}; }
+                        }
+                        const extraBadges = [];
+                        if (extraObj.minFollowers) extraBadges.push(`🎯 ${lang==='en'?'Min Followers:':'最低粉丝:'} ${Number(extraObj.minFollowers).toLocaleString()}`);
+                        if (extraObj.note) extraBadges.push(`📌 ${lang==='en'?'Note:':'附加要求:'} ${escHtml(extraObj.note)}`);
+
+                        const extraHTML = extraBadges.length ? `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.08);font-size:0.83rem;color:#818cf8;display:flex;gap:12px;flex-wrap:wrap;">${extraBadges.map(b=>`<span>${b}</span>`).join('')}</div>` : '';
+
+                        row.innerHTML = `
+                            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                                <div style="font-weight:600;font-size:0.95rem;">
+                                    📱 ${pName}
+                                </div>
+                                <div style="font-size:0.85rem;">
+                                    ${lang==='en'?'Creators:':'需要达人：'}<strong style="margin-right:12px;">${r.influencerCount}</strong>
+                                    ${lang==='en'?'Format:':'内容类型：'}<span>${cName}</span>
+                                </div>
+                            </div>
+                            ${extraHTML}
+                        `;
+                        reqListEl.appendChild(row);
+                    });
+                } else {
+                    reqListEl.innerHTML = `<p style="margin:0;color:#6b7280;font-size:0.85rem;">${t.detailNoReqs || '暂无特定平台招募要求'}</p>`;
+                }
+            }
+            if (!preventPush && typeof showSection === 'function') {
+                showSection('campaign-detail', true, req.id);
+            }
+        }
+
         function renderCampaignCard(req) {
             const lang = (document.documentElement.lang === 'en' || localStorage.getItem('lang') === 'en') ? 'en' : 'zh';
             const t = pageI18n[lang] || pageI18n.zh;
@@ -704,19 +839,36 @@
             const item = document.createElement('div');
             item.className = 'message-item';
             item.dataset.requestId = req.id;
+            item.style.display = 'flex';
+            item.style.alignItems = 'center';
+            item.style.justifyContent = 'space-between';
             item.innerHTML = `
-                <div class="message-avatar" style="background:${rw.bg};color:${rw.color};font-size:20px;display:flex;align-items:center;justify-content:center;">
-                    ${rw.icon}
+                <div style="display:flex;align-items:flex-start;gap:12px;flex:1;min-width:0;">
+                    <div class="message-avatar" style="background:${rw.bg};color:${rw.color};font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        ${rw.icon}
+                    </div>
+                    <div class="message-content" style="flex:1;min-width:0;">
+                        <h5 style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 4px;">
+                            ${escHtml(req.title)}
+                            <span style="font-size:0.72rem;font-weight:500;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,0.07);color:#9ca3af;">${st.dot} ${statusLabel}</span>
+                            ${perksHTML}
+                        </h5>
+                        <p style="margin:4px 0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(req.description)}</p>
+                        <span class="message-time">${rewardLabel} · ${start} → ${end}</span>
+                    </div>
                 </div>
-                <div class="message-content" style="flex:1;min-width:0;">
-                    <h5 style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                        ${escHtml(req.title)}
-                        <span style="font-size:0.72rem;font-weight:500;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,0.07);color:#9ca3af;">${st.dot} ${statusLabel}</span>
-                        ${perksHTML}
-                    </h5>
-                    <p style="margin:4px 0 6px;">${escHtml(req.description)}</p>
-                    <span class="message-time">${rewardLabel} · ${start} → ${end}</span>
-                </div>`;
+                <button class="btn-detail" style="padding:8px 16px;background:rgba(102,126,234,0.15);border:1px solid rgba(102,126,234,0.3);border-radius:8px;color:#818cf8;cursor:pointer;font-size:0.82rem;white-space:nowrap;margin-left:16px;flex-shrink:0;">
+                    ${t.btnDetail || '查看详情'}
+                </button>`;
+
+            const detailBtn = item.querySelector('.btn-detail');
+            if (detailBtn) {
+                detailBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showCampaignDetail(req);
+                });
+            }
+
             return item;
         }
 
@@ -745,7 +897,7 @@
                     if (el.id !== 'campaignLoading') el.remove();
                 });
 
-                const requests = data.requests || [];
+                const requests = data.requests || []; window._allCampaigns = requests;
                 if (requests.length === 0) {
                     const lang = localStorage.getItem('lang') || 'zh';
                     const t = pageI18n[lang] || pageI18n.zh;
@@ -772,8 +924,23 @@
         }
 
         // ── Section 切换钩子 ────────────────────────────────────────
-        window.onSectionShow = function(section) {
-            if (section === 'campaigns') loadCampaigns();
+        window.onSectionShow = async function(section, id) {
+            if (section === 'campaigns') {
+                loadCampaigns();
+            } else if (section === 'campaign-detail' && id) {
+                if (!_campaignsLoaded) {
+                    await loadCampaigns();
+                }
+                if (window._allCampaigns) {
+                    const req = window._allCampaigns.find(r => r.id === id);
+                    if (req) {
+                        showCampaignDetail(req, true);
+                    } else {
+                        // If not found, go back to campaigns
+                        if (typeof showSection === 'function') showSection('campaigns', false);
+                    }
+                }
+            }
         };
 
 
@@ -784,42 +951,107 @@
         const reqList = document.getElementById('requirementsList');
         const reqEmptyHint = document.getElementById('reqEmptyHint');
 
-        const PLATFORMS = [
-            { key: 'xiaohongshu', label: '小红书' }, { key: 'douyin', label: '抖音' },
-            { key: 'tiktok', label: 'TikTok' }, { key: 'instagram', label: 'Instagram' },
-            { key: 'youtube', label: 'YouTube' }, { key: 'weibo', label: '微博' },
-            { key: 'wechat', label: '微信视频号' }, { key: 'twitter', label: 'X / Twitter' }
+        const DEFAULT_PLATFORMS = [
+            { platformKey: 'xiaohongshu', nameZh: '小红书', nameEn: 'Xiaohongshu' },
+            { platformKey: 'douyin', nameZh: '抖音', nameEn: 'Douyin' },
+            { platformKey: 'tiktok', nameZh: 'TikTok', nameEn: 'TikTok' },
+            { platformKey: 'instagram', nameZh: 'Instagram', nameEn: 'Instagram' },
+            { platformKey: 'youtube', nameZh: 'YouTube', nameEn: 'YouTube' },
+            { platformKey: 'facebook', nameZh: 'Facebook', nameEn: 'Facebook' },
+            { platformKey: 'twitter', nameZh: 'X (Twitter)', nameEn: 'X (Twitter)' }
         ];
+
         const CONTENT_TYPES = [
             { value: 'both', label: '图文 + 视频' }, { value: 'video', label: '仅视频' }, { value: 'image', label: '仅图文' }
         ];
 
-        function addRequirementRow() {
+        async function addRequirementRow() {
             reqEmptyHint.style.display = 'none';
             const row = document.createElement('div');
             row.className = 'req-row';
-            row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1.4fr auto;gap:8px;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 12px;';
+            row.style.cssText = 'background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;';
+
             const is = 'padding:7px 10px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#f9fafb;font-size:0.82rem;outline:none;width:100%;box-sizing:border-box;';
+
+            // 第一行：平台、数量、形式、删除按钮
+            const topRow = document.createElement('div');
+            topRow.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1.4fr auto;gap:8px;align-items:center;';
+
             const selP = document.createElement('select'); selP.style.cssText = is;
-            PLATFORMS.forEach(p => { const o = document.createElement('option'); o.value = p.key; o.textContent = p.label; selP.appendChild(o); });
-            const inpC = document.createElement('input'); inpC.type = 'number'; inpC.min = '1'; inpC.value = '1'; inpC.style.cssText = is;
+
+            // 获取 API 平台数据，如果没有就退回预设
+            const platforms = (await loadPlatformsFromApi()) || DEFAULT_PLATFORMS;
+            const lang = (document.documentElement.lang === 'en' || localStorage.getItem('lang') === 'en') ? 'en' : 'zh';
+            const listToRender = (platforms && platforms.length > 0) ? platforms : DEFAULT_PLATFORMS;
+
+            listToRender.forEach(p => {
+                const o = document.createElement('option');
+                o.value = p.platformKey;
+                o.textContent = lang === 'en' ? (p.nameEn || p.nameZh || p.platformKey) : (p.nameZh || p.nameEn || p.platformKey);
+                selP.appendChild(o);
+            });
+
+            const inpC = document.createElement('input'); inpC.type = 'number'; inpC.min = '1'; inpC.value = '1'; inpC.placeholder = '数量'; inpC.style.cssText = is;
+
             const selC = document.createElement('select'); selC.style.cssText = is;
             CONTENT_TYPES.forEach(c => { const o = document.createElement('option'); o.value = c.value; o.textContent = c.label; selC.appendChild(o); });
+
             const del = document.createElement('button'); del.type = 'button'; del.textContent = '✕';
             del.style.cssText = 'background:transparent;border:none;color:#6b7280;cursor:pointer;font-size:16px;padding:0 4px;';
             del.addEventListener('click', () => { row.remove(); if (!reqList.children.length) reqEmptyHint.style.display = 'block'; });
-            [selP, inpC, selC, del].forEach(el => row.appendChild(el));
+
+            topRow.appendChild(selP); topRow.appendChild(inpC); topRow.appendChild(selC); topRow.appendChild(del);
+
+            // 第二行：extraRequirements (最低粉丝数 + 额外要求/定位)
+            const bottomRow = document.createElement('div');
+            bottomRow.style.cssText = 'display:grid;grid-template-columns:1fr 2fr;gap:8px;align-items:center;';
+
+            const inpFollowers = document.createElement('input');
+            inpFollowers.type = 'number'; inpFollowers.min = '0'; inpFollowers.placeholder = '最低粉丝数 (例: 10000)';
+            inpFollowers.className = 'req-extra-followers';
+            inpFollowers.style.cssText = is;
+
+            const inpExtraNote = document.createElement('input');
+            inpExtraNote.type = 'text'; inpExtraNote.placeholder = '附加要求 (例: 粉丝地域伦敦, 性别不限)';
+            inpExtraNote.className = 'req-extra-note';
+            inpExtraNote.style.cssText = is;
+
+            bottomRow.appendChild(inpFollowers); bottomRow.appendChild(inpExtraNote);
+
+            row.appendChild(topRow);
+            row.appendChild(bottomRow);
             reqList.appendChild(row);
         }
 
         function collectRequirements() {
             return Array.from(reqList.querySelectorAll('.req-row')).map(row => {
-                const [selP, inpC, selC] = row.querySelectorAll('select, input');
-                return { platformKey: selP.value, influencerCount: parseInt(inpC.value) || 1, contentType: selC.value };
+                const selects = row.querySelectorAll('select');
+                const selP = selects[0];
+                const selC = selects[1] || selects[0];
+                const inpC = row.querySelector('input[type="number"]');
+
+                const inpFollowers = row.querySelector('.req-extra-followers');
+                const inpExtraNote = row.querySelector('.req-extra-note');
+
+                const platformKey = selP.value;
+                const influencerCount = parseInt(inpC.value) || 1;
+                const contentType = selC.value;
+
+                const extraRequirements = {};
+                if (inpFollowers && inpFollowers.value) {
+                    const mf = parseInt(inpFollowers.value);
+                    if (mf > 0) extraRequirements.minFollowers = mf;
+                }
+                if (inpExtraNote && inpExtraNote.value.trim()) {
+                    extraRequirements.note = inpExtraNote.value.trim();
+                }
+
+                return { platformKey, influencerCount, contentType, extraRequirements };
             }).filter(r => r.platformKey);
         }
 
         function openModal() {
+            loadPlatformsFromApi();
             form.reset(); reqList.innerHTML = ''; reqEmptyHint.style.display = 'block';
             errorBox.style.display = 'none'; submitBtn.disabled = false; submitBtn.textContent = '发布活动';
             modal.style.display = 'block';

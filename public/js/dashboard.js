@@ -1,6 +1,6 @@
 /**
  * GeoMedia Dashboard — Common Script (SPA Edition)
- * URL scheme: /index.html?section=<name>&lang=<zh|en>
+ * URL scheme: /index.html/<name>?lang=<zh|en>
  */
 
 const API_BASE_URL = 'https://geoclientbackend.shandong-buxie.workers.dev';
@@ -54,8 +54,19 @@ function getCurrentLang() {
     return getParam('lang') || localStorage.getItem('lang') || 'zh';
 }
 
+function getCurrentSectionInfo() {
+    const match = window.location.pathname.match(/\/index\.html\/([^/?]+)(?:\/([^/?]+))?/);
+    if (match) {
+        if (match[1] === 'campaigns' && match[2]) {
+            return { section: 'campaign-detail', id: match[2] };
+        }
+        return { section: match[1], id: match[2] };
+    }
+    return { section: getParam('section') || 'home', id: null };
+}
+
 function getCurrentSection() {
-    return getParam('section') || 'home';
+    return getCurrentSectionInfo().section;
 }
 
 // ── SPA Section Router ─────────────────────────────────────────────────────
@@ -66,8 +77,10 @@ const VALID_SECTIONS = ['home', 'analytics', 'campaigns', 'influencers', 'messag
  * Updates URL via pushState (or replaceState on initial load).
  * @param {string} name - section name
  * @param {boolean} pushState - whether to push a new history entry
+ * @param {string|null} id - optional ID for detail views
  */
-function showSection(name, pushState = true) {
+
+function showSection(name, pushState = true, id = null) {
     if (!VALID_SECTIONS.includes(name)) name = 'home';
 
     // Hide all sections
@@ -80,25 +93,32 @@ function showSection(name, pushState = true) {
     const target = document.getElementById(`section-${name}`);
     if (target) target.style.display = 'block';
 
-    // Update sidebar active state
+    // Update sidebar active state (for campaign-detail, highlight campaigns)
+    const activeSection = name === 'campaign-detail' ? 'campaigns' : name;
     document.querySelectorAll('.menu-item[data-section]').forEach(link => {
-        link.classList.toggle('active', link.dataset.section === name);
+        link.classList.toggle('active', link.dataset.section === activeSection);
     });
 
     // Update URL (preserve lang param)
     const lang = getCurrentLang();
-    const newUrl = setParam('section', name);
+    const newUrl = new URL(window.location.href);
+    if (name === 'campaign-detail' && id) {
+        newUrl.pathname = `/index.html/campaigns/${id}`;
+    } else {
+        newUrl.pathname = name === 'home' ? '/index.html' : `/index.html/${name}`;
+    }
+    newUrl.searchParams.delete('section');
     newUrl.searchParams.set('lang', lang);
 
     if (pushState) {
-        window.history.pushState({ section: name }, '', newUrl.toString());
+        window.history.pushState({ section: name, id: id }, '', newUrl.toString());
     } else {
-        window.history.replaceState({ section: name }, '', newUrl.toString());
+        window.history.replaceState({ section: name, id: id }, '', newUrl.toString());
     }
 
     // Notify page-level scripts that a section became visible
     if (typeof window.onSectionShow === 'function') {
-        window.onSectionShow(name);
+        window.onSectionShow(name, id);
     }
 }
 
@@ -261,8 +281,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── SPA Navigation: browser back/forward ────────────────────
     window.addEventListener('popstate', e => {
-        const section = (e.state && e.state.section) || getCurrentSection();
-        showSection(section, false);
+        let section, id;
+        if (e.state && e.state.section) {
+            section = e.state.section;
+            id = e.state.id;
+        } else {
+            const current = getCurrentSectionInfo();
+            section = current.section;
+            id = current.id;
+        }
+        showSection(section, false, id);
     });
 
     // ── Mobile Sidebar ───────────────────────────────────────────
@@ -287,8 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ── Initial section render ───────────────────────────────────
-    const initSection = getCurrentSection();
-    showSection(initSection, false);   // replaceState so it won't break back button
+    const currentInit = getCurrentSectionInfo();
+    showSection(currentInit.section, false, currentInit.id);   // replaceState so it won't break back button
 
     // ── Fetch brand data ─────────────────────────────────────────
     fetchBrandData();

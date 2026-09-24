@@ -57,10 +57,18 @@ function getCurrentLang() {
 function getCurrentSectionInfo() {
     const match = window.location.pathname.match(/\/index\.html\/([^/?]+)(?:\/([^/?]+))?/);
     if (match) {
-        if (match[1] === 'campaigns' && match[2]) {
-            return { section: 'campaign-detail', id: match[2] };
+        let route = match[1];
+        let id = match[2];
+        
+        // Map new URL routes back to internal sections
+        if (route === 'requests' || route === 'campaigns') {
+            if (id) return { section: 'request-detail', id: id };
+            return { section: 'campaigns', id: null };
         }
-        return { section: match[1], id: match[2] };
+        if (route === 'claims') return { section: 'influencers', id };
+        if (route === 'brands') return { section: 'merchant', id };
+        
+        return { section: route, id: id };
     }
     return { section: getParam('section') || 'home', id: null };
 }
@@ -70,7 +78,7 @@ function getCurrentSection() {
 }
 
 // ── SPA Section Router ─────────────────────────────────────────────────────
-const VALID_SECTIONS = ['home', 'analytics', 'campaigns', 'influencers', 'messages', 'merchant', 'campaign-detail'];
+const VALID_SECTIONS = ['home', 'analytics', 'campaigns', 'influencers', 'messages', 'merchant', 'request-detail'];
 
 /**
  * Show the target section, hide all others.
@@ -93,8 +101,8 @@ function showSection(name, pushState = true, id = null) {
     const target = document.getElementById(`section-${name}`);
     if (target) target.style.display = 'block';
 
-    // Update sidebar active state (for campaign-detail, highlight campaigns)
-    const activeSection = name === 'campaign-detail' ? 'campaigns' : name;
+    // Update sidebar active state (for request-detail, highlight campaigns)
+    const activeSection = name === 'request-detail' ? 'campaigns' : name;
     document.querySelectorAll('.menu-item[data-section]').forEach(link => {
         link.classList.toggle('active', link.dataset.section === activeSection);
     });
@@ -102,11 +110,20 @@ function showSection(name, pushState = true, id = null) {
     // Update URL (preserve lang param)
     const lang = getCurrentLang();
     const newUrl = new URL(window.location.href);
-    if (name === 'campaign-detail' && id) {
-        newUrl.pathname = `/index.html/campaigns/${id}`;
+    
+    // Map internal sections to URL paths
+    if (name === 'request-detail' && id) {
+        newUrl.pathname = `/index.html/requests/${id}`;
+    } else if (name === 'home') {
+        newUrl.pathname = '/index.html';
     } else {
-        newUrl.pathname = name === 'home' ? '/index.html' : `/index.html/${name}`;
+        let pathSegment = name;
+        if (name === 'campaigns') pathSegment = 'requests';
+        if (name === 'influencers') pathSegment = 'claims';
+        if (name === 'merchant') pathSegment = 'brands';
+        newUrl.pathname = `/index.html/${pathSegment}`;
     }
+    
     newUrl.searchParams.delete('section');
     newUrl.searchParams.set('lang', lang);
 
@@ -315,8 +332,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ── Initial section render ───────────────────────────────────
-    const currentInit = getCurrentSectionInfo();
-    showSection(currentInit.section, false, currentInit.id);   // replaceState so it won't break back button
+    const isSPA = window.location.pathname.includes('index.html') || window.location.pathname === '/';
+    if (isSPA) {
+        const currentInit = getCurrentSectionInfo();
+        showSection(currentInit.section, false, currentInit.id);   // replaceState so it won't break back button
+    }
 
     // ── Fetch brand data ─────────────────────────────────────────
     fetchBrandData();

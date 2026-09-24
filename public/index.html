@@ -279,7 +279,7 @@
                         <h4 style="margin: 0 0 10px 0; font-size: 16px; color: var(--primary-color);" id="analyticsAdviceTitle">💡 AI 智能优化建议</h4>
                         <ul style="margin: 0; padding-left: 20px; color: var(--text-muted); font-size: 14px; line-height: 1.8;" id="analyticsAdviceList">
                             <li id="advice1">您当前的品牌在本地美食搜索类目中的AI大模型引用频次位居前列。</li>
-                            <li id="advice2">建议在即将推出的新品中补充特色食材与地理定位标签，以进一步提升高意向客群曝光。</li>
+                            <li id="advice2">建议在即将推出的补充特色食材与地理定位标签，以进一步提升高意向客群曝光。</li>
                             <li id="advice3">配合探店达人发布测评内容，可将语义问答搜索推荐度再提升 20% 以上。</li>
                         </ul>
                     </div>
@@ -423,79 +423,109 @@
             </section>
 
             <!-- ═══════════════════════════════════════════
-                 SECTION: campaign-detail
+                 SECTION: request-detail
             ════════════════════════════════════════════ -->
-            <section id="section-campaign-detail" class="spa-section" style="display:none;">
-                <!-- 返回按钮 -->
+            <section id="section-request-detail" class="spa-section" style="display:none;">
                 <div style="margin-bottom:20px;">
-                    <button id="detailBackBtn" onclick="showSection('campaigns')" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#9ca3af;cursor:pointer;font-size:0.85rem;">
+                    <button id="detailBackBtn" onclick="window.location.href='/index.html?section=campaigns'" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#ffffff;border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);cursor:pointer;font-size:0.85rem;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
                         <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
                         <span id="detailBackLabel">返回活动列表</span>
                     </button>
                 </div>
 
-                <!-- 内容区：最大宽度 680px，左对齐，不撑满 -->
-                <div style="max-width:680px;">
-
-                    <!-- 标题区 -->
-                    <div class="pane-header" style="margin-bottom:24px;">
+                <div style="display:block;">
+                    <div class="pane-header" style="margin-bottom:24px; width:100%;">
                         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
                             <span id="detailRewardIcon" style="font-size:32px;">🍽️</span>
-                            <div>
+                            <div style="width:100%;">
                                 <h2 class="pane-title" id="detailTitle" style="margin:0 0 6px;">活动详情</h2>
                                 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
                                     <span id="detailStatusBadge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;background:rgba(16,185,129,0.15);color:#10b981;">🟢 招募中</span>
-                                    <span id="detailRewardBadge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,0.07);color:#d1d5db;">免费餐饮</span>
+                                    <span id="detailRewardBadge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;background:#f1f5f9;color:var(--text-muted);">免费餐饮</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 基本信息：竖向列表 -->
-                    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;margin-bottom:16px;display:flex;flex-direction:column;gap:16px;">
-
-                        <div style="display:flex;flex-direction:column;gap:5px;">
-                            <span style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">活动时间</span>
-                            <span id="detailDateRange" style="font-size:0.97rem;font-weight:500;">—</span>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-bottom:24px;">
+                        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--text-muted)" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">活动时间</span>
+                            </div>
+                            <div id="detailDateRange" style="font-size:1rem;color:var(--text-main);font-weight:600;">—</div>
                         </div>
 
-                        <div style="height:1px;background:rgba(255,255,255,0.08);"></div>
-
-                        <div style="display:flex;flex-direction:column;gap:5px;">
-                            <span style="font-size:0.75rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelBudget">预算金额</span>
-                            <span id="detailBudget" style="font-size:0.97rem;font-weight:500;">—</span>
+                        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--text-muted)" stroke-width="2" fill="none"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">预算金额</span>
+                            </div>
+                            <div id="detailBudget" style="font-size:1rem;color:var(--text-main);font-weight:600;">—</div>
                         </div>
 
-                        <div style="height:1px;background:rgba(255,255,255,0.08);"></div>
-
-                        <div style="display:flex;flex-direction:column;gap:5px;">
-                            <span style="font-size:0.75rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelPerks">活动福利</span>
-                            <span id="detailPerks" style="font-size:0.97rem;font-weight:500;">—</span>
+                        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--text-muted)" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">活动福利</span>
+                            </div>
+                            <div id="detailPerks" style="font-size:1rem;color:var(--text-main);font-weight:600;">—</div>
                         </div>
 
-                        <div style="height:1px;background:rgba(255,255,255,0.08);"></div>
-
-                        <div style="display:flex;flex-direction:column;gap:5px;">
-                            <span style="font-size:0.75rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelCreated">创建时间</span>
-                            <span id="detailCreatedAt" style="font-size:0.97rem;font-weight:500;">—</span>
+                        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--text-muted)" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">创建时间</span>
+                            </div>
+                            <div id="detailCreatedAt" style="font-size:1rem;color:var(--text-main);font-weight:600;">—</div>
                         </div>
-
                     </div>
 
-                    <!-- 活动描述 -->
-                    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;margin-bottom:16px;">
-                        <h4 style="margin:0 0 12px;font-size:0.75rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelDesc">活动描述</h4>
-                        <p id="detailDescription" style="margin:0;font-size:0.95rem;line-height:1.8;white-space:pre-wrap;"></p>
+                    <div style="background:#ffffff;border:1px solid var(--border-color);border-radius:12px;padding:24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--text-muted)" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            <h4 style="margin:0;font-size:0.85rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">活动描述</h4>
+                        </div>
+                        <p id="detailDescription" style="margin:0;color:var(--text-main);font-size:0.95rem;line-height:1.8;white-space:pre-wrap;"></p>
                     </div>
 
-                    <!-- 平台招募要求 -->
-                    <div id="detailRequirementsCard" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;">
-                        <h4 style="margin:0 0 14px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;" id="detailLabelReqs">平台招募要求</h4>
+                    <div id="detailRequirementsCard" style="background:#ffffff;border:1px solid var(--border-color);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--text-muted)" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            <h4 style="margin:0;font-size:0.85rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">平台招募要求</h4>
+                        </div>
                         <div id="detailRequirementsList"></div>
                     </div>
 
-                </div><!-- /max-width wrapper -->
+                    <div id="detailImagesCard" style="margin-top:24px;background:#ffffff;border:1px solid var(--border-color);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--text-muted)" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                <h4 style="margin:0;font-size:0.85rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">活动图片</h4>
+                            </div>
+                            <span id="detailImageCount" style="font-size:0.8rem;color:var(--text-muted);"></span>
+                        </div>
 
+                        <div id="detailImageGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;"></div>
+
+                        <div id="imageDropZone" style="border:2px dashed var(--border-color);border-radius:12px;padding:24px 16px;text-align:center;cursor:pointer;transition:all 0.2s ease;background:var(--bg-page);">
+                            <svg viewBox="0 0 24 24" width="28" height="28" stroke="var(--text-muted)" stroke-width="1.5" fill="none" style="margin-bottom:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <div style="color:var(--text-main);font-size:0.85rem;font-weight:500;">点击或拖拽图片上传</div>
+                            <div style="color:var(--text-muted);font-size:0.75rem;margin-top:4px;">JPG / PNG / WebP，最大 10MB</div>
+                            <input type="file" id="imageFileInput" accept="image/jpeg,image/png,image/webp" multiple style="display:block;">
+                        </div>
+
+                        <div id="imageUploadProgress" style="display:none;margin-top:14px;">
+                            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                                <div class="spinner" style="width:16px;height:16px;border:2px solid var(--border-color);border-top-color:var(--primary-color);border-radius:50%;animation:spin 0.6s linear infinite;"></div>
+                                <span id="imageUploadStatus" style="font-size:0.85rem;color:var(--text-muted);">上传中...</span>
+                            </div>
+                            <div style="height:4px;background:var(--border-color);border-radius:2px;overflow:hidden;">
+                                <div id="imageUploadBar" style="height:100%;background:var(--primary-color);border-radius:2px;width:0%;transition:width 0.3s ease;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
         </main>
@@ -575,7 +605,8 @@
         </div>
     </div>
 
-    <script src="/js/dashboard.js"></script>
+    <script src="./js/page-components.js"></script>
+    <script src="./js/dashboard.js"></script>
     <script>
         // ── 全部 section 的 i18n 文案 ──────────────────────────────
         const pageI18n = {
@@ -786,7 +817,7 @@
 
                     req.requirements.forEach(r => {
                         const row = document.createElement('div');
-                        row.style.cssText = 'padding:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;margin-bottom:10px;';
+                        row.style.cssText = 'padding:14px;background:var(--bg-page);border:1px solid var(--border-color);border-radius:10px;margin-bottom:10px;';
                         const pName = getPlatformDisplayName(r.platformKey, lang);
                         const cName = cNames[r.contentType] || r.contentType;
 
@@ -799,16 +830,16 @@
                         if (extraObj.minFollowers) extraBadges.push(`🎯 ${lang==='en'?'Min Followers:':'最低粉丝:'} ${Number(extraObj.minFollowers).toLocaleString()}`);
                         if (extraObj.note) extraBadges.push(`📌 ${lang==='en'?'Note:':'附加要求:'} ${escHtml(extraObj.note)}`);
 
-                        const extraHTML = extraBadges.length ? `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.08);font-size:0.83rem;color:#818cf8;display:flex;gap:12px;flex-wrap:wrap;">${extraBadges.map(b=>`<span>${b}</span>`).join('')}</div>` : '';
+                        const extraHTML = extraBadges.length ? `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border-color);font-size:0.83rem;color:var(--primary-color);display:flex;gap:12px;flex-wrap:wrap;">${extraBadges.map(b=>`<span>${b}</span>`).join('')}</div>` : '';
 
                         row.innerHTML = `
-                            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;color:var(--text-main);">
                                 <div style="font-weight:600;font-size:0.95rem;">
                                     📱 ${pName}
                                 </div>
-                                <div style="font-size:0.85rem;">
-                                    ${lang==='en'?'Creators:':'需要达人：'}<strong style="margin-right:12px;">${r.influencerCount}</strong>
-                                    ${lang==='en'?'Format:':'内容类型：'}<span>${cName}</span>
+                                <div style="font-size:0.85rem;color:var(--text-muted);">
+                                    ${lang==='en'?'Creators:':'需要达人：'}<strong style="margin-right:12px;color:var(--text-main);">${r.influencerCount}</strong>
+                                    ${lang==='en'?'Format:':'内容类型：'}<span style="color:var(--text-main);">${cName}</span>
                                 </div>
                             </div>
                             ${extraHTML}
@@ -816,13 +847,234 @@
                         reqListEl.appendChild(row);
                     });
                 } else {
-                    reqListEl.innerHTML = `<p style="margin:0;color:#6b7280;font-size:0.85rem;">${t.detailNoReqs || '暂无特定平台招募要求'}</p>`;
+                    reqListEl.innerHTML = `<p style="margin:0;color:var(--text-muted);font-size:0.85rem;">${t.detailNoReqs || '暂无特定平台招募要求'}</p>`;
                 }
             }
             if (!preventPush && typeof showSection === 'function') {
-                showSection('campaign-detail', true, req.id);
+                showSection('request-detail', true, req.id);
+            }
+            
+            // 加载该活动的图片
+            loadRequestImages(req.id);
+        }
+
+        // ── Image Upload & Display ─────────────────────────────────────
+        let _currentDetailRequestId = null;
+
+        async function loadRequestImages(requestId) {
+            _currentDetailRequestId = requestId;
+            const grid = document.getElementById('detailImageGrid');
+            const countEl = document.getElementById('detailImageCount');
+            if (!grid) return;
+            grid.innerHTML = '';
+            if (countEl) countEl.textContent = '';
+
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            try {
+                const resp = await fetch(`${API_BASE_URL}/api/requests/${requestId}/images`, {
+                    headers: { 'Authorization': token }
+                });
+                const data = await resp.json();
+                if (data.success && data.images && data.images.length > 0) {
+                    const lang = localStorage.getItem('lang') || 'zh';
+                    if (countEl) countEl.textContent = lang === 'en' ? `${data.images.length} image(s)` : `${data.images.length} 张图片`;
+                    data.images.forEach(img => renderImageThumb(img, grid, requestId));
+                }
+            } catch (e) {
+                console.error('Load images error:', e);
             }
         }
+
+        function renderImageThumb(img, container, requestId) {
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = 'position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border-color);aspect-ratio:1;background:var(--bg-page);';
+
+            const imgEl = document.createElement('img');
+            imgEl.src = img.url;
+            imgEl.alt = '';
+            imgEl.style.cssText = 'width:100%;height:100%;object-fit:cover;cursor:pointer;display:block;';
+            imgEl.loading = 'lazy';
+            imgEl.onclick = () => openImagePreview(img.url);
+
+            // 删除按钮
+            const delBtn = document.createElement('button');
+            delBtn.innerHTML = '✕';
+            delBtn.style.cssText = 'position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.5);color:#fff;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;';
+            delBtn.onclick = async (e) => {
+                e.stopPropagation();
+                if (!confirm(localStorage.getItem('lang') === 'en' ? 'Delete this image?' : '确定删除这张图片？')) return;
+                const token = localStorage.getItem('authToken');
+                try {
+                    const resp = await fetch(`${API_BASE_URL}/api/requests/${requestId}/images/${img.id}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': token }
+                    });
+                    if (resp.ok) {
+                        wrapper.remove();
+                        // 更新计数
+                        const countEl = document.getElementById('detailImageCount');
+                        const grid = document.getElementById('detailImageGrid');
+                        if (countEl && grid) {
+                            const remaining = grid.children.length;
+                            const lang = localStorage.getItem('lang') || 'zh';
+                            countEl.textContent = remaining > 0 ? (lang === 'en' ? `${remaining} image(s)` : `${remaining} 张图片`) : '';
+                        }
+                    }
+                } catch (e) {
+                    console.error('Delete image error:', e);
+                }
+            };
+
+            wrapper.onmouseenter = () => delBtn.style.opacity = '1';
+            wrapper.onmouseleave = () => delBtn.style.opacity = '0';
+
+            wrapper.appendChild(imgEl);
+            wrapper.appendChild(delBtn);
+            container.appendChild(wrapper);
+        }
+
+        function openImagePreview(url) {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;cursor:pointer;';
+            overlay.onclick = () => overlay.remove();
+
+            const img = document.createElement('img');
+            img.src = url;
+            img.style.cssText = 'max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.4);';
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '✕';
+            closeBtn.style.cssText = 'position:fixed;top:24px;right:24px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);color:#fff;border:none;cursor:pointer;font-size:20px;z-index:2001;';
+
+            overlay.appendChild(img);
+            overlay.appendChild(closeBtn);
+            document.body.appendChild(overlay);
+        }
+
+        async function uploadRequestImage(file) {
+            const requestId = _currentDetailRequestId;
+            if (!requestId) return;
+
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            const lang = localStorage.getItem('lang') || 'zh';
+            const progressEl = document.getElementById('imageUploadProgress');
+            const statusEl = document.getElementById('imageUploadStatus');
+            const barEl = document.getElementById('imageUploadBar');
+
+            // 文件类型映射
+            const mimeMap = { 'image/jpeg': 'image/jpeg', 'image/png': 'image/png', 'image/webp': 'image/webp' };
+            const contentType = mimeMap[file.type];
+            if (!contentType) {
+                alert(lang === 'en' ? 'Unsupported file type. Please upload JPG, PNG or WebP.' : '不支持的文件格式，请上传 JPG、PNG 或 WebP 图片。');
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                alert(lang === 'en' ? 'File too large. Maximum size is 10MB.' : '文件过大，最大支持 10MB。');
+                return;
+            }
+
+            if (progressEl) progressEl.style.display = 'block';
+            if (statusEl) statusEl.textContent = lang === 'en' ? 'Requesting upload URL...' : '正在获取上传地址...';
+            if (barEl) barEl.style.width = '20%';
+
+            try {
+                // Step 1: POST to get presigned URL
+                const resp = await fetch(`${API_BASE_URL}/api/requests/${requestId}/images`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ contentType })
+                });
+                const data = await resp.json();
+                if (!data.success || !data.upload || !data.upload.url) {
+                    throw new Error(data.error || 'Failed to get upload URL');
+                }
+
+                if (statusEl) statusEl.textContent = lang === 'en' ? 'Uploading image...' : '正在上传图片...';
+                if (barEl) barEl.style.width = '50%';
+
+                // Step 2: PUT file to presigned URL
+                const uploadResp = await fetch(data.upload.url, {
+                    method: data.upload.method || 'PUT',
+                    headers: data.upload.headers || { 'Content-Type': contentType },
+                    body: file
+                });
+                if (!uploadResp.ok) {
+                    throw new Error(`Upload failed: ${uploadResp.status}`);
+                }
+
+                if (barEl) barEl.style.width = '100%';
+                if (statusEl) statusEl.textContent = lang === 'en' ? 'Upload complete!' : '上传完成！';
+
+                // Step 3: 添加到图片网格
+                const grid = document.getElementById('detailImageGrid');
+                if (grid && data.image) {
+                    renderImageThumb(data.image, grid, requestId);
+                    // 更新计数
+                    const countEl = document.getElementById('detailImageCount');
+                    if (countEl) {
+                        const count = grid.children.length;
+                        countEl.textContent = lang === 'en' ? `${count} image(s)` : `${count} 张图片`;
+                    }
+                }
+
+                setTimeout(() => {
+                    if (progressEl) progressEl.style.display = 'none';
+                    if (barEl) barEl.style.width = '0%';
+                }, 1500);
+
+            } catch (e) {
+                console.error('Upload error:', e);
+                if (statusEl) statusEl.textContent = lang === 'en' ? `Upload failed: ${e.message}` : `上传失败：${e.message}`;
+                if (barEl) { barEl.style.width = '100%'; barEl.style.background = '#ef4444'; }
+                setTimeout(() => {
+                    if (progressEl) progressEl.style.display = 'none';
+                    if (barEl) { barEl.style.width = '0%'; barEl.style.background = 'var(--primary-color)'; }
+                }, 3000);
+            }
+        }
+
+        // ── Drop Zone Event Binding ────────────────────────────────────
+        (function initImageUpload() {
+            const dropZone = document.getElementById('imageDropZone');
+            const fileInput = document.getElementById('imageFileInput');
+            if (!dropZone || !fileInput) return;
+
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            fileInput.addEventListener('change', () => {
+                Array.from(fileInput.files).forEach(f => uploadRequestImage(f));
+                fileInput.value = '';
+            });
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--primary-color)';
+                dropZone.style.background = 'rgba(102,126,234,0.05)';
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--border-color)';
+                dropZone.style.background = 'var(--bg-page)';
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--border-color)';
+                dropZone.style.background = 'var(--bg-page)';
+                const files = e.dataTransfer.files;
+                Array.from(files).forEach(f => {
+                    if (f.type.startsWith('image/')) uploadRequestImage(f);
+                });
+            });
+        })();
 
         function renderCampaignCard(req) {
             const lang = (document.documentElement.lang === 'en' || localStorage.getItem('lang') === 'en') ? 'en' : 'zh';
@@ -850,7 +1102,7 @@
                     <div class="message-content" style="flex:1;min-width:0;">
                         <h5 style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 4px;">
                             ${escHtml(req.title)}
-                            <span style="font-size:0.72rem;font-weight:500;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,0.07);color:#9ca3af;">${st.dot} ${statusLabel}</span>
+                            <span style="font-size:0.72rem;font-weight:500;padding:2px 7px;border-radius:10px;background:#f1f5f9;color:var(--text-muted);border:1px solid var(--border-color);">${st.dot} ${statusLabel}</span>
                             ${perksHTML}
                         </h5>
                         <p style="margin:4px 0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(req.description)}</p>
@@ -927,7 +1179,7 @@
         window.onSectionShow = async function(section, id) {
             if (section === 'campaigns') {
                 loadCampaigns();
-            } else if (section === 'campaign-detail' && id) {
+            } else if (section === 'request-detail' && id) {
                 if (!_campaignsLoaded) {
                     await loadCampaigns();
                 }

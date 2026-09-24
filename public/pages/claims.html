@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商家详情 - 智优传媒</title>
+    <title>网红推广 - 智优传媒</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,7 +94,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="campaigns.html" class="menu-item">
+                        <a href="requests.html" class="menu-item">
                             <span class="menu-icon">
                                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -105,7 +105,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="influencers.html" class="menu-item">
+                        <a href="claims.html" class="menu-item active">
                             <span class="menu-icon">
                                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -129,7 +129,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="merchant.html" class="menu-item active">
+                        <a href="brands.html" class="menu-item">
                             <span class="menu-icon">
                                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 9l1-5h16l1 5"></path>
@@ -151,27 +151,23 @@
         <!-- Right Main View Area -->
         <main class="dashboard-main">
             <div class="pane-header">
-                <h2 class="pane-title" id="pageMainTitle">商家详情</h2>
-                <p class="pane-subtitle" id="pageMainSubtitle">查看与管理您的品牌入驻档案与账户配置</p>
+                <h2 class="pane-title" id="pageMainTitle">网红推广</h2>
+                <p class="pane-subtitle" id="pageMainSubtitle">覆盖多主流社交平台的专业内容创作者资源库</p>
             </div>
 
             <div class="content-card">
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <span class="detail-label" id="detLabelNameZh">品牌名称（中文）</span>
-                        <span class="detail-value" id="detValueNameZh">加载中...</span>
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4 id="infRedTitle">📕 小红书优质探店达人</h4>
+                        <p id="infRedDesc">图文审美出众、粉丝互动率高，擅长打造本地生活潮流爆款笔记。</p>
                     </div>
-                    <div class="detail-item">
-                        <span class="detail-label" id="detLabelNameEn">品牌名称（英文）</span>
-                        <span class="detail-value" id="detValueNameEn">Loading...</span>
+                    <div class="feature-box">
+                        <h4 id="infVideoTitle">📱 抖音 / TikTok 视频创作者</h4>
+                        <p id="infVideoDesc">沉浸式视觉探店、剧情互动体验，快速放大品牌区域声量与到店意愿。</p>
                     </div>
-                    <div class="detail-item">
-                        <span class="detail-label" id="detLabelStatus">合作状态</span>
-                        <span class="detail-value" style="color: #10b981; font-weight: 700;" id="detValueStatus">● 合作认证商家</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label" id="detLabelSupport">专属客户顾问</span>
-                        <span class="detail-value" id="detValueSupport">智优传媒 GEO优化团队</span>
+                    <div class="feature-box">
+                        <h4 id="infReviewTitle">⭐ 大众点评 / Google 达人</h4>
+                        <p id="infReviewDesc">LV6+ 高等级会员真实测评，稳固提升品牌好评度与地理搜索权重。</p>
                     </div>
                 </div>
             </div>
@@ -182,26 +178,26 @@
     <script>
         const pageI18n = {
             zh: {
-                pageTitle: '商家详情 - 智优传媒',
-                pageMainTitle: '商家详情',
-                pageMainSubtitle: '查看与管理您的品牌入驻档案与账户配置',
-                detLabelNameZh: '品牌名称（中文）',
-                detLabelNameEn: '品牌名称（英文）',
-                detLabelStatus: '合作状态',
-                detValueStatus: '● 合作认证商家',
-                detLabelSupport: '专属客户顾问',
-                detValueSupport: '智优传媒 GEO优化团队'
+                pageTitle: '网红推广 - 智优传媒',
+                pageMainTitle: '网红推广',
+                pageMainSubtitle: '覆盖多主流社交平台的专业内容创作者资源库',
+                infRedTitle: '📕 小红书优质探店达人',
+                infRedDesc: '图文审美出众、粉丝互动率高，擅长打造本地生活潮流爆款笔记。',
+                infVideoTitle: '📱 抖音 / TikTok 视频创作者',
+                infVideoDesc: '沉浸式视觉探店、剧情互动体验，快速放大品牌区域声量与到店意愿。',
+                infReviewTitle: '⭐ 大众点评 / Google 达人',
+                infReviewDesc: 'LV6+ 高等级会员真实测评，稳固提升品牌好评度与地理搜索权重。'
             },
             en: {
-                pageTitle: 'Merchant Details - GeoMedia',
-                pageMainTitle: 'Merchant Details',
-                pageMainSubtitle: 'Review and manage your brand registration profile and account settings',
-                detLabelNameZh: 'Brand Name (Chinese)',
-                detLabelNameEn: 'Brand Name (English)',
-                detLabelStatus: 'Partnership Status',
-                detValueStatus: '● Verified Active Merchant',
-                detLabelSupport: 'Dedicated Consultant',
-                detValueSupport: 'GeoMedia Optimization Team'
+                pageTitle: 'Influencers - GeoMedia',
+                pageMainTitle: 'Influencer Marketing',
+                pageMainSubtitle: 'Premium content creators across major social platforms',
+                infRedTitle: '📕 Verified RED Creators',
+                infRedDesc: 'High visual aesthetics and engagement, adept at crafting viral lifestyle & dining content.',
+                infVideoTitle: '📱 Douyin & TikTok Video Creators',
+                infVideoDesc: 'Dynamic dining vlogs and authentic video storytelling that drive visits and recognition.',
+                infReviewTitle: '⭐ Dianping & Google Local Guides',
+                infReviewDesc: 'High-tier authentic customer reviews to strengthen credibility and map search rankings.'
             }
         };
 
@@ -210,12 +206,12 @@
             document.title = t.pageTitle;
             document.getElementById('pageMainTitle').textContent = t.pageMainTitle;
             document.getElementById('pageMainSubtitle').textContent = t.pageMainSubtitle;
-            document.getElementById('detLabelNameZh').textContent = t.detLabelNameZh;
-            document.getElementById('detLabelNameEn').textContent = t.detLabelNameEn;
-            document.getElementById('detLabelStatus').textContent = t.detLabelStatus;
-            document.getElementById('detValueStatus').textContent = t.detValueStatus;
-            document.getElementById('detLabelSupport').textContent = t.detLabelSupport;
-            document.getElementById('detValueSupport').textContent = t.detValueSupport;
+            document.getElementById('infRedTitle').textContent = t.infRedTitle;
+            document.getElementById('infRedDesc').textContent = t.infRedDesc;
+            document.getElementById('infVideoTitle').textContent = t.infVideoTitle;
+            document.getElementById('infVideoDesc').textContent = t.infVideoDesc;
+            document.getElementById('infReviewTitle').textContent = t.infReviewTitle;
+            document.getElementById('infReviewDesc').textContent = t.infReviewDesc;
         };
     </script>
 </body>

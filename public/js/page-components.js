@@ -5,24 +5,25 @@
         componentHooks[name] = hook;
     };
 
+    const assetRoot = window.location.protocol === 'file:' ? './' : '/';
     const components = {
-        home: './pages/home.html',
-        analytics: './pages/analytics.html',
-        campaigns: './pages/requests.html',
-        influencers: './pages/claims.html',
-        messages: './pages/messages.html',
-        merchant: './pages/brands.html',
-        'request-detail': './pages/request-detail.html'
+        home: `${assetRoot}pages/home.html`,
+        analytics: `${assetRoot}pages/analytics.html`,
+        campaigns: `${assetRoot}pages/requests.html`,
+        influencers: `${assetRoot}pages/claims.html`,
+        messages: `${assetRoot}pages/messages.html`,
+        merchant: `${assetRoot}pages/brands.html`,
+        'request-detail': `${assetRoot}pages/request-detail.html`
     };
 
     const scripts = {
-        home: './js/components/home.js',
-        analytics: './js/components/analytics.js',
-        campaigns: './js/components/campaigns.js',
-        influencers: './js/components/influencers.js',
-        messages: './js/components/messages.js',
-        merchant: './js/components/merchant.js',
-        'request-detail': './js/components/request-detail.js'
+        home: `${assetRoot}js/components/home.js`,
+        analytics: `${assetRoot}js/components/analytics.js`,
+        campaigns: `${assetRoot}js/components/campaigns.js`,
+        influencers: `${assetRoot}js/components/influencers.js`,
+        messages: `${assetRoot}js/components/messages.js`,
+        merchant: `${assetRoot}js/components/merchant.js`,
+        'request-detail': `${assetRoot}js/components/request-detail.js`
     };
 
     function aliasId(root, sourceId, targetId) {

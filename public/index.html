@@ -447,37 +447,27 @@
                         </div>
                     </div>
 
-                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-bottom:24px;">
-                        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                    <div class="content-card" style="margin-bottom:24px;">
+                        <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);">活动福利</span>
+                        <div id="detailPerks" style="margin-top:8px;font-size:1rem;color:var(--text-main);font-weight:600;">—</div>
+                    </div>
+
+                    <div style="background:#ffffff;border:1px solid var(--border-color);border-radius:12px;padding:24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+                        <div>
                             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--text-muted)" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">活动时间</span>
+                                <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);">活动时间</span>
                             </div>
                             <div id="detailDateRange" style="font-size:1rem;color:var(--text-main);font-weight:600;">—</div>
                         </div>
-
-                        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
-                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--text-muted)" stroke-width="2" fill="none"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">预算金额</span>
-                            </div>
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);">预算金额</span></div>
                             <div id="detailBudget" style="font-size:1rem;color:var(--text-main);font-weight:600;">—</div>
                         </div>
-
-                        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
-                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--text-muted)" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">活动福利</span>
-                            </div>
-                            <div id="detailPerks" style="font-size:1rem;color:var(--text-main);font-weight:600;">—</div>
-                        </div>
-
-                        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
-                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--text-muted)" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">创建时间</span>
-                            </div>
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);">创建时间</span></div>
                             <div id="detailCreatedAt" style="font-size:1rem;color:var(--text-main);font-weight:600;">—</div>
+                        </div>
                         </div>
                     </div>
 
@@ -503,7 +493,7 @@
                                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--text-muted)" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                                 <h4 style="margin:0;font-size:0.85rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">活动图片</h4>
                             </div>
-                            <span id="detailImageCount" style="font-size:0.8rem;color:var(--text-muted);"></span>
+                            <div style="display:flex;align-items:center;gap:12px;"><span id="detailImageCount" style="font-size:0.8rem;color:var(--text-muted);"></span><button type="button" id="deleteAllImagesBtn" style="display:none;border:0;background:none;color:#ef4444;cursor:pointer;font-size:0.78rem;padding:0;">删除全部</button></div>
                         </div>
 
                         <div id="detailImageGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;"></div>
@@ -512,7 +502,7 @@
                             <svg viewBox="0 0 24 24" width="28" height="28" stroke="var(--text-muted)" stroke-width="1.5" fill="none" style="margin-bottom:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                             <div style="color:var(--text-main);font-size:0.85rem;font-weight:500;">点击或拖拽图片上传</div>
                             <div style="color:var(--text-muted);font-size:0.75rem;margin-top:4px;">JPG / PNG / WebP，最大 10MB</div>
-                            <input type="file" id="imageFileInput" accept="image/jpeg,image/png,image/webp" multiple style="display:block;">
+                            <input type="file" id="imageFileInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none;">
                         </div>
 
                         <div id="imageUploadProgress" style="display:none;margin-top:14px;">
@@ -605,8 +595,11 @@
         </div>
     </div>
 
-    <script src="./js/page-components.js"></script>
-    <script src="./js/dashboard.js"></script>
+    <script>
+        const assetRoot = window.location.protocol === 'file:' ? './' : '/';
+        document.write(`<script src="${assetRoot}js/page-components.js"><\/script>`);
+        document.write(`<script src="${assetRoot}js/dashboard.js"><\/script>`);
+    </script>
     <script>
         // ── 全部 section 的 i18n 文案 ──────────────────────────────
         const pageI18n = {
@@ -715,8 +708,6 @@
         };
 
         // ── loadCampaigns: GET /api/requests ───────────────────────
-        let _campaignsLoaded = false;   // 防止重复请求
-
         const REWARD_ICONS = {
             free_meal: { icon: '🍽️', color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
             cash:      { icon: '💰', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
@@ -855,333 +846,22 @@
             }
             
             // 加载该活动的图片
-            loadRequestImages(req.id);
-        }
-
-        // ── Image Upload & Display ─────────────────────────────────────
-        let _currentDetailRequestId = null;
-
-        async function loadRequestImages(requestId) {
-            _currentDetailRequestId = requestId;
-            const grid = document.getElementById('detailImageGrid');
-            const countEl = document.getElementById('detailImageCount');
-            if (!grid) return;
-            grid.innerHTML = '';
-            if (countEl) countEl.textContent = '';
-
-            const token = localStorage.getItem('authToken');
-            if (!token) return;
-
-            try {
-                const resp = await fetch(`${API_BASE_URL}/api/requests/${requestId}/images`, {
-                    headers: { 'Authorization': token }
-                });
-                const data = await resp.json();
-                if (data.success && data.images && data.images.length > 0) {
-                    const lang = localStorage.getItem('lang') || 'zh';
-                    if (countEl) countEl.textContent = lang === 'en' ? `${data.images.length} image(s)` : `${data.images.length} 张图片`;
-                    data.images.forEach(img => renderImageThumb(img, grid, requestId));
-                }
-            } catch (e) {
-                console.error('Load images error:', e);
+            if (typeof window.loadRequestImagesFromDetail === 'function') {
+                window.loadRequestImagesFromDetail(req.id);
             }
-        }
-
-        function renderImageThumb(img, container, requestId) {
-            const wrapper = document.createElement('div');
-            wrapper.style.cssText = 'position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border-color);aspect-ratio:1;background:var(--bg-page);';
-
-            const imgEl = document.createElement('img');
-            imgEl.src = img.url;
-            imgEl.alt = '';
-            imgEl.style.cssText = 'width:100%;height:100%;object-fit:cover;cursor:pointer;display:block;';
-            imgEl.loading = 'lazy';
-            imgEl.onclick = () => openImagePreview(img.url);
-
-            // 删除按钮
-            const delBtn = document.createElement('button');
-            delBtn.innerHTML = '✕';
-            delBtn.style.cssText = 'position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.5);color:#fff;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;';
-            delBtn.onclick = async (e) => {
-                e.stopPropagation();
-                if (!confirm(localStorage.getItem('lang') === 'en' ? 'Delete this image?' : '确定删除这张图片？')) return;
-                const token = localStorage.getItem('authToken');
-                try {
-                    const resp = await fetch(`${API_BASE_URL}/api/requests/${requestId}/images/${img.id}`, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': token }
-                    });
-                    if (resp.ok) {
-                        wrapper.remove();
-                        // 更新计数
-                        const countEl = document.getElementById('detailImageCount');
-                        const grid = document.getElementById('detailImageGrid');
-                        if (countEl && grid) {
-                            const remaining = grid.children.length;
-                            const lang = localStorage.getItem('lang') || 'zh';
-                            countEl.textContent = remaining > 0 ? (lang === 'en' ? `${remaining} image(s)` : `${remaining} 张图片`) : '';
-                        }
-                    }
-                } catch (e) {
-                    console.error('Delete image error:', e);
-                }
-            };
-
-            wrapper.onmouseenter = () => delBtn.style.opacity = '1';
-            wrapper.onmouseleave = () => delBtn.style.opacity = '0';
-
-            wrapper.appendChild(imgEl);
-            wrapper.appendChild(delBtn);
-            container.appendChild(wrapper);
-        }
-
-        function openImagePreview(url) {
-            const overlay = document.createElement('div');
-            overlay.style.cssText = 'position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;cursor:pointer;';
-            overlay.onclick = () => overlay.remove();
-
-            const img = document.createElement('img');
-            img.src = url;
-            img.style.cssText = 'max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.4);';
-
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = '✕';
-            closeBtn.style.cssText = 'position:fixed;top:24px;right:24px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);color:#fff;border:none;cursor:pointer;font-size:20px;z-index:2001;';
-
-            overlay.appendChild(img);
-            overlay.appendChild(closeBtn);
-            document.body.appendChild(overlay);
-        }
-
-        async function uploadRequestImage(file) {
-            const requestId = _currentDetailRequestId;
-            if (!requestId) return;
-
-            const token = localStorage.getItem('authToken');
-            if (!token) return;
-
-            const lang = localStorage.getItem('lang') || 'zh';
-            const progressEl = document.getElementById('imageUploadProgress');
-            const statusEl = document.getElementById('imageUploadStatus');
-            const barEl = document.getElementById('imageUploadBar');
-
-            // 文件类型映射
-            const mimeMap = { 'image/jpeg': 'image/jpeg', 'image/png': 'image/png', 'image/webp': 'image/webp' };
-            const contentType = mimeMap[file.type];
-            if (!contentType) {
-                alert(lang === 'en' ? 'Unsupported file type. Please upload JPG, PNG or WebP.' : '不支持的文件格式，请上传 JPG、PNG 或 WebP 图片。');
-                return;
-            }
-            if (file.size > 10 * 1024 * 1024) {
-                alert(lang === 'en' ? 'File too large. Maximum size is 10MB.' : '文件过大，最大支持 10MB。');
-                return;
-            }
-
-            if (progressEl) progressEl.style.display = 'block';
-            if (statusEl) statusEl.textContent = lang === 'en' ? 'Requesting upload URL...' : '正在获取上传地址...';
-            if (barEl) barEl.style.width = '20%';
-
-            try {
-                // Step 1: POST to get presigned URL
-                const resp = await fetch(`${API_BASE_URL}/api/requests/${requestId}/images`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ contentType })
-                });
-                const data = await resp.json();
-                if (!data.success || !data.upload || !data.upload.url) {
-                    throw new Error(data.error || 'Failed to get upload URL');
-                }
-
-                if (statusEl) statusEl.textContent = lang === 'en' ? 'Uploading image...' : '正在上传图片...';
-                if (barEl) barEl.style.width = '50%';
-
-                // Step 2: PUT file to presigned URL
-                const uploadResp = await fetch(data.upload.url, {
-                    method: data.upload.method || 'PUT',
-                    headers: data.upload.headers || { 'Content-Type': contentType },
-                    body: file
-                });
-                if (!uploadResp.ok) {
-                    throw new Error(`Upload failed: ${uploadResp.status}`);
-                }
-
-                if (barEl) barEl.style.width = '100%';
-                if (statusEl) statusEl.textContent = lang === 'en' ? 'Upload complete!' : '上传完成！';
-
-                // Step 3: 添加到图片网格
-                const grid = document.getElementById('detailImageGrid');
-                if (grid && data.image) {
-                    renderImageThumb(data.image, grid, requestId);
-                    // 更新计数
-                    const countEl = document.getElementById('detailImageCount');
-                    if (countEl) {
-                        const count = grid.children.length;
-                        countEl.textContent = lang === 'en' ? `${count} image(s)` : `${count} 张图片`;
-                    }
-                }
-
-                setTimeout(() => {
-                    if (progressEl) progressEl.style.display = 'none';
-                    if (barEl) barEl.style.width = '0%';
-                }, 1500);
-
-            } catch (e) {
-                console.error('Upload error:', e);
-                if (statusEl) statusEl.textContent = lang === 'en' ? `Upload failed: ${e.message}` : `上传失败：${e.message}`;
-                if (barEl) { barEl.style.width = '100%'; barEl.style.background = '#ef4444'; }
-                setTimeout(() => {
-                    if (progressEl) progressEl.style.display = 'none';
-                    if (barEl) { barEl.style.width = '0%'; barEl.style.background = 'var(--primary-color)'; }
-                }, 3000);
-            }
-        }
-
-        // ── Drop Zone Event Binding ────────────────────────────────────
-        (function initImageUpload() {
-            const dropZone = document.getElementById('imageDropZone');
-            const fileInput = document.getElementById('imageFileInput');
-            if (!dropZone || !fileInput) return;
-
-            dropZone.addEventListener('click', () => fileInput.click());
-
-            fileInput.addEventListener('change', () => {
-                Array.from(fileInput.files).forEach(f => uploadRequestImage(f));
-                fileInput.value = '';
-            });
-
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.style.borderColor = 'var(--primary-color)';
-                dropZone.style.background = 'rgba(102,126,234,0.05)';
-            });
-
-            dropZone.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                dropZone.style.borderColor = 'var(--border-color)';
-                dropZone.style.background = 'var(--bg-page)';
-            });
-
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.style.borderColor = 'var(--border-color)';
-                dropZone.style.background = 'var(--bg-page)';
-                const files = e.dataTransfer.files;
-                Array.from(files).forEach(f => {
-                    if (f.type.startsWith('image/')) uploadRequestImage(f);
-                });
-            });
-        })();
-
-        function renderCampaignCard(req) {
-            const lang = (document.documentElement.lang === 'en' || localStorage.getItem('lang') === 'en') ? 'en' : 'zh';
-            const t = pageI18n[lang] || pageI18n.zh;
-            const rw = REWARD_ICONS[req.rewardType] || REWARD_ICONS.gift;
-            const st = STATUS_CONFIG[req.status] || STATUS_CONFIG.open;
-            const statusLabel = t[st.key] || req.status;
-            const rewardLabels = { free_meal: t.campRewardFreeMeal, cash: t.campRewardCash, discount: t.campRewardDiscount, gift: t.campRewardGift };
-            const rewardLabel = rewardLabels[req.rewardType] || req.rewardType;
-            const start = formatDate(req.startDate);
-            const end   = formatDate(req.endDate);
-            const perksHTML = req.perks ? `<span style="font-size:0.78rem;color:#818cf8;background:rgba(102,126,234,0.12);padding:2px 8px;border-radius:4px;margin-left:6px;">${escHtml(req.perks)}</span>` : '';
-
-            const item = document.createElement('div');
-            item.className = 'message-item';
-            item.dataset.requestId = req.id;
-            item.style.display = 'flex';
-            item.style.alignItems = 'center';
-            item.style.justifyContent = 'space-between';
-            item.innerHTML = `
-                <div style="display:flex;align-items:flex-start;gap:12px;flex:1;min-width:0;">
-                    <div class="message-avatar" style="background:${rw.bg};color:${rw.color};font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        ${rw.icon}
-                    </div>
-                    <div class="message-content" style="flex:1;min-width:0;">
-                        <h5 style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 4px;">
-                            ${escHtml(req.title)}
-                            <span style="font-size:0.72rem;font-weight:500;padding:2px 7px;border-radius:10px;background:#f1f5f9;color:var(--text-muted);border:1px solid var(--border-color);">${st.dot} ${statusLabel}</span>
-                            ${perksHTML}
-                        </h5>
-                        <p style="margin:4px 0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(req.description)}</p>
-                        <span class="message-time">${rewardLabel} · ${start} → ${end}</span>
-                    </div>
-                </div>
-                <button class="btn-detail" style="padding:8px 16px;background:rgba(102,126,234,0.15);border:1px solid rgba(102,126,234,0.3);border-radius:8px;color:#818cf8;cursor:pointer;font-size:0.82rem;white-space:nowrap;margin-left:16px;flex-shrink:0;">
-                    ${t.btnDetail || '查看详情'}
-                </button>`;
-
-            const detailBtn = item.querySelector('.btn-detail');
-            if (detailBtn) {
-                detailBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    showCampaignDetail(req);
-                });
-            }
-
-            return item;
-        }
-
-        async function loadCampaigns(forceReload = false) {
-            if (_campaignsLoaded && !forceReload) return;
-            const list = document.getElementById('campaignList');
-            const loading = document.getElementById('campaignLoading');
-            if (!list) return;
-
-            // 显示加载状态
-            if (loading) loading.style.display = 'block';
-
-            const token = localStorage.getItem('authToken');
-            if (!token) return;
-
-            try {
-                const resp = await fetch(`${API_BASE_URL}/api/requests`, {
-                    headers: { 'Authorization': token, 'Content-Type': 'application/json' }
-                });
-                const data = await resp.json();
-
-                if (!resp.ok || !data.success) throw new Error(data.error || 'API error');
-
-                // 清空列表（保留 loading 元素）
-                Array.from(list.children).forEach(el => {
-                    if (el.id !== 'campaignLoading') el.remove();
-                });
-
-                const requests = data.requests || []; window._allCampaigns = requests;
-                if (requests.length === 0) {
-                    const lang = localStorage.getItem('lang') || 'zh';
-                    const t = pageI18n[lang] || pageI18n.zh;
-                    const empty = document.createElement('div');
-                    empty.style.cssText = 'text-align:center;padding:40px 20px;color:#4b5563;font-size:0.9rem;';
-                    empty.textContent = t.campEmpty;
-                    list.appendChild(empty);
-                } else {
-                    requests.forEach(req => list.appendChild(renderCampaignCard(req)));
-                }
-
-                _campaignsLoaded = true;
-            } catch (err) {
-                const lang = localStorage.getItem('lang') || 'zh';
-                const t = pageI18n[lang] || pageI18n.zh;
-                if (loading) {
-                    loading.innerHTML = `<span style="color:#f87171;">⚠ ${t.campLoadError}</span>`;
-                }
-                console.error('loadCampaigns error:', err);
-                return;
-            }
-
-            if (loading) loading.style.display = 'none';
         }
 
         // ── Section 切换钩子 ────────────────────────────────────────
         window.onSectionShow = async function(section, id) {
             if (section === 'campaigns') {
-                loadCampaigns();
+                if (typeof window.loadCampaignsFromComponent === 'function') {
+                    window.loadCampaignsFromComponent();
+                }
             } else if (section === 'request-detail' && id) {
-                if (!_campaignsLoaded) {
-                    await loadCampaigns();
+                if (!window.campaignsLoaded) {
+                    if (typeof window.loadCampaignsFromComponent === 'function') {
+                        await window.loadCampaignsFromComponent();
+                    }
                 }
                 if (window._allCampaigns) {
                     const req = window._allCampaigns.find(r => r.id === id);
@@ -1360,11 +1040,10 @@
             const empty = list.querySelector('[data-empty]');
             if (empty) empty.remove();
             // 使用统一渲染函数，插入顶部
-            const item = renderCampaignCard(req);
+            const item = window.renderCampaignCardFromComponent(req);
             item.style.borderLeft = '3px solid #667eea';
             list.prepend(item);
             // 标记需要下次重新加载（因服务端数据已变）
-            _campaignsLoaded = false;
         }
 
         function escHtml(s) {

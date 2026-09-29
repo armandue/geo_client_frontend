@@ -4,37 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网红推广 - 智优传媒</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body class="page-transition">
     <div class="dashboard-container">
         <main class="dashboard-main">
-            <div class="pane-header">
-                <h2 class="pane-title" id="pageMainTitle">网红推广</h2>
-                <p class="pane-subtitle" id="pageMainSubtitle">覆盖多主流社交平台的专业内容创作者资源库</p>
-            </div>
-            <div class="content-card">
-                <div class="feature-grid">
-                    <div class="feature-box"><h4 id="infRedTitle">📕 小红书优质探店达人</h4><p id="infRedDesc">图文审美出众、粉丝互动率高，擅长打造本地生活潮流爆款笔记。</p></div>
-                    <div class="feature-box"><h4 id="infVideoTitle">📱 抖音 / TikTok 视频创作者</h4><p id="infVideoDesc">沉浸式视觉探店、剧情互动体验，快速放大品牌区域声量与到店意愿。</p></div>
-                    <div class="feature-box"><h4 id="infReviewTitle">⭐ 大众点评 / Google 达人</h4><p id="infReviewDesc">LV6+ 高等级会员真实测评，稳固提升品牌好评度与地理搜索权重。</p></div>
+            <div class="pane-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;">
+                <div>
+                    <h2 class="pane-title" id="pageMainTitle">网红推广</h2>
+                    <p class="pane-subtitle" id="pageMainSubtitle">达人报名及活动信息</p>
                 </div>
+                <button id="refreshClaimsBtn" type="button" class="login-btn" style="padding:9px 16px;">刷新</button>
+            </div>
+            <div id="claimsSummary" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;"></div>
+            <div id="claimsList" aria-live="polite">
+                <div id="claimsLoading" class="content-card" style="text-align:center;padding:32px;color:var(--text-muted);">正在加载报名信息...</div>
             </div>
         </main>
     </div>
     <script src="../js/dashboard-layout.js"></script>
     <script src="../js/dashboard.js"></script>
+    <script src="../js/components/influencers.js"></script>
     <script>
-        const pageI18n = {
-            zh: { pageTitle: '网红推广 - 智优传媒', pageMainTitle: '网红推广', pageMainSubtitle: '覆盖多主流社交平台的专业内容创作者资源库', infRedTitle: '📕 小红书优质探店达人', infRedDesc: '图文审美出众、粉丝互动率高，擅长打造本地生活潮流爆款笔记。', infVideoTitle: '📱 抖音 / TikTok 视频创作者', infVideoDesc: '沉浸式视觉探店、剧情互动体验，快速放大品牌区域声量与到店意愿。', infReviewTitle: '⭐ 大众点评 / Google 达人', infReviewDesc: 'LV6+ 高等级会员真实测评，稳固提升品牌好评度与地理搜索权重。' },
-            en: { pageTitle: 'Influencers - GeoMedia', pageMainTitle: 'Influencer Marketing', pageMainSubtitle: 'Premium content creators across major social platforms', infRedTitle: '📕 Verified RED Creators', infRedDesc: 'High visual aesthetics and engagement, adept at crafting viral lifestyle & dining content.', infVideoTitle: '📱 Douyin & TikTok Video Creators', infVideoDesc: 'Dynamic dining vlogs and authentic video storytelling that drive visits and recognition.', infReviewTitle: '⭐ Dianping & Google Local Guides', infReviewDesc: 'High-tier authentic customer reviews to strengthen credibility and map search rankings.' }
-        };
         window.onPageLanguageChange = function (lang) {
-            const t = pageI18n[lang] || pageI18n.zh;
-            document.title = t.pageTitle;
-            ['pageMainTitle', 'pageMainSubtitle', 'infRedTitle', 'infRedDesc', 'infVideoTitle', 'infVideoDesc', 'infReviewTitle', 'infReviewDesc'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = t[id]; });
+            const labels = lang === 'en'
+                ? { title: 'Influencer Marketing', subtitle: 'Creator applications and campaign details', refresh: 'Refresh' }
+                : { title: '网红推广', subtitle: '达人报名及活动信息', refresh: '刷新' };
+            document.title = `${labels.title} - GeoMedia`;
+            const title = document.getElementById('pageMainTitle');
+            const subtitle = document.getElementById('pageMainSubtitle');
+            const refresh = document.getElementById('refreshClaimsBtn');
+            if (title) title.textContent = labels.title;
+            if (subtitle) subtitle.textContent = labels.subtitle;
+            if (refresh) refresh.textContent = labels.refresh;
+            if (typeof window.loadClaimsFromComponent === 'function') window.loadClaimsFromComponent(true);
         };
     </script>
 </body>

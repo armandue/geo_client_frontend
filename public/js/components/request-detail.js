@@ -151,6 +151,8 @@ async function uploadRequestImageFromDetail(file) {
 
 async function loadRequestImagesFromDetail(requestId) {
     window.currentDetailRequestId = requestId;
+    const detailsTab = document.getElementById('detailTabBtn');
+    if (detailsTab?.getAttribute('aria-selected') !== 'true') detailsTab?.click();
     const grid = document.getElementById('detailImageGrid');
     const countEl = document.getElementById('detailImageCount');
     if (!grid) return;
@@ -176,6 +178,158 @@ async function loadRequestImagesFromDetail(requestId) {
         }
     } catch (error) {
         console.error('Load images error:', error);
+    }
+}
+
+function renderRequestClaimsFromDetail(claims, container, lang) {
+    container.innerHTML = '';
+    if (!claims.length) {
+        const empty = document.createElement('p');
+        empty.style.cssText = 'margin:0;color:var(--text-muted);';
+        empty.textContent = lang === 'en' ? 'No claims for this campaign yet.' : '当前活动暂无报名。';
+        container.appendChild(empty);
+        return;
+    }
+
+    const labels = lang === 'en'
+        ? { anonymous: 'Creator', pending: 'Pending', approved: 'Approved', rejected: 'Rejected' }
+        : { anonymous: '达人', pending: '待审核', approved: '已通过', rejected: '已拒绝' };
+
+    claims.forEach((claim, index) => {
+        const profile = claim.influencer || claim.creator || claim.applicant || claim.user || {};
+        const platformValue = claim.platformName || claim.platform || claim.platformKey || profile.platformName || profile.platform || '';
+        const platform = typeof platformValue === 'object' ? (platformValue.name || platformValue.platformKey || '') : platformValue;
+        const name = claim.influencerName || claim.creatorName || claim.applicantName || profile.displayName || profile.name || profile.username || profile.handle || `${labels.anonymous} ${index + 1}`;
+        const statusValue = String(claim.status || 'pending').toLowerCase();
+        const statusKey = ['approved', 'accepted', 'confirmed'].includes(statusValue)
+            ? 'approved'
+            : (['rejected', 'declined', 'denied'].includes(statusValue) ? 'rejected' : 'pending');
+        const statusText = claim.statusLabel || labels[statusKey];
+        const card = document.createElement('article');
+        card.className = 'content-card';
+        card.style.cssText = 'margin-bottom:12px;padding:16px;';
+
+        const header = document.createElement('div');
+        header.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;gap:12px;';
+        const identity = document.createElement('div');
+        identity.style.cssText = 'display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;';
+        const nameEl = document.createElement('h4');
+        nameEl.style.cssText = 'margin:0;font-size:.98rem;color:var(--text-main);';
+        nameEl.textContent = name;
+        const statusEl = document.createElement('span');
+        statusEl.style.cssText = 'flex-shrink:0;padding:3px 9px;border-radius:12px;font-size:.75rem;background:rgba(102,126,234,.12);color:var(--primary-color);';
+        statusEl.textContent = statusText;
+        identity.append(nameEl, statusEl);
+        header.appendChild(identity);
+        if (statusKey === 'pending' && claim.id) {
+            const approveButton = document.createElement('button');
+            approveButton.type = 'button';
+            approveButton.textContent = lang === 'en' ? 'Approve' : '通过';
+            approveButton.style.cssText = 'flex-shrink:0;padding:5px 12px;border:0;border-radius:6px;background:#10b981;color:#fff;font-size:.78rem;font-weight:600;cursor:pointer;';
+            approveButton.addEventListener('click', () => approveRequestClaimFromDetail(claim, approveButton, statusEl, lang));
+            header.appendChild(approveButton);
+        }
+        card.appendChild(header);
+
+        const metadata = [];
+        if (platform) metadata.push(String(platform));
+        const email = claim.influencerEmail || profile.email;
+        if (email) metadata.push(String(email));
+        const followers = claim.followerCount ?? claim.followers ?? profile.followerCount ?? profile.followers;
+        if (followers !== undefined && followers !== null && followers !== '') {
+            metadata.push(`${lang === 'en' ? 'Followers' : '粉丝'}: ${Number(followers).toLocaleString()}`);
+        }
+        const submittedAt = claim.submittedAt || claim.appliedAt || claim.createdAt;
+        if (submittedAt) metadata.push(new Date(submittedAt).toLocaleDateString(lang === 'en' ? 'en' : 'zh-CN'));
+        if (metadata.length) {
+            const metaEl = document.createElement('p');
+            metaEl.style.cssText = 'margin:8px 0 0;color:var(--text-muted);font-size:.82rem;';
+            metaEl.textContent = metadata.join(' · ');
+            card.appendChild(metaEl);
+        }
+
+        const note = claim.notes || claim.message || claim.note || claim.bio || profile.bio;
+        if (note) {
+            const noteEl = document.createElement('p');
+            noteEl.style.cssText = 'margin:10px 0 0;color:var(--text-main);font-size:.88rem;white-space:pre-wrap;';
+            noteEl.textContent = note;
+            card.appendChild(noteEl);
+        }
+        container.appendChild(card);
+    });
+}
+
+async function approveRequestClaimFromDetail(claim, button, statusEl, lang) {
+    if (!claim?.id || button.disabled) return;
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+
+    button.disabled = true;
+    button.textContent = lang === 'en' ? 'Approving...' : '处理中...';
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/claims/${encodeURIComponent(claim.id)}/approve`, {
+            method: 'POST',
+            headers: { Authorization: token, 'Content-Type': 'application/json' }
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || data.success === false) {
+            throw new Error(data.error || data.message || `Request failed (${response.status})`);
+        }
+
+        claim.status = data.claim?.status || data.status || 'approved';
+        statusEl.textContent = lang === 'en' ? 'Approved' : '已通过';
+        statusEl.style.background = 'rgba(16,185,129,.14)';
+        statusEl.style.color = '#059669';
+        button.remove();
+    } catch (error) {
+        console.error('Approve claim error:', error);
+        button.disabled = false;
+        button.textContent = lang === 'en' ? 'Approve' : '通过';
+        let errorEl = button.closest('article')?.querySelector('[data-claim-approve-error]');
+        if (!errorEl) {
+            errorEl = document.createElement('p');
+            errorEl.dataset.claimApproveError = 'true';
+            errorEl.style.cssText = 'margin:10px 0 0;color:#dc2626;font-size:.82rem;';
+            button.closest('article')?.appendChild(errorEl);
+        }
+        if (errorEl) errorEl.textContent = lang === 'en' ? `Could not approve: ${error.message}` : `审核失败：${error.message}`;
+    }
+}
+
+async function loadRequestClaimsFromDetail(requestId) {
+    const container = document.getElementById('requestClaimsList');
+    if (!requestId || !container) return;
+    const requestKey = String(requestId);
+    if (container.dataset.loadedRequestId === requestKey) return;
+    if (container.dataset.loadingRequestId === requestKey) return;
+
+    const lang = localStorage.getItem('lang') === 'en' ? 'en' : 'zh';
+    container.dataset.loadingRequestId = requestKey;
+    container.textContent = lang === 'en' ? 'Loading claims...' : '正在加载报名信息...';
+    try {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+        let request = window.currentDetailRequest?.id === requestKey ? window.currentDetailRequest : null;
+        let claims = Array.isArray(request?.claims) && request.claims.length ? request.claims : null;
+        if (!claims) {
+            const response = await fetch(`${API_BASE_URL}/api/requests/${encodeURIComponent(requestKey)}`, {
+                headers: { Authorization: token, 'Content-Type': 'application/json' }
+            });
+            const data = await response.json();
+            if (!response.ok || data.success === false) throw new Error(data.error || data.message || `Request failed (${response.status})`);
+            request = data.request || data;
+            claims = Array.isArray(request.claims) ? request.claims : [];
+            if (request.id === requestKey) window.currentDetailRequest = request;
+        }
+        if (String(window.currentDetailRequestId) !== requestKey) return;
+        renderRequestClaimsFromDetail(claims, container, lang);
+        container.dataset.loadedRequestId = requestKey;
+    } catch (error) {
+        if (String(window.currentDetailRequestId) !== requestKey) return;
+        console.error('Load request claims error:', error);
+        container.textContent = lang === 'en' ? `Failed to load claims: ${error.message}` : `加载报名信息失败：${error.message}`;
+    } finally {
+        if (container.dataset.loadingRequestId === requestKey) delete container.dataset.loadingRequestId;
     }
 }
 
@@ -241,11 +395,15 @@ function openImagePreviewFromDetail(url) {
 
 window.uploadRequestImageFromDetail = uploadRequestImageFromDetail;
 window.loadRequestImagesFromDetail = loadRequestImagesFromDetail;
+window.loadRequestClaimsFromDetail = loadRequestClaimsFromDetail;
 window.renderImageThumb = renderImageThumbFromDetail;
 window.deleteAllRequestImages = deleteAllRequestImages;
 
 window.registerPageComponent('request-detail', function (root) {
     root.dataset.componentScript = 'request-detail';
+    root.querySelector('#detailBackBtn')?.addEventListener('click', () => {
+        if (typeof window.showSection === 'function') window.showSection('campaigns', true);
+    });
     const imageHeader = root.querySelector('#detailImagesCard h4')?.parentElement;
     let deleteAllButton = root.querySelector('#deleteAllImagesBtn');
     if (!deleteAllButton && imageHeader) {
@@ -257,6 +415,34 @@ window.registerPageComponent('request-detail', function (root) {
         imageHeader.appendChild(deleteAllButton);
     }
     deleteAllButton?.addEventListener('click', deleteAllRequestImages);
+    const detailTab = root.querySelector('#detailTabBtn');
+    const claimsTab = root.querySelector('#claimsTabBtn');
+    const detailPanel = root.querySelector('#requestDetailPanel');
+    const claimsPanel = root.querySelector('#requestClaimsPanel');
+    const activateTab = tab => {
+        const isClaims = tab === claimsTab;
+        detailTab?.setAttribute('aria-selected', String(!isClaims));
+        claimsTab?.setAttribute('aria-selected', String(isClaims));
+        if (detailTab) {
+            detailTab.style.borderBottomColor = isClaims ? 'transparent' : 'var(--primary-color)';
+            detailTab.style.color = isClaims ? 'var(--text-muted)' : 'var(--primary-color)';
+        }
+        if (claimsTab) {
+            claimsTab.style.borderBottomColor = isClaims ? 'var(--primary-color)' : 'transparent';
+            claimsTab.style.color = isClaims ? 'var(--primary-color)' : 'var(--text-muted)';
+        }
+        if (detailPanel) {
+            detailPanel.hidden = isClaims;
+            detailPanel.style.display = isClaims ? 'none' : 'block';
+        }
+        if (claimsPanel) {
+            claimsPanel.hidden = !isClaims;
+            claimsPanel.style.display = isClaims ? 'block' : 'none';
+        }
+        if (isClaims) loadRequestClaimsFromDetail(window.currentDetailRequestId);
+    };
+    detailTab?.addEventListener('click', () => activateTab(detailTab));
+    claimsTab?.addEventListener('click', () => activateTab(claimsTab));
     const dropZone = root.querySelector('#imageDropZone');
     const fileInput = root.querySelector('#imageFileInput');
     if (!dropZone || !fileInput || dropZone.dataset.bound === 'true') return;

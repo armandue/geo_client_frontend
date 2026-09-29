@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消息中心 - 智优传媒</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="page-transition">
+    <div class="dashboard-container"><main class="dashboard-main">
+        <div class="pane-header" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+            <div><h2 class="pane-title" id="pageMainTitle">消息中心</h2><p class="pane-subtitle" id="pageMainSubtitle">查看与达人之间的对话</p></div>
+            <button id="refreshConversationsBtn" type="button" class="login-btn" style="padding:9px 16px;">刷新</button>
+        </div>
+        <div id="conversationSummary" style="margin-bottom:16px;"></div>
+        <div id="conversationsList" class="message-list" aria-live="polite">
+            <div class="content-card" style="text-align:center;padding:32px;color:var(--text-muted);">正在加载对话...</div>
+        </div>
+    </main></div>
+    <script src="../js/dashboard-layout.js"></script><script src="../js/dashboard.js"></script>
+    <script src="../js/components/conversations.js"></script>
+    <script>window.onPageLanguageChange = function (lang) { const labels = lang === 'en' ? { title:'Conversations', subtitle:'View conversations with creators', refresh:'Refresh' } : { title:'消息中心', subtitle:'查看与达人之间的对话', refresh:'刷新' }; document.title = `${labels.title} - GeoMedia`; const title = document.getElementById('pageMainTitle'); const subtitle = document.getElementById('pageMainSubtitle'); const refresh = document.getElementById('refreshConversationsBtn'); if (title) title.textContent = labels.title; if (subtitle) subtitle.textContent = labels.subtitle; if (refresh) refresh.textContent = labels.refresh; };</script>
+</body>
+</html>

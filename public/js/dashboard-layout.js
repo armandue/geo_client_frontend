@@ -17,10 +17,6 @@
                     <a href="/index.html" class="nav-brand">智优传媒</a>
                 </div>
                 <div class="nav-right">
-                    <div class="brand-indicator">
-                        <span class="brand-indicator-dot"></span>
-                        <span id="navBrandName">加载中...</span>
-                    </div>
                     <div class="language-switcher">
                         <div class="lang-dropdown">
                             <button class="lang-btn lang-toggle" id="langToggle">
@@ -53,7 +49,7 @@
                         <li><a href="/index.html/analytics" class="menu-item" data-section="analytics"><span class="menu-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span><span class="menu-text" id="navLabelAnalytics">智能分析</span></a></li>
                         <li><a href="/index.html/requests" class="menu-item" data-section="campaigns"><span class="menu-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span><span class="menu-text" id="navLabelCampaigns">活动召集</span></a></li>
                         <li><a href="/index.html/claims" class="menu-item" data-section="influencers"><span class="menu-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span><span class="menu-text" id="navLabelInfluencers">网红推广</span></a></li>
-                        <li><a href="/index.html/messages" class="menu-item" data-section="messages"><span class="menu-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span><span class="menu-text" id="navLabelMessages">消息</span><span class="menu-badge">3</span></a></li>
+                        <li><a href="/index.html/conversations" class="menu-item" data-section="conversations"><span class="menu-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span><span class="menu-text" id="navLabelConversations">消息</span><span class="menu-badge" id="conversationUnreadBadge" style="display:none;"></span></a></li>
                         <li><a href="/index.html/brands" class="menu-item" data-section="merchant"><span class="menu-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 9l1-5h16l1 5"></path><path d="M4 9v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"></path><path d="M9 22V12h6v10"></path></svg></span><span class="menu-text" id="navLabelMerchant">商家详情</span></a></li>
                     </ul>
                 </div>

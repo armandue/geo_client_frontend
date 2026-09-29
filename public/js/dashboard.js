@@ -5,6 +5,26 @@
 
 const API_BASE_URL = 'https://geoclientbackend.shandong-buxie.workers.dev';
 
+function redirectToLogin() {
+    if (window.__authRedirecting) return;
+    window.__authRedirecting = true;
+    ['authToken', 'tokenType', 'accessToken', 'expiresIn', 'brandInfo'].forEach(key => localStorage.removeItem(key));
+    const lang = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('lang') || 'zh';
+    window.location.replace(`/login.html?lang=${encodeURIComponent(lang)}`);
+}
+
+// A token can be present in storage but expired or revoked. Redirect when an
+// authenticated API request confirms that the session is no longer valid.
+const dashboardFetch = window.fetch.bind(window);
+window.fetch = async (...args) => {
+    const response = await dashboardFetch(...args);
+    const requestUrl = args[0] instanceof Request ? args[0].url : String(args[0]);
+    if (response.status === 401 && requestUrl.startsWith(`${API_BASE_URL}/`)) {
+        redirectToLogin();
+    }
+    return response;
+};
+
 // ── i18n: shared navbar / sidebar labels ──────────────────────────────────
 const dashboardI18n = {
     zh: {
@@ -16,7 +36,7 @@ const dashboardI18n = {
         navAnalytics: '智能分析',
         navCampaigns: '活动召集',
         navInfluencers: '网红推广',
-        navMessages: '消息',
+        navConversations: '消息',
         navMerchant: '商家详情',
         logoutBtn: '退出登录',
         welcomeBannerTitle: (brand) => `欢迎回来，${brand}`,
@@ -31,7 +51,7 @@ const dashboardI18n = {
         navAnalytics: 'Smart Analysis',
         navCampaigns: 'Campaigns',
         navInfluencers: 'Influencers',
-        navMessages: 'Messages',
+        navConversations: 'Conversations',
         navMerchant: 'Merchant Details',
         logoutBtn: 'Sign Out',
         welcomeBannerTitle: (brand) => `Welcome back, ${brand}`,
@@ -65,6 +85,7 @@ function getCurrentSectionInfo() {
             if (id) return { section: 'request-detail', id: id };
             return { section: 'campaigns', id: null };
         }
+        if (route === 'conversations' && id) return { section: 'conversation-detail', id };
         if (route === 'claims') return { section: 'influencers', id };
         if (route === 'brands') return { section: 'merchant', id };
         
@@ -78,7 +99,7 @@ function getCurrentSection() {
 }
 
 // ── SPA Section Router ─────────────────────────────────────────────────────
-const VALID_SECTIONS = ['home', 'analytics', 'campaigns', 'influencers', 'messages', 'merchant', 'request-detail'];
+const VALID_SECTIONS = ['home', 'analytics', 'campaigns', 'influencers', 'conversations', 'conversation-detail', 'merchant', 'request-detail'];
 
 /**
  * Show the target section, hide all others.
@@ -102,7 +123,7 @@ function showSection(name, pushState = true, id = null) {
     if (target) target.style.display = 'block';
 
     // Update sidebar active state (for request-detail, highlight campaigns)
-    const activeSection = name === 'request-detail' ? 'campaigns' : name;
+    const activeSection = name === 'request-detail' ? 'campaigns' : (name === 'conversation-detail' ? 'conversations' : name);
     document.querySelectorAll('.menu-item[data-section]').forEach(link => {
         link.classList.toggle('active', link.dataset.section === activeSection);
     });
@@ -114,6 +135,8 @@ function showSection(name, pushState = true, id = null) {
     // Map internal sections to URL paths
     if (name === 'request-detail' && id) {
         newUrl.pathname = `/index.html/requests/${id}`;
+    } else if (name === 'conversation-detail' && id) {
+        newUrl.pathname = `/index.html/conversations/${encodeURIComponent(id)}`;
     } else if (name === 'home') {
         newUrl.pathname = '/index.html';
     } else {
@@ -149,7 +172,7 @@ function applySharedLanguage(lang) {
     set('navLabelAnalytics', t.navAnalytics);
     set('navLabelCampaigns', t.navCampaigns);
     set('navLabelInfluencers', t.navInfluencers);
-    set('navLabelMessages', t.navMessages);
+    set('navLabelConversations', t.navConversations);
     set('navLabelMerchant', t.navMerchant);
     set('sidebarBrandStatus', t.verifiedMerchant);
     set('logoutBtn', t.logoutBtn);
@@ -216,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lang = getParam('lang') || localStorage.getItem('lang') || 'zh';
 
     if (!token) {
-        window.location.href = `/login.html?lang=${lang}`;
+        redirectToLogin();
         return;
     }
 

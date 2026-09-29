@@ -11,7 +11,8 @@
         analytics: `${assetRoot}pages/analytics.html`,
         campaigns: `${assetRoot}pages/requests.html`,
         influencers: `${assetRoot}pages/claims.html`,
-        messages: `${assetRoot}pages/messages.html`,
+        conversations: `${assetRoot}pages/conversations.html`,
+        'conversation-detail': `${assetRoot}pages/conversation-detail.html`,
         merchant: `${assetRoot}pages/brands.html`,
         'request-detail': `${assetRoot}pages/request-detail.html`
     };
@@ -21,7 +22,8 @@
         analytics: `${assetRoot}js/components/analytics.js`,
         campaigns: `${assetRoot}js/components/campaigns.js`,
         influencers: `${assetRoot}js/components/influencers.js`,
-        messages: `${assetRoot}js/components/messages.js`,
+        conversations: `${assetRoot}js/components/conversations.js`,
+        'conversation-detail': `${assetRoot}js/components/conversation-detail.js`,
         merchant: `${assetRoot}js/components/merchant.js`,
         'request-detail': `${assetRoot}js/components/request-detail.js`
     };
@@ -36,7 +38,7 @@
             analytics: [['pageMainTitle', 'analyticsTitle'], ['pageMainSubtitle', 'analyticsSubtitle']],
             campaigns: [['pageMainTitle', 'campaignsTitle'], ['pageMainSubtitle', 'campaignsSubtitle']],
             influencers: [['pageMainTitle', 'influencersTitle'], ['pageMainSubtitle', 'influencersSubtitle']],
-            messages: [['pageMainTitle', 'messagesTitle'], ['pageMainSubtitle', 'messagesSubtitle']],
+            conversations: [['pageMainTitle', 'conversationsTitle'], ['pageMainSubtitle', 'conversationsSubtitle']],
             merchant: [['pageMainTitle', 'merchantTitle'], ['pageMainSubtitle', 'merchantSubtitle']]
         };
 

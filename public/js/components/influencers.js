@@ -5,14 +5,18 @@ function claimsPageText(lang) {
         ? {
             loading: 'Loading applications...', empty: 'No applications found.', error: 'Could not load applications',
             refresh: 'Refresh', pending: 'Pending', approved: 'Approved', rejected: 'Rejected',
-            approve: 'Approve', approving: 'Approving...', openConversation: 'Open conversation', request: 'Campaign', creator: 'Creator',
+            approve: 'Approve', approving: 'Approving...', reject: 'Reject', rejecting: 'Rejecting...',
+            rejectConfirm: 'Reject this application?', rejectError: 'Rejection failed',
+            openConversation: 'Open conversation', request: 'Campaign', creator: 'Creator',
             email: 'Email', dates: 'Campaign dates', reward: 'Reward', budget: 'Budget', perks: 'Perks',
             submitted: 'Applied', noPerks: 'No additional perks', approveError: 'Approval failed'
         }
         : {
             loading: '正在加载报名信息...', empty: '暂无活动报名。', error: '无法加载报名信息',
             refresh: '刷新', pending: '待审核', approved: '已通过', rejected: '已拒绝',
-            approve: '通过', approving: '处理中...', openConversation: '打开对话', request: '活动', creator: '达人',
+            approve: '通过', approving: '处理中...', reject: '拒绝', rejecting: '处理中...',
+            rejectConfirm: '确定拒绝这条报名吗？', rejectError: '拒绝失败',
+            openConversation: '打开对话', request: '活动', creator: '达人',
             email: '邮箱', dates: '活动日期', reward: '奖励', budget: '预算', perks: '福利',
             submitted: '报名时间', noPerks: '暂无额外福利', approveError: '审核失败'
         };
@@ -104,16 +108,22 @@ function renderClaimCard(claim, lang) {
     badge.style.color = statusKey === 'approved' ? '#059669' : (statusKey === 'rejected' ? '#dc2626' : '#b45309');
     actions.appendChild(badge);
 
-    if (claim.id) {
+    if (claim.requestId && claim.influencerEmail) {
         const conversationLink = document.createElement('a');
         const langQuery = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('lang') || 'zh';
-        conversationLink.href = `/index.html/conversations/${encodeURIComponent(claim.id)}?lang=${encodeURIComponent(langQuery)}`;
+        const detailUrl = new URL(`/index.html/conversations/${encodeURIComponent(claim.requestId)}`, window.location.origin);
+        detailUrl.searchParams.set('lang', langQuery);
+        detailUrl.searchParams.set('email', claim.influencerEmail);
+        conversationLink.href = detailUrl.toString();
         conversationLink.textContent = labels.openConversation;
         conversationLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;background:rgba(102,126,234,.15);border:1px solid rgba(102,126,234,.3);border-radius:8px;color:#818cf8;cursor:pointer;font-family:inherit;font-size:.82rem;line-height:1.2;text-decoration:none;white-space:nowrap;';
         conversationLink.addEventListener('click', event => {
-            if (typeof window.showSection !== 'function') return;
             event.preventDefault();
-            window.showSection('conversation-detail', true, claim.id);
+            if (typeof window.openConversationDetail === 'function') {
+                window.openConversationDetail(claim.requestId, claim.influencerEmail, claim.influencerName, claim.request?.title);
+            } else if (typeof window.showSection === 'function') {
+                window.showSection('conversation-detail', true, claim.requestId);
+            }
         });
         actions.appendChild(conversationLink);
     }
@@ -141,6 +151,7 @@ function renderClaimCard(claim, lang) {
                 badge.style.background = 'rgba(16,185,129,.13)';
                 badge.style.color = '#059669';
                 button.remove();
+                rejectBtn?.remove();
             } catch (error) {
                 button.disabled = false;
                 button.textContent = labels.approve;
@@ -155,6 +166,37 @@ function renderClaimCard(claim, lang) {
             }
         });
         actions.appendChild(button);
+        const rejectBtn = document.createElement('button');
+        rejectBtn.type = 'button';
+        rejectBtn.style.cssText = 'padding:7px 12px;border:1px solid #fecaca;border-radius:7px;background:#fff;color:#dc2626;cursor:pointer;font-size:.82rem;';
+        rejectBtn.textContent = labels.reject;
+        rejectBtn.addEventListener('click', async () => {
+            if (rejectBtn.disabled) return;
+            if (!confirm(labels.rejectConfirm)) return;
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+            rejectBtn.disabled = true;
+            rejectBtn.textContent = labels.rejecting;
+            try {
+                const response = await fetch(`${claimsApiBaseUrl}/api/claims/${encodeURIComponent(claim.id)}/reject`, {
+                    method: 'POST', headers: { Authorization: token, 'Content-Type': 'application/json' }
+                });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok || result.success === false) throw new Error(result.error || result.message || `HTTP ${response.status}`);
+                claim.status = result.claim?.status || 'rejected';
+                renderClaimsSummary(window.allClaims || [], document.getElementById('claimsSummary'), lang);
+                badge.textContent = labels.rejected;
+                badge.style.background = 'rgba(239,68,68,.12)';
+                badge.style.color = '#dc2626';
+                button.remove();
+                rejectBtn.remove();
+            } catch (error) {
+                rejectBtn.disabled = false;
+                rejectBtn.textContent = labels.reject;
+                alert(`${labels.rejectError}: ${error.message}`);
+            }
+        });
+        actions.appendChild(rejectBtn);
     }
     header.append(titleGroup, actions);
     card.appendChild(header);

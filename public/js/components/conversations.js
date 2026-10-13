@@ -59,7 +59,7 @@ function renderConversationCard(conversation, lang) {
     const labels = conversationsText(lang);
     const card = document.createElement('article');
     card.className = 'message-item';
-    card.dataset.claimId = conversation.claimId || '';
+    card.dataset.requestId = conversation.requestId || conversation.request?.id || '';
     card.style.cssText = 'align-items:center;gap:14px;';
 
     const avatar = document.createElement('div');
@@ -114,18 +114,24 @@ function renderConversationCard(conversation, lang) {
         actions.appendChild(campaignLink);
     }
 
-    if (conversation.claimId) {
+    const threadRequestId = conversation.requestId || request.id;
+    const threadEmail = conversation.influencer?.email;
+    if (threadRequestId && threadEmail) {
         const conversationLink = document.createElement('a');
         const langParam = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('lang') || 'zh';
-        const detailUrl = new URL(`/index.html/conversations/${encodeURIComponent(conversation.claimId)}`, window.location.origin);
+        const detailUrl = new URL(`/index.html/conversations/${encodeURIComponent(threadRequestId)}`, window.location.origin);
         detailUrl.searchParams.set('lang', langParam);
+        detailUrl.searchParams.set('email', threadEmail);
         conversationLink.href = detailUrl.toString();
         conversationLink.textContent = labels.openConversation;
         conversationLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;padding:8px 16px;background:rgba(102,126,234,.15);border:1px solid rgba(102,126,234,.3);border-radius:8px;color:#818cf8;cursor:pointer;font-family:inherit;font-size:.85rem;line-height:1.2;text-decoration:none;white-space:nowrap;';
         conversationLink.addEventListener('click', event => {
-            if (typeof window.showSection !== 'function') return;
             event.preventDefault();
-            window.showSection('conversation-detail', true, conversation.claimId);
+            if (typeof window.openConversationDetail === 'function') {
+                window.openConversationDetail(threadRequestId, threadEmail, conversation.influencer?.title, request.title);
+            } else if (typeof window.showSection === 'function') {
+                window.showSection('conversation-detail', true, threadRequestId);
+            }
         });
         actions.appendChild(conversationLink);
     }

@@ -85,7 +85,13 @@ function getCurrentSectionInfo() {
             if (id) return { section: 'request-detail', id: id };
             return { section: 'campaigns', id: null };
         }
-        if (route === 'conversations' && id) return { section: 'conversation-detail', id };
+        if (route === 'conversations' && id) {
+            // Detail route is /index.html/conversations/:requestId?email=<influencerEmail>
+            // (backend conversation API is keyed by request + influencer email)
+            const email = new URLSearchParams(window.location.search).get('email');
+            if (email) window.__conversationContext = { requestId: id, influencerEmail: email };
+            return { section: 'conversation-detail', id };
+        }
         if (route === 'claims') return { section: 'influencers', id };
         if (route === 'brands') return { section: 'merchant', id };
         
@@ -97,6 +103,11 @@ function getCurrentSectionInfo() {
 function getCurrentSection() {
     return getCurrentSectionInfo().section;
 }
+
+// NOTE: window.onSectionShow is defined in index.html's inline script (it runs
+// after this file and owns the SPA section dispatcher). Detail data loaders
+// (window.loadRequestDetailPage, window.loadConversationDetailPage,
+// window.loadMerchantPage) are called from there.
 
 // ── SPA Section Router ─────────────────────────────────────────────────────
 const VALID_SECTIONS = ['home', 'analytics', 'campaigns', 'influencers', 'conversations', 'conversation-detail', 'merchant', 'request-detail'];
@@ -137,6 +148,10 @@ function showSection(name, pushState = true, id = null) {
         newUrl.pathname = `/index.html/requests/${id}`;
     } else if (name === 'conversation-detail' && id) {
         newUrl.pathname = `/index.html/conversations/${encodeURIComponent(id)}`;
+        const ctxEmail = window.__conversationContext && window.__conversationContext.requestId === id
+            ? window.__conversationContext.influencerEmail
+            : null;
+        if (ctxEmail) newUrl.searchParams.set('email', ctxEmail);
     } else if (name === 'home') {
         newUrl.pathname = '/index.html';
     } else {

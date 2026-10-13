@@ -13,14 +13,19 @@
         <div class="content-card"><div class="detail-grid">
             <div class="detail-item"><span class="detail-label" id="detLabelNameZh">品牌名称（中文）</span><span class="detail-value" id="detValueNameZh">加载中...</span></div>
             <div class="detail-item"><span class="detail-label" id="detLabelNameEn">品牌名称（英文）</span><span class="detail-value" id="detValueNameEn">Loading...</span></div>
+            <div class="detail-item"><span class="detail-label" id="detLabelIndustry">行业</span><span class="detail-value" id="detValueIndustry">—</span></div>
+            <div class="detail-item"><span class="detail-label" id="detLabelEmail">邮箱</span><span class="detail-value" id="detValueEmail">—</span></div>
+            <div class="detail-item"><span class="detail-label" id="detLabelPhone">电话</span><span class="detail-value" id="detValuePhone">—</span></div>
             <div class="detail-item"><span class="detail-label" id="detLabelStatus">合作状态</span><span class="detail-value" style="color:#10b981;font-weight:700;" id="detValueStatus">● 合作认证商家</span></div>
             <div class="detail-item"><span class="detail-label" id="detLabelSupport">专属客户顾问</span><span class="detail-value" id="detValueSupport">智优传媒 GEO优化团队</span></div>
         </div></div>
+        <div class="pane-header" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-top:28px;"><div><h2 class="pane-title" id="merchantStoresTitle" style="font-size:1.15rem;">门店管理</h2><p class="pane-subtitle" id="merchantStoresSubtitle">管理门店地址，用于活动关联与达人到店</p></div><button class="login-btn" style="padding:10px 20px;" id="btnAddStore">+ 新增门店</button></div>
+        <div id="merchantStoresList" aria-live="polite"></div>
     </main></div>
     <script src="../js/dashboard-layout.js"></script><script src="../js/dashboard.js"></script>
     <script>
-        const pageI18n = { zh: { pageTitle:'商家详情 - 智优传媒', pageMainTitle:'商家详情', pageMainSubtitle:'查看与管理您的品牌入驻档案与账户配置', detLabelNameZh:'品牌名称（中文）', detLabelNameEn:'品牌名称（英文）', detLabelStatus:'合作状态', detValueStatus:'● 合作认证商家', detLabelSupport:'专属客户顾问', detValueSupport:'智优传媒 GEO优化团队' }, en: { pageTitle:'Merchant Details - GeoMedia', pageMainTitle:'Merchant Details', pageMainSubtitle:'Review and manage your brand registration profile and account settings', detLabelNameZh:'Brand Name (Chinese)', detLabelNameEn:'Brand Name (English)', detLabelStatus:'Partnership Status', detValueStatus:'● Verified Active Merchant', detLabelSupport:'Dedicated Consultant', detValueSupport:'GeoMedia Optimization Team' } };
-        window.onPageLanguageChange = function (lang) { const t = pageI18n[lang] || pageI18n.zh; document.title = t.pageTitle; ['pageMainTitle','pageMainSubtitle','detLabelNameZh','detLabelNameEn','detLabelStatus','detValueStatus','detLabelSupport','detValueSupport'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = t[id]; }); };
+        const pageI18n = { zh: { pageTitle:'商家详情 - 智优传媒', pageMainTitle:'商家详情', pageMainSubtitle:'查看与管理您的品牌入驻档案与账户配置', detLabelNameZh:'品牌名称（中文）', detLabelNameEn:'品牌名称（英文）', detLabelIndustry:'行业', detLabelEmail:'邮箱', detLabelPhone:'电话', detLabelStatus:'合作状态', detValueStatus:'● 合作认证商家', detLabelSupport:'专属客户顾问', detValueSupport:'智优传媒 GEO优化团队' }, en: { pageTitle:'Merchant Details - GeoMedia', pageMainTitle:'Merchant Details', pageMainSubtitle:'Review and manage your brand registration profile and account settings', detLabelNameZh:'Brand Name (Chinese)', detLabelNameEn:'Brand Name (English)', detLabelIndustry:'Industry', detLabelEmail:'Email', detLabelPhone:'Phone', detLabelStatus:'Partnership Status', detValueStatus:'● Verified Active Merchant', detLabelSupport:'Dedicated Consultant', detValueSupport:'GeoMedia Optimization Team' } };
+        window.onPageLanguageChange = function (lang) { const t = pageI18n[lang] || pageI18n.zh; document.title = t.pageTitle; ['pageMainTitle','pageMainSubtitle','detLabelNameZh','detLabelNameEn','detLabelIndustry','detLabelEmail','detLabelPhone','detLabelStatus','detValueStatus','detLabelSupport','detValueSupport'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = t[id]; }); if (typeof window.updateMerchantLanguage === 'function') window.updateMerchantLanguage(lang); };
     </script>
 </body>
 </html>

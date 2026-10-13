@@ -308,6 +308,18 @@
                             <span class="detail-value" id="detValueNameEn">Loading...</span>
                         </div>
                         <div class="detail-item">
+                            <span class="detail-label" id="detLabelIndustry">行业</span>
+                            <span class="detail-value" id="detValueIndustry">—</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label" id="detLabelEmail">邮箱</span>
+                            <span class="detail-value" id="detValueEmail">—</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label" id="detLabelPhone">电话</span>
+                            <span class="detail-value" id="detValuePhone">—</span>
+                        </div>
+                        <div class="detail-item">
                             <span class="detail-label" id="detLabelStatus">合作状态</span>
                             <span class="detail-value" style="color: #10b981; font-weight: 700;" id="detValueStatus">● 合作认证商家</span>
                         </div>
@@ -317,6 +329,15 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="pane-header" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-top:28px;">
+                    <div>
+                        <h2 class="pane-title" id="merchantStoresTitle" style="font-size:1.15rem;">门店管理</h2>
+                        <p class="pane-subtitle" id="merchantStoresSubtitle">管理门店地址，用于活动关联与达人到店</p>
+                    </div>
+                    <button class="login-btn" style="padding:10px 20px;" id="btnAddStore">+ 新增门店</button>
+                </div>
+                <div id="merchantStoresList" aria-live="polite"></div>
             </section>
 
             <!-- ═══════════════════════════════════════════
@@ -375,6 +396,11 @@
                             <h4 style="margin:0;font-size:0.85rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">平台招募要求</h4>
                         </div>
                         <div id="detailRequirementsList"></div>
+                    </div>
+
+                    <div id="detailStoresCard" style="margin-top:24px;background:#ffffff;border:1px solid var(--border-color);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                        <h4 id="detailLabelStores" style="margin:0 0 12px;font-size:0.85rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">关联门店</h4>
+                        <div id="detailStoresList"></div>
                     </div>
 
                     <div id="detailImagesCard" style="margin-top:24px;background:#ffffff;border:1px solid var(--border-color);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.02);">
@@ -527,6 +553,7 @@
                 // merchant
                 merchantTitle: '商家详情', merchantSubtitle: '查看与管理您的品牌入驻档案与账户配置',
                 detLabelNameZh: '品牌名称（中文）', detLabelNameEn: '品牌名称（英文）',
+                detLabelIndustry: '行业', detLabelEmail: '邮箱', detLabelPhone: '电话',
                 detLabelStatus: '合作状态', detValueStatus: '● 合作认证商家',
                 detLabelSupport: '专属客户顾问', detValueSupport: '智优传媒 GEO优化团队'
             },
@@ -564,6 +591,7 @@
                 // merchant
                 merchantTitle: 'Merchant Details', merchantSubtitle: 'Review and manage your brand registration profile and account settings',
                 detLabelNameZh: 'Brand Name (Chinese)', detLabelNameEn: 'Brand Name (English)',
+                detLabelIndustry: 'Industry', detLabelEmail: 'Email', detLabelPhone: 'Phone',
                 detLabelStatus: 'Partnership Status', detValueStatus: '● Verified Active Merchant',
                 detLabelSupport: 'Dedicated Consultant', detValueSupport: 'GeoMedia Optimization Team'
             }
@@ -591,7 +619,9 @@
             if (document.getElementById('conversationsList') && typeof window.loadConversationsFromComponent === 'function') window.loadConversationsFromComponent(true);
             // merchant
             s('merchantTitle'); s('merchantSubtitle');
-            s('detLabelNameZh'); s('detLabelNameEn'); s('detLabelStatus'); s('detValueStatus'); s('detLabelSupport'); s('detValueSupport');
+            s('detLabelNameZh'); s('detLabelNameEn'); s('detLabelIndustry'); s('detLabelEmail'); s('detLabelPhone');
+            s('detLabelStatus'); s('detValueStatus'); s('detLabelSupport'); s('detValueSupport');
+            if (typeof window.updateMerchantLanguage === 'function') window.updateMerchantLanguage(lang);
             const detailTab = document.getElementById('detailTabBtn');
             const claimsTab = document.getElementById('claimsTabBtn');
             if (detailTab) detailTab.textContent = lang === 'en' ? 'Details' : '活动详情';
@@ -744,30 +774,32 @@
             if (section === 'conversation-detail' && id) {
                 if (typeof window.loadConversationDetailPage === 'function') window.loadConversationDetailPage(id);
             } else if (section === 'conversations') {
-                if (!window.conversationsLoaded && typeof window.loadConversationsFromComponent === 'function') {
-                    window.loadConversationsFromComponent();
+                if (typeof window.loadConversationsFromComponent === 'function') {
+                    window.loadConversationsFromComponent(true);
                 }
             } else if (section === 'campaigns') {
                 if (typeof window.loadCampaignsFromComponent === 'function') {
-                    window.loadCampaignsFromComponent();
+                    window.loadCampaignsFromComponent(true);
+                }
+            } else if (section === 'influencers') {
+                if (typeof window.loadClaimsFromComponent === 'function') {
+                    window.loadClaimsFromComponent(true);
+                }
+            } else if (section === 'merchant') {
+                if (typeof window.loadMerchantPage === 'function') {
+                    window.loadMerchantPage(true);
                 }
             } else if (section === 'request-detail' && id) {
-                if (!window.campaignsLoaded) {
-                    if (typeof window.loadCampaignsFromComponent === 'function') {
-                        await window.loadCampaignsFromComponent();
-                    }
-                }
+                // Prefer a fresh fetch (full shape: stores, claims, requirements).
+                // Fall back to the cached list data for instant paint.
                 if (window._allCampaigns) {
-                    const req = window._allCampaigns.find(r => r.id === id);
-                    if (req) {
-                        showCampaignDetail(req, true);
-                        if (typeof window.loadRequestImagesFromDetail === 'function') {
-                            window.loadRequestImagesFromDetail(req.id);
-                        }
-                    } else {
-                        // If not found, go back to campaigns
-                        if (typeof showSection === 'function') showSection('campaigns', false);
-                    }
+                    const cached = window._allCampaigns.find(r => r.id === id);
+                    if (cached) showCampaignDetail(cached, true);
+                }
+                if (typeof window.loadRequestDetailPage === 'function') {
+                    window.loadRequestDetailPage(id);
+                } else if (typeof window.loadRequestImagesFromDetail === 'function') {
+                    window.loadRequestImagesFromDetail(id);
                 }
             }
         };

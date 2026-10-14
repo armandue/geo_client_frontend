@@ -75,7 +75,7 @@ body {
     position: relative;
 }
 
-.login-btn {
+.action-btn {
     padding: 10px 24px;
     border: none;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -88,7 +88,7 @@ body {
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.login-btn:hover {
+.action-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }

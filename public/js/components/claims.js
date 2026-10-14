@@ -4,7 +4,7 @@ function claimsPageText(lang) {
     return lang === 'en'
         ? {
             loading: 'Loading applications...', empty: 'No applications found.', error: 'Could not load applications',
-            refresh: 'Refresh', pending: 'Pending', approved: 'Approved', rejected: 'Rejected',
+            refresh: 'Refresh', pending: 'Pending', approved: 'Approved', rejected: 'Rejected', completed: 'Completed',
             approve: 'Approve', approving: 'Approving...', reject: 'Reject', rejecting: 'Rejecting...',
             rejectConfirm: 'Reject this application?', rejectError: 'Rejection failed',
             openConversation: 'Open conversation', request: 'Campaign', creator: 'Creator',
@@ -13,7 +13,7 @@ function claimsPageText(lang) {
         }
         : {
             loading: '正在加载报名信息...', empty: '暂无活动报名。', error: '无法加载报名信息',
-            refresh: '刷新', pending: '待审核', approved: '已通过', rejected: '已拒绝',
+            refresh: '刷新', pending: '待审核', approved: '已通过', rejected: '已拒绝', completed: '已完成',
             approve: '通过', approving: '处理中...', reject: '拒绝', rejecting: '处理中...',
             rejectConfirm: '确定拒绝这条报名吗？', rejectError: '拒绝失败',
             openConversation: '打开对话', request: '活动', creator: '达人',
@@ -32,6 +32,7 @@ function claimStatusKey(status) {
     const normalized = String(status || 'pending').toLowerCase();
     if (['approved', 'accepted', 'confirmed'].includes(normalized)) return 'approved';
     if (['rejected', 'declined', 'denied'].includes(normalized)) return 'rejected';
+    if (normalized === 'completed') return 'completed';
     return 'pending';
 }
 
@@ -47,11 +48,13 @@ function renderClaimsSummary(claims, container, lang) {
     const labels = claimsPageText(lang);
     const pending = claims.filter(claim => claimStatusKey(claim.status) === 'pending').length;
     const approved = claims.filter(claim => claimStatusKey(claim.status) === 'approved').length;
+    const completed = claims.filter(claim => claimStatusKey(claim.status) === 'completed').length;
     container.replaceChildren();
     [
         { label: lang === 'en' ? 'Total' : '报名总数', value: claims.length },
         { label: labels.pending, value: pending },
-        { label: labels.approved, value: approved }
+        { label: labels.approved, value: approved },
+        { label: labels.completed, value: completed }
     ].forEach(item => {
         const card = document.createElement('div');
         card.className = 'content-card';
@@ -104,8 +107,8 @@ function renderClaimCard(claim, lang) {
     const badge = document.createElement('span');
     badge.style.cssText = 'white-space:nowrap;padding:4px 10px;border-radius:12px;font-size:.76rem;font-weight:600;';
     badge.textContent = labels[statusKey];
-    badge.style.background = statusKey === 'approved' ? 'rgba(16,185,129,.13)' : (statusKey === 'rejected' ? 'rgba(239,68,68,.12)' : 'rgba(245,158,11,.14)');
-    badge.style.color = statusKey === 'approved' ? '#059669' : (statusKey === 'rejected' ? '#dc2626' : '#b45309');
+    badge.style.background = statusKey === 'approved' ? 'rgba(16,185,129,.13)' : (statusKey === 'completed' ? 'rgba(59,130,246,.13)' : (statusKey === 'rejected' ? 'rgba(239,68,68,.12)' : 'rgba(245,158,11,.14)'));
+    badge.style.color = statusKey === 'approved' ? '#059669' : (statusKey === 'completed' ? '#2563eb' : (statusKey === 'rejected' ? '#dc2626' : '#b45309'));
     actions.appendChild(badge);
 
     if (claim.requestId && claim.influencerEmail) {
@@ -131,7 +134,7 @@ function renderClaimCard(claim, lang) {
     if (statusKey === 'pending' && claim.id) {
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = 'login-btn';
+        button.className = 'action-btn';
         button.style.cssText = 'padding:7px 12px;background:#10b981;color:#fff;border:0;border-radius:7px;cursor:pointer;';
         button.textContent = labels.approve;
         button.addEventListener('click', async () => {
@@ -295,7 +298,7 @@ async function loadClaimsFromComponent(forceReload = false) {
             : `${labels.error}: ${error.message}`;
         const retryButton = document.createElement('button');
         retryButton.type = 'button';
-        retryButton.className = 'login-btn';
+        retryButton.className = 'action-btn';
         retryButton.style.cssText = 'padding:7px 12px;';
         retryButton.textContent = labels.refresh;
         retryButton.addEventListener('click', () => loadClaimsFromComponent(true));
@@ -310,7 +313,7 @@ async function loadClaimsFromComponent(forceReload = false) {
 
 window.loadClaimsFromComponent = loadClaimsFromComponent;
 function initializeClaimsPage(root) {
-    root.dataset.componentScript = 'influencers';
+    root.dataset.componentScript = 'claims';
     root.querySelector('#refreshClaimsBtn')?.addEventListener('click', () => loadClaimsFromComponent(true));
     loadClaimsFromComponent();
 }

@@ -20,11 +20,11 @@
     const scripts = {
         home: `${assetRoot}js/components/home.js`,
         analytics: `${assetRoot}js/components/analytics.js`,
-        campaigns: `${assetRoot}js/components/campaigns.js`,
-        influencers: `${assetRoot}js/components/influencers.js`,
+        campaigns: `${assetRoot}js/components/requests.js`,
+        influencers: `${assetRoot}js/components/claims.js`,
         conversations: `${assetRoot}js/components/conversations.js`,
         'conversation-detail': `${assetRoot}js/components/conversation-detail.js`,
-        merchant: `${assetRoot}js/components/merchant.js`,
+        merchant: `${assetRoot}js/components/brands.js`,
         'request-detail': `${assetRoot}js/components/request-detail.js`
     };
 

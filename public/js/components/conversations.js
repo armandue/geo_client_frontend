@@ -206,7 +206,7 @@ async function loadConversationsFromComponent(forceReload = false) {
             : `${labels.error}: ${error.message}`;
         const retryButton = document.createElement('button');
         retryButton.type = 'button';
-        retryButton.className = 'login-btn';
+        retryButton.className = 'action-btn';
         retryButton.style.cssText = 'padding:7px 12px;';
         retryButton.textContent = labels.retry;
         retryButton.addEventListener('click', () => loadConversationsFromComponent(true));

@@ -131,7 +131,7 @@ async function loadConversationDetailPage(requestIdFromRoute) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 20000);
     try {
-        const url = `${conversationDetailApiBaseUrl}/api/requests/${encodeURIComponent(ctx.requestId)}/conversation?influencer_email=${encodeURIComponent(ctx.influencerEmail)}`;
+        const url = `${conversationDetailApiBaseUrl}/api/requests/${encodeURIComponent(ctx.requestId)}/conversation?influencer_email=${encodeURIComponent(ctx.influencerEmail)}&limit=50`;
         const response = await fetch(url, {
             headers: { Authorization: token, 'Content-Type': 'application/json' },
             signal: controller.signal
@@ -172,7 +172,7 @@ async function sendConversationMessage(event) {
         const response = await fetch(`${conversationDetailApiBaseUrl}/api/requests/${encodeURIComponent(ctx.requestId)}/conversation`, {
             method: 'POST',
             headers: { Authorization: token, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ influencerEmail: ctx.influencerEmail, content })
+            body: JSON.stringify({ influencerEmail: ctx.influencerEmail, content, contentType: 'text' })
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok || data.success === false) throw new Error(data.error || data.message || `HTTP ${response.status}`);

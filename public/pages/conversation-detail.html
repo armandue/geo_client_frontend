@@ -13,18 +13,20 @@
             <div style="margin-bottom:20px;">
                 <a id="backToConversationsLink" href="/index.html/conversations" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#fff;border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);cursor:pointer;font-size:.85rem;text-decoration:none;box-shadow:0 1px 2px rgba(0,0,0,.05);"><span aria-hidden="true">‹</span><span id="backToConversationsLabel">返回对话</span></a>
             </div>
-            <div class="pane-header" style="margin-bottom:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-                <div><h2 class="pane-title" id="conversationDetailCreator">对话详情</h2>
-                <p class="pane-subtitle" id="conversationDetailRequest"></p></div>
-                <button id="conversationRefreshBtn" type="button" class="login-btn" style="padding:9px 16px;">刷新</button>
+            <div class="pane-header" style="width:min(100%,860px);margin-bottom:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:nowrap;">
+                <div style="min-width:0;"><h2 class="pane-title" id="conversationDetailCreator">对话详情</h2>
+                </div>
+                <button id="conversationRefreshBtn" type="button" class="action-btn" style="flex:0 0 auto;padding:9px 16px;white-space:nowrap;">刷新</button>
             </div>
-            <section id="conversationMessages" class="content-card" aria-live="polite" style="display:flex;flex-direction:column;gap:12px;min-height:220px;max-height:56vh;overflow-y:auto;">
+            <div style="width:min(100%,860px);margin:0;box-sizing:border-box;">
+            <section id="conversationMessages" class="content-card" aria-live="polite" style="display:flex;flex-direction:column;gap:12px;min-height:220px;max-height:56vh;overflow-y:auto;width:100%;box-sizing:border-box;">
                 <p id="conversationDetailLoading" style="margin:auto;color:var(--text-muted);text-align:center;">正在加载消息...</p>
             </section>
-            <form id="conversationSendForm" style="display:flex;gap:10px;margin-top:14px;">
-                <input id="conversationInput" type="text" autocomplete="off" placeholder="输入消息..." style="flex:1;padding:11px 14px;border:1px solid var(--border-color);border-radius:10px;font-size:.9rem;">
-                <button id="conversationSendBtn" type="submit" class="login-btn" style="padding:11px 22px;">发送</button>
+            <form id="conversationSendForm" style="position:relative;width:100%;margin-top:14px;">
+                <input id="conversationInput" type="text" autocomplete="off" placeholder="输入消息..." style="display:block;width:calc(100% - 100px);height:42px;box-sizing:border-box;padding:11px 14px;border:1px solid var(--border-color);border-radius:10px;font-size:.9rem;">
+                <button id="conversationSendBtn" type="submit" class="action-btn" style="position:absolute;top:0;right:0;height:42px;padding:0 22px;white-space:nowrap;">发送</button>
             </form>
+            </div>
         </main>
     </div>
     <script src="../js/dashboard-layout.js"></script>

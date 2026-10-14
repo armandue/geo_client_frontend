@@ -29,7 +29,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="login-btn" id="logoutBtn">退出登录</button>
+                    <button class="action-btn" id="logoutBtn">退出登录</button>
                 </div>
             </div>
         </nav>

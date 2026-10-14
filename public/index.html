@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="login-btn" id="logoutBtn">退出登录</button>
+                <button class="action-btn" id="logoutBtn">退出登录</button>
             </div>
         </div>
     </nav>
@@ -226,7 +226,7 @@
                         <h2 class="pane-title" id="campaignsTitle">活动召集</h2>
                         <p class="pane-subtitle" id="campaignsSubtitle">规划并发布达人探店、体验召集与推广任务</p>
                     </div>
-                    <button class="login-btn" style="padding: 10px 20px;" id="btnCreateCampaign">+ 发起新活动</button>
+                    <button type="button" class="action-btn" style="padding: 10px 20px;" id="btnCreateCampaign">+ 发起新活动</button>
                 </div>
 
                 <div class="content-card">
@@ -278,7 +278,7 @@
                         <h2 class="pane-title" id="conversationsTitle">消息中心</h2>
                         <p class="pane-subtitle" id="conversationsSubtitle">查看与达人之间的对话</p>
                     </div>
-                    <button id="refreshConversationsBtn" type="button" class="login-btn" style="padding:9px 16px;">刷新</button>
+                    <button id="refreshConversationsBtn" type="button" class="action-btn" style="padding:9px 16px;">刷新</button>
                 </div>
                 <div id="conversationSummary" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;"></div>
                 <div id="conversationsList" class="message-list" aria-live="polite">
@@ -335,7 +335,7 @@
                         <h2 class="pane-title" id="merchantStoresTitle" style="font-size:1.15rem;">门店管理</h2>
                         <p class="pane-subtitle" id="merchantStoresSubtitle">管理门店地址，用于活动关联与达人到店</p>
                     </div>
-                    <button class="login-btn" style="padding:10px 20px;" id="btnAddStore">+ 新增门店</button>
+                    <button class="action-btn" style="padding:10px 20px;" id="btnAddStore">+ 新增门店</button>
                 </div>
                 <div id="merchantStoresList" aria-live="polite"></div>
             </section>
@@ -654,7 +654,11 @@
         async function loadPlatformsFromApi() {
             if (PLATFORMS_CACHE.length > 0) return PLATFORMS_CACHE;
             try {
-                const resp = await fetch(`${API_BASE_URL}/api/platforms`);
+                const token = localStorage.getItem('authToken');
+                const resp = await fetch(`${API_BASE_URL}/api/platforms`, {
+                    headers: token ? { Authorization: token } : {}
+                });
+                if (resp.status === 401) return [];
                 const data = await resp.json();
                 if (data && data.success && Array.isArray(data.platforms) && data.platforms.length > 0) {
                     PLATFORMS_CACHE = data.platforms;
@@ -779,7 +783,7 @@
                 }
             } else if (section === 'campaigns') {
                 if (typeof window.loadCampaignsFromComponent === 'function') {
-                    window.loadCampaignsFromComponent(true);
+                    window.loadCampaignsFromComponent();
                 }
             } else if (section === 'influencers') {
                 if (typeof window.loadClaimsFromComponent === 'function') {
@@ -955,7 +959,11 @@
                 const data = await resp.json();
                 if (!resp.ok || !data.success) throw new Error(data.error || `服务器错误 (${resp.status})`);
                 closeModal();
-                prependCampaignCard(data.request);
+                if (typeof window.loadCampaignsFromComponent === 'function') {
+                    await window.loadCampaignsFromComponent(true);
+                } else {
+                    prependCampaignCard(data.request);
+                }
             } catch (err) {
                 errorBox.textContent = err.message || '提交失败，请稍后重试';
                 errorBox.style.display = 'block'; submitBtn.disabled = false; submitBtn.textContent = '发布活动';

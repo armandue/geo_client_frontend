@@ -192,8 +192,8 @@ function renderRequestClaimsFromDetail(claims, container, lang) {
     }
 
     const labels = lang === 'en'
-        ? { anonymous: 'Creator', pending: 'Pending', approved: 'Approved', rejected: 'Rejected' }
-        : { anonymous: '达人', pending: '待审核', approved: '已通过', rejected: '已拒绝' };
+        ? { anonymous: 'Creator', pending: 'Pending', approved: 'Approved', rejected: 'Rejected', completed: 'Completed' }
+        : { anonymous: '达人', pending: '待审核', approved: '已通过', rejected: '已拒绝', completed: '已完成' };
 
     claims.forEach((claim, index) => {
         const profile = claim.influencer || claim.creator || claim.applicant || claim.user || {};
@@ -203,7 +203,9 @@ function renderRequestClaimsFromDetail(claims, container, lang) {
         const statusValue = String(claim.status || 'pending').toLowerCase();
         const statusKey = ['approved', 'accepted', 'confirmed'].includes(statusValue)
             ? 'approved'
-            : (['rejected', 'declined', 'denied'].includes(statusValue) ? 'rejected' : 'pending');
+            : (['rejected', 'declined', 'denied'].includes(statusValue)
+                ? 'rejected'
+                : (statusValue === 'completed' ? 'completed' : 'pending'));
         const statusText = claim.statusLabel || labels[statusKey];
         const card = document.createElement('article');
         card.className = 'content-card';
@@ -217,7 +219,13 @@ function renderRequestClaimsFromDetail(claims, container, lang) {
         nameEl.style.cssText = 'margin:0;font-size:.98rem;color:var(--text-main);';
         nameEl.textContent = name;
         const statusEl = document.createElement('span');
-        statusEl.style.cssText = 'flex-shrink:0;padding:3px 9px;border-radius:12px;font-size:.75rem;background:rgba(102,126,234,.12);color:var(--primary-color);';
+        statusEl.style.cssText = statusKey === 'completed'
+            ? 'flex-shrink:0;padding:3px 9px;border-radius:12px;font-size:.75rem;background:rgba(59,130,246,.13);color:#2563eb;'
+            : (statusKey === 'approved'
+                ? 'flex-shrink:0;padding:3px 9px;border-radius:12px;font-size:.75rem;background:rgba(16,185,129,.13);color:#059669;'
+                : (statusKey === 'rejected'
+                    ? 'flex-shrink:0;padding:3px 9px;border-radius:12px;font-size:.75rem;background:rgba(239,68,68,.12);color:#dc2626;'
+                    : 'flex-shrink:0;padding:3px 9px;border-radius:12px;font-size:.75rem;background:rgba(245,158,11,.14);color:#b45309;'));
         statusEl.textContent = statusText;
         identity.append(nameEl, statusEl);
         header.appendChild(identity);
@@ -533,8 +541,8 @@ function requestDetailPageText(lang) {
             contentTypes: { video: 'Video', image: 'Image', both: 'Both' },
             statuses: { draft: '🟡 Draft', open: '🟢 Recruiting', completed: '✅ Completed', cancelled: '⚫ Cancelled', closed: '🔴 Closed' },
             reject: 'Reject', rejecting: 'Rejecting...', rejectConfirm: 'Reject this application?',
-            posts: 'Submitted works', loadPosts: 'View works', noPosts: 'No works submitted yet.',
-            approve: 'Approve', approvePost: 'Approve', rejectPost: 'Reject',
+            posts: 'Submitted works', loadPosts: 'View works', noPosts: 'No works submitted yet.', submitted: 'Submitted',
+            approve: 'Approve', approvePost: 'Approve', rejectPost: 'Reject', openConversation: 'Message creator',
             reviewNotes: 'Review notes (optional)', reviewNotesPh: 'Reason for rejection / feedback...',
             viewPost: 'Open', statsViews: 'Views', statsLikes: 'Likes', statsComments: 'Comments', statsCollects: 'Collects',
             notes: 'Notes', bookingDate: 'Booking date'
@@ -558,8 +566,8 @@ function requestDetailPageText(lang) {
             contentTypes: { video: '视频', image: '图文', both: '视频+图文' },
             statuses: { draft: '🟡 草稿', open: '🟢 招募中', completed: '✅ 已完成', cancelled: '⚫ 已取消', closed: '🔴 已关闭' },
             reject: '拒绝', rejecting: '处理中...', rejectConfirm: '确定拒绝这条报名吗？',
-            posts: '提交的作品', loadPosts: '查看作品', noPosts: '暂无提交的作品。',
-            approve: '通过', approvePost: '通过', rejectPost: '驳回',
+            posts: '提交的作品', loadPosts: '查看作品', noPosts: '暂无提交的作品。', submitted: '已提交',
+            approve: '通过', approvePost: '通过', rejectPost: '驳回', openConversation: '联系达人',
             reviewNotes: '审核备注（选填）', reviewNotesPh: '驳回原因 / 反馈意见...',
             viewPost: '打开', statsViews: '播放', statsLikes: '点赞', statsComments: '评论', statsCollects: '收藏',
             notes: '备注', bookingDate: '预约日期'
@@ -568,6 +576,33 @@ function requestDetailPageText(lang) {
 
 const requestDetailEscapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const requestDetailDate = value => value ? String(value).slice(0, 10) : '—';
+
+function openRequestActionModal(title, message, confirmLabel, cancelLabel) {
+    return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;';
+        overlay.innerHTML = `<div style="width:min(92vw,460px);background:#1a1f2e;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px;color:#f9fafb;position:relative;"><button type="button" data-close style="position:absolute;top:14px;right:14px;background:transparent;border:0;color:#9ca3af;cursor:pointer;font-size:20px;line-height:1;">✕</button><h3 style="margin:0 0 8px;font-size:1.15rem;">${requestDetailEscapeHtml(title)}</h3><p style="margin:0 0 24px;color:#9ca3af;font-size:.88rem;line-height:1.6;">${requestDetailEscapeHtml(message)}</p><div style="display:flex;justify-content:flex-end;gap:10px;"><button type="button" data-cancel style="padding:10px 18px;background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#9ca3af;cursor:pointer;font-size:.88rem;">${requestDetailEscapeHtml(cancelLabel)}</button><button type="button" data-confirm style="padding:10px 22px;background:linear-gradient(135deg,#667eea,#764ba2);border:0;border-radius:8px;color:#fff;cursor:pointer;font-size:.88rem;font-weight:600;">${requestDetailEscapeHtml(confirmLabel)}</button></div></div>`;
+        document.body.appendChild(overlay);
+        const close = result => { overlay.remove(); resolve(result); };
+        overlay.querySelector('[data-close]').addEventListener('click', () => close(false));
+        overlay.querySelector('[data-cancel]').addEventListener('click', () => close(false));
+        overlay.querySelector('[data-confirm]').addEventListener('click', () => close(true));
+        overlay.addEventListener('click', event => { if (event.target === overlay) close(false); });
+    });
+}
+
+function openRequestNoticeModal(title, message, closeLabel) {
+    return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;';
+        overlay.innerHTML = `<div style="width:min(92vw,460px);background:#1a1f2e;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px;color:#f9fafb;position:relative;"><button type="button" data-close-x style="position:absolute;top:14px;right:14px;background:transparent;border:0;color:#9ca3af;cursor:pointer;font-size:20px;line-height:1;">✕</button><h3 style="margin:0 0 8px;font-size:1.15rem;">${requestDetailEscapeHtml(title)}</h3><p style="margin:0 0 24px;color:#9ca3af;font-size:.88rem;line-height:1.6;">${requestDetailEscapeHtml(message)}</p><div style="display:flex;justify-content:flex-end;"><button type="button" data-close style="padding:10px 22px;background:linear-gradient(135deg,#667eea,#764ba2);border:0;border-radius:8px;color:#fff;cursor:pointer;font-size:.88rem;font-weight:600;">${requestDetailEscapeHtml(closeLabel)}</button></div></div>`;
+        document.body.appendChild(overlay);
+        const close = () => { overlay.remove(); resolve(); };
+        overlay.querySelector('[data-close-x]').addEventListener('click', close);
+        overlay.querySelector('[data-close]').addEventListener('click', close);
+        overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
+    });
+}
 
 async function fetchPlatformOptions() {
     if (Array.isArray(window.__platformOptions)) return window.__platformOptions;
@@ -712,7 +747,7 @@ function renderRequestDetailActions(request) {
         if (!header) return;
         bar = document.createElement('div');
         bar.id = 'detailActionsBar';
-        bar.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px;';
+        bar.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px;padding:16px 0 8px;';
         header.parentElement.insertBefore(bar, header.nextSibling);
     }
     bar.replaceChildren();
@@ -727,18 +762,18 @@ function renderRequestDetailActions(request) {
         bar.appendChild(btn);
         return btn;
     };
-    const primary = 'padding:8px 16px;border:0;border-radius:8px;background:var(--primary-color);color:#fff;font-size:.85rem;font-weight:600;cursor:pointer;';
+    const primary = 'padding:10px 20px;border:0;border-radius:8px;background:var(--primary-color);color:#fff;font-size:.85rem;font-weight:600;cursor:pointer;';
     const ghost = 'padding:8px 16px;border:1px solid var(--border-color);border-radius:8px;background:#fff;color:var(--text-main);font-size:.85rem;cursor:pointer;';
     const danger = 'padding:8px 16px;border:1px solid #fecaca;border-radius:8px;background:#fff;color:#dc2626;font-size:.85rem;cursor:pointer;';
 
     mkBtn(t.edit, primary, () => openRequestEditModal(request));
     if (status === 'open' || status === 'draft') {
         mkBtn(t.completeCampaign, ghost, async () => {
-            if (!confirm(t.confirmComplete)) return;
+            if (!await openRequestActionModal(t.completeCampaign, t.confirmComplete, t.completeCampaign, t.close)) return;
             await updateRequestStatus(request.id, 'completed');
         });
         mkBtn(t.cancelCampaign, danger, async () => {
-            if (!confirm(t.confirmCancel)) return;
+            if (!await openRequestActionModal(t.cancelCampaign, t.confirmCancel, t.cancelCampaign, t.close)) return;
             await updateRequestStatus(request.id, 'cancelled');
         });
     }
@@ -766,7 +801,6 @@ async function updateRequestStatus(requestId, status) {
         if (window.currentDetailRequest) window.currentDetailRequest.status = data.request?.status || status;
         renderRequestDetailHeader(window.currentDetailRequest);
         renderRequestDetailActions(window.currentDetailRequest);
-        window.campaignsLoaded = false;
     } catch (error) {
         console.error('Update request status error:', error);
         alert(`${t.updateFailed}: ${error.message}`);
@@ -801,12 +835,13 @@ async function openRequestEditModal(request) {
     const linkedStoreIds = new Set((request.stores || []).map(s => s.id));
 
     const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:3000;background:rgba(15,20,33,.6);display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;';
-    const input = 'width:100%;padding:9px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:.9rem;box-sizing:border-box;';
-    const label = 'display:block;margin:14px 0 6px;font-size:.82rem;color:var(--text-muted);font-weight:600;';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;';
+    const input = 'width:100%;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#f9fafb;font-size:.9rem;box-sizing:border-box;outline:none;';
+    const label = 'display:block;margin:14px 0 6px;font-size:.82rem;color:#d1d5db;font-weight:600;';
     overlay.innerHTML = `
-        <div style="width:min(94vw,620px);background:#fff;border-radius:14px;padding:24px;color:#111827;margin:auto;">
-            <h3 style="margin:0 0 6px;font-size:1.05rem;">${t.edit}</h3>
+        <div style="width:min(94vw,620px);background:#1a1f2e;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:32px;color:#f9fafb;margin:auto;position:relative;">
+            <button type="button" data-close-x style="position:absolute;top:16px;right:16px;background:transparent;border:0;color:#9ca3af;cursor:pointer;font-size:20px;line-height:1;">✕</button>
+            <h3 style="margin:0 0 6px;font-size:1.2rem;">${t.edit}</h3>
             <label style="${label}">${t.title} *</label><input data-f="title" value="${requestDetailEscapeHtml(request.title)}" style="${input}">
             <label style="${label}">${t.description} *</label><textarea data-f="description" rows="4" style="${input}resize:vertical;">${requestDetailEscapeHtml(request.description)}</textarea>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
@@ -823,14 +858,15 @@ async function openRequestEditModal(request) {
             <button type="button" data-req-add style="border:1px dashed var(--border-color);background:#fff;border-radius:8px;padding:7px 12px;font-size:.82rem;color:var(--primary-color);cursor:pointer;">${t.addRequirement}</button>
             ${stores.length ? `<label style="${label}">${t.stores}</label><div data-store-list style="display:flex;flex-direction:column;gap:6px;max-height:150px;overflow-y:auto;">${stores.filter(s => s.status === 'active').map(s => `<label style="display:flex;gap:8px;align-items:center;font-size:.85rem;"><input type="checkbox" data-store-id="${requestDetailEscapeHtml(s.id)}"${linkedStoreIds.has(s.id) ? ' checked' : ''}> ${requestDetailEscapeHtml(s.storeName)} <span style="color:var(--text-muted);">${requestDetailEscapeHtml(s.address || '')}</span></label>`).join('')}</div>` : ''}
             <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;">
-                <button type="button" data-close style="padding:9px 18px;border:1px solid var(--border-color);background:#fff;border-radius:8px;cursor:pointer;">${t.close}</button>
-                <button type="button" data-save style="padding:9px 22px;border:0;background:var(--primary-color);color:#fff;border-radius:8px;font-weight:600;cursor:pointer;">${t.save}</button>
+                <button type="button" data-close style="padding:10px 18px;background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#9ca3af;cursor:pointer;">${t.close}</button>
+                <button type="button" data-save style="padding:10px 22px;background:linear-gradient(135deg,#667eea,#764ba2);border:0;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;">${t.save}</button>
             </div>
             <p data-error style="display:none;margin:12px 0 0;color:#dc2626;font-size:.82rem;"></p>
         </div>`;
     document.body.appendChild(overlay);
     const close = () => overlay.remove();
     overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    overlay.querySelector('[data-close-x]').addEventListener('click', close);
 
     const reqList = overlay.querySelector('[data-req-list]');
     const addRow = (req) => {
@@ -883,7 +919,6 @@ async function openRequestEditModal(request) {
             renderRequestDetailActions(data.request);
             const claimsList = document.getElementById('requestClaimsList');
             if (claimsList) delete claimsList.dataset.loadedRequestId;
-            window.campaignsLoaded = false;
             close();
         } catch (error) {
             console.error('Save request error:', error);
@@ -949,14 +984,14 @@ async function toggleClaimPostsFromDetail(claim, container, button, lang) {
         const data = await response.json();
         if (!response.ok || data.success === false) throw new Error(data.error || `HTTP ${response.status}`);
         container.dataset.loaded = claim.id;
-        renderClaimPostsFromDetail(data.posts || [], container, lang);
+        renderClaimPostsFromDetail(data.posts || [], container, lang, claim);
     } catch (error) {
         console.error('Load claim posts error:', error);
         container.innerHTML = `<p style="margin:0;color:#dc2626;font-size:.82rem;">${t.loadError}: ${requestDetailEscapeHtml(error.message)}</p>`;
     }
 }
 
-function renderClaimPostsFromDetail(posts, container, lang) {
+function renderClaimPostsFromDetail(posts, container, lang, claim) {
     const t = requestDetailPageText(lang);
     container.replaceChildren();
     if (!posts.length) {
@@ -968,37 +1003,47 @@ function renderClaimPostsFromDetail(posts, container, lang) {
     }
     const statusColor = s => s === 'approved'
         ? 'background:rgba(16,185,129,.13);color:#059669;'
-        : (s === 'rejected' ? 'background:rgba(239,68,68,.12);color:#dc2626;' : 'background:rgba(245,158,11,.14);color:#b45309;');
+        : (s === 'rejected' ? 'background:rgba(239,68,68,.12);color:#dc2626;' : 'background:rgba(59,130,246,.13);color:#2563eb;');
     posts.forEach(post => {
         const card = document.createElement('div');
         card.style.cssText = 'border:1px solid var(--border-color);border-radius:10px;padding:12px;margin-bottom:10px;background:#fff;';
         const statusKey = String(post.status || 'submitted').toLowerCase();
-        const statusLabel = statusKey === 'approved' ? t.approve : (statusKey === 'rejected' ? t.reject : (lang === 'en' ? 'Pending' : '待审核'));
+        const statusLabel = statusKey === 'approved' ? t.approve : (statusKey === 'rejected' ? t.reject : t.submitted);
         card.innerHTML = `
             <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
                 <div style="min-width:0;">
                     <div style="font-weight:600;font-size:.88rem;color:var(--text-main);">${requestDetailEscapeHtml(post.title || post.platformKey || '')}</div>
                     <div style="font-size:.76rem;color:var(--text-muted);margin-top:2px;">${requestDetailEscapeHtml(post.platformKey || '')} · ${t.statsViews} ${Number(post.viewCount) || 0} · ${t.statsLikes} ${Number(post.likeCount) || 0} · ${t.statsComments} ${Number(post.commentCount) || 0} · ${t.statsCollects} ${Number(post.collectCount) || 0}</div>
                 </div>
-                <span style="padding:3px 10px;border-radius:12px;font-size:.74rem;font-weight:600;${statusColor(statusKey)}">${statusLabel}</span>
+                <span data-post-status style="padding:3px 10px;border-radius:12px;font-size:.74rem;font-weight:600;${statusColor(statusKey)}">${statusLabel}</span>
             </div>
-            <div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                <a href="${requestDetailEscapeHtml(post.postUrl || '#')}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--primary-color);">${t.viewPost} ↗</a>
+            <div style="margin-top:10px;padding:10px 12px;background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;">
+                <a href="${requestDetailEscapeHtml(post.postUrl || '#')}" target="_blank" rel="noopener" style="display:block;overflow:hidden;color:var(--primary-color);font-size:.8rem;font-weight:600;text-overflow:ellipsis;white-space:nowrap;">${t.viewPost} ↗</a>
+                <span style="display:block;margin-top:4px;overflow:hidden;color:var(--text-muted);font-size:.75rem;text-overflow:ellipsis;white-space:nowrap;">${requestDetailEscapeHtml(post.postUrl || '—')}</span>
             </div>
-            <div data-review-box style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-                <input data-review-notes placeholder="${requestDetailEscapeHtml(t.reviewNotesPh)}" value="${requestDetailEscapeHtml(post.reviewNotes || '')}" style="flex:1;min-width:160px;padding:7px 10px;border:1px solid var(--border-color);border-radius:6px;font-size:.8rem;">
-            </div>`;
-        const reviewBox = card.querySelector('[data-review-box]');
-        const mkBtn = (label, bg, status) => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.textContent = label;
-            btn.style.cssText = `padding:6px 14px;border:0;border-radius:6px;background:${bg};color:#fff;font-size:.78rem;font-weight:600;cursor:pointer;`;
-            btn.addEventListener('click', () => reviewClaimPostFromDetail(post, status, card.querySelector('[data-review-notes]').value, btn, lang));
-            reviewBox.appendChild(btn);
-        };
-        if (statusKey !== 'approved') mkBtn(t.approvePost, '#10b981', 'approved');
-        if (statusKey !== 'rejected') mkBtn(t.rejectPost, '#ef4444', 'rejected');
+            <div data-post-actions style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;"></div>`;
+        const actions = card.querySelector('[data-post-actions]');
+        if (claim?.influencerEmail && window.currentDetailRequestId) {
+            const langParam = localStorage.getItem('lang') || 'zh';
+            const conversationLink = document.createElement('a');
+            conversationLink.href = `/index.html/conversations/${encodeURIComponent(window.currentDetailRequestId)}?lang=${encodeURIComponent(langParam)}&email=${encodeURIComponent(claim.influencerEmail)}`;
+            conversationLink.target = '_self';
+            conversationLink.textContent = t.openConversation;
+            conversationLink.style.cssText = 'padding:6px 12px;border:1px solid rgba(102,126,234,.3);border-radius:6px;background:rgba(102,126,234,.12);color:#667eea;font-size:.78rem;text-decoration:none;';
+            actions.appendChild(conversationLink);
+        }
+        if (post.id) {
+            const createReviewButton = (label, status, background) => {
+                const reviewButton = document.createElement('button');
+                reviewButton.type = 'button';
+                reviewButton.textContent = label;
+                reviewButton.style.cssText = `padding:6px 12px;border:0;border-radius:6px;background:${background};color:#fff;font-size:.78rem;font-weight:600;cursor:pointer;`;
+                reviewButton.addEventListener('click', () => reviewClaimPostFromDetail(post, status, '', reviewButton, lang));
+                actions.appendChild(reviewButton);
+            };
+            if (statusKey !== 'approved') createReviewButton(t.approvePost, 'approved', '#10b981');
+            if (statusKey !== 'rejected') createReviewButton(t.rejectPost, 'rejected', '#ef4444');
+        }
         container.appendChild(card);
     });
 }
@@ -1020,9 +1065,18 @@ async function reviewClaimPostFromDetail(post, status, reviewNotes, button, lang
         if (!response.ok || data.success === false) throw new Error(data.error || `HTTP ${response.status}`);
         post.status = data.post?.status || status;
         post.reviewNotes = data.post?.reviewNotes ?? reviewNotes;
+        const card = button.closest('[data-post-actions]')?.parentElement;
+        const statusEl = card?.querySelector('[data-post-status]');
+        if (statusEl) {
+            statusEl.textContent = status === 'approved' ? t.approvePost : t.rejectPost;
+            statusEl.style.cssText = status === 'approved'
+                ? 'padding:3px 10px;border-radius:12px;font-size:.74rem;font-weight:600;background:rgba(16,185,129,.13);color:#059669;'
+                : 'padding:3px 10px;border-radius:12px;font-size:.74rem;font-weight:600;background:rgba(239,68,68,.12);color:#dc2626;';
+        }
+        button.closest('[data-post-actions]')?.querySelectorAll('button').forEach(reviewButton => reviewButton.remove());
         const container = button.closest('[data-posts-container]');
         if (container) { delete container.dataset.loaded; }
-        alert(lang === 'en' ? 'Review saved.' : '审核已保存。');
+        await openRequestNoticeModal(t.statusUpdated, lang === 'en' ? 'Review saved.' : '审核已保存。', t.close);
     } catch (error) {
         console.error('Review claim post error:', error);
         alert(`${t.updateFailed}: ${error.message}`);

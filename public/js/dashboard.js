@@ -97,6 +97,15 @@ function getCurrentSectionInfo() {
         
         return { section: route, id: id };
     }
+    if (window.location.pathname.endsWith('/request-detail.html')) {
+        return { section: 'request-detail', id: getParam('id') };
+    }
+    if (window.location.pathname.endsWith('/conversation-detail.html')) {
+        const requestId = getParam('request_id');
+        const email = getParam('email');
+        if (requestId && email) window.__conversationContext = { requestId, influencerEmail: email };
+        return { section: 'conversation-detail', id: requestId };
+    }
     return { section: getParam('section') || 'home', id: null };
 }
 
@@ -145,9 +154,11 @@ function showSection(name, pushState = true, id = null) {
     
     // Map internal sections to URL paths
     if (name === 'request-detail' && id) {
-        newUrl.pathname = `/index.html/requests/${id}`;
+        newUrl.pathname = '/request-detail.html';
+        newUrl.searchParams.set('id', id);
     } else if (name === 'conversation-detail' && id) {
-        newUrl.pathname = `/index.html/conversations/${encodeURIComponent(id)}`;
+        newUrl.pathname = '/conversation-detail.html';
+        newUrl.searchParams.set('request_id', id);
         const ctxEmail = window.__conversationContext && window.__conversationContext.requestId === id
             ? window.__conversationContext.influencerEmail
             : null;
@@ -155,11 +166,14 @@ function showSection(name, pushState = true, id = null) {
     } else if (name === 'home') {
         newUrl.pathname = '/index.html';
     } else {
-        let pathSegment = name;
-        if (name === 'campaigns') pathSegment = 'requests';
-        if (name === 'influencers') pathSegment = 'claims';
-        if (name === 'merchant') pathSegment = 'brands';
-        newUrl.pathname = `/index.html/${pathSegment}`;
+        const pagePaths = {
+            analytics: '/analytics.html',
+            campaigns: '/requests.html',
+            influencers: '/claims.html',
+            conversations: '/conversations.html',
+            merchant: '/brands.html'
+        };
+        newUrl.pathname = pagePaths[name] || '/index.html';
     }
     
     newUrl.searchParams.delete('section');

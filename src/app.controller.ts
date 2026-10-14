@@ -33,4 +33,39 @@ export class AppController {
   spaFallback(@Res() res: Response) {
     res.sendFile(join(__dirname, '..', 'public', 'index.html'));
   }
+
+  @Get('analytics.html')
+  analyticsPage(@Res() res: Response) {
+    res.sendFile(join(__dirname, '..', 'public', 'pages', 'analytics.html'));
+  }
+
+  @Get('requests.html')
+  requestsPage(@Res() res: Response) {
+    res.sendFile(join(__dirname, '..', 'public', 'pages', 'requests.html'));
+  }
+
+  @Get('claims.html')
+  claimsPage(@Res() res: Response) {
+    res.sendFile(join(__dirname, '..', 'public', 'pages', 'claims.html'));
+  }
+
+  @Get('conversations.html')
+  conversationsPage(@Res() res: Response) {
+    res.sendFile(join(__dirname, '..', 'public', 'pages', 'conversations.html'));
+  }
+
+  @Get('conversation-detail.html')
+  conversationDetailPage(@Res() res: Response) {
+    res.sendFile(join(__dirname, '..', 'public', 'pages', 'conversation-detail.html'));
+  }
+
+  @Get('brands.html')
+  brandsPage(@Res() res: Response) {
+    res.sendFile(join(__dirname, '..', 'public', 'pages', 'brands.html'));
+  }
+
+  @Get('request-detail.html')
+  requestDetailPage(@Res() res: Response) {
+    res.sendFile(join(__dirname, '..', 'public', 'pages', 'request-detail.html'));
+  }
 }

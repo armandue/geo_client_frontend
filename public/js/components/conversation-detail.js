@@ -64,6 +64,7 @@ function resolveConversationContext(requestIdFromRoute) {
     const pathMatch = window.location.pathname.match(/\/index\.html\/conversations\/([^/?]+)/);
     const requestId = requestIdFromRoute
         || (window.__conversationContext && window.__conversationContext.requestId)
+        || new URLSearchParams(window.location.search).get('request_id')
         || (pathMatch ? decodeURIComponent(pathMatch[1]) : null);
     let ctx = window.__conversationContext;
     if (!ctx || ctx.requestId !== requestId) ctx = {};
@@ -103,7 +104,7 @@ async function loadConversationDetailPage(requestIdFromRoute) {
     const form = document.getElementById('conversationSendForm');
     const input = document.getElementById('conversationInput');
 
-    if (backLink) backLink.href = `/index.html/conversations?lang=${encodeURIComponent(lang)}`;
+    if (backLink) backLink.href = `/conversations.html?lang=${encodeURIComponent(lang)}`;
     document.title = `${labels.title} - GeoMedia`;
     if (creatorElement) creatorElement.textContent = ctx.influencerName || labels.title;
     if (requestElement) requestElement.textContent = `${labels.request}: ${ctx.requestTitle || ''}`;
@@ -233,7 +234,7 @@ if (typeof window.registerPageComponent === 'function') {
     const boot = () => {
         initializeConversationDetailPage(document);
         const pathMatch = window.location.pathname.match(/\/index\.html\/conversations\/([^/?]+)/);
-        loadConversationDetailPage(pathMatch ? decodeURIComponent(pathMatch[1]) : null);
+        loadConversationDetailPage(pathMatch ? decodeURIComponent(pathMatch[1]) : new URLSearchParams(window.location.search).get('request_id'));
     };
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', boot, { once: true });

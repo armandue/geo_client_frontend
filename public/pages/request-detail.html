@@ -33,6 +33,9 @@
         </section>
     </main></div>
     <script src="../js/dashboard-layout.js"></script><script src="../js/dashboard.js"></script>
+    <script>window.registerPageComponent = window.registerPageComponent || function (name, initialize) { if (name === 'request-detail') initialize(document); };</script>
+    <script src="../js/components/request-detail.js"></script>
+    <script>window.loadRequestDetailPage?.(new URLSearchParams(window.location.search).get('id'));</script>
     <script>window.onPageLanguageChange = function (lang) { const labels = lang === 'en' ? { back:'Back to Campaigns', title:'Campaign Detail', details:'Details', claims:'Claims' } : { back:'返回活动列表', title:'活动详情', details:'活动详情', claims:'报名' }; const back = document.getElementById('detailBackLabel'); const title = document.getElementById('detailTitle'); const details = document.getElementById('detailTabBtn'); const claims = document.getElementById('claimsTabBtn'); if (back) back.textContent = labels.back; if (title && title.textContent === '活动详情') title.textContent = labels.title; if (details) details.textContent = labels.details; if (claims) claims.textContent = labels.claims; };</script>
 </body>
 </html>

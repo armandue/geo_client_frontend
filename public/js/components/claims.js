@@ -86,7 +86,7 @@ function renderClaimCard(claim, lang) {
     if (claim.requestId) {
         const requestLink = document.createElement('a');
         const langQuery = new URLSearchParams(window.location.search).get('lang');
-        requestLink.href = `/index.html/requests/${encodeURIComponent(claim.requestId)}${langQuery ? `?lang=${encodeURIComponent(langQuery)}` : ''}`;
+        requestLink.href = `/request-detail.html?id=${encodeURIComponent(claim.requestId)}${langQuery ? `&lang=${encodeURIComponent(langQuery)}` : ''}`;
         requestLink.textContent = requestTitleText;
         requestLink.style.cssText = 'color:var(--primary-color);text-decoration:none;';
         requestLink.addEventListener('mouseenter', () => { requestLink.style.textDecoration = 'underline'; });
@@ -114,7 +114,8 @@ function renderClaimCard(claim, lang) {
     if (claim.requestId && claim.influencerEmail) {
         const conversationLink = document.createElement('a');
         const langQuery = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('lang') || 'zh';
-        const detailUrl = new URL(`/index.html/conversations/${encodeURIComponent(claim.requestId)}`, window.location.origin);
+        const detailUrl = new URL('/conversation-detail.html', window.location.origin);
+        detailUrl.searchParams.set('request_id', claim.requestId);
         detailUrl.searchParams.set('lang', langQuery);
         detailUrl.searchParams.set('email', claim.influencerEmail);
         conversationLink.href = detailUrl.toString();

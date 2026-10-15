@@ -10,7 +10,7 @@ function redirectToLogin() {
     window.__authRedirecting = true;
     ['authToken', 'tokenType', 'accessToken', 'expiresIn', 'brandInfo'].forEach(key => localStorage.removeItem(key));
     const lang = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('lang') || 'zh';
-    window.location.replace(`/login.html?lang=${encodeURIComponent(lang)}`);
+    window.location.replace(`/login?lang=${encodeURIComponent(lang)}`);
 }
 
 // A token can be present in storage but expired or revoked. Redirect when an
@@ -75,6 +75,17 @@ function getCurrentLang() {
 }
 
 function getCurrentSectionInfo() {
+    const logicalMatch = window.location.pathname.match(/\/(requests|conversations)(?:\/([^/?]+))?$/);
+    if (logicalMatch) {
+        const route = logicalMatch[1];
+        const id = logicalMatch[2];
+        if (route === 'requests') return id ? { section: 'request-detail', id } : { section: 'campaigns', id: null };
+        const email = getParam('email');
+        if (id && email) window.__conversationContext = { requestId: id, influencerEmail: email };
+        return id ? { section: 'conversation-detail', id } : { section: 'conversations', id: null };
+    }
+    const simpleRoutes = { '/analytics': 'analytics', '/claims': 'influencers', '/brands': 'merchant' };
+    if (simpleRoutes[window.location.pathname]) return { section: simpleRoutes[window.location.pathname], id: null };
     const match = window.location.pathname.match(/\/index\.html\/([^/?]+)(?:\/([^/?]+))?/);
     if (match) {
         let route = match[1];
@@ -96,15 +107,6 @@ function getCurrentSectionInfo() {
         if (route === 'brands') return { section: 'merchant', id };
         
         return { section: route, id: id };
-    }
-    if (window.location.pathname.endsWith('/request-detail.html')) {
-        return { section: 'request-detail', id: getParam('id') };
-    }
-    if (window.location.pathname.endsWith('/conversation-detail.html')) {
-        const requestId = getParam('request_id');
-        const email = getParam('email');
-        if (requestId && email) window.__conversationContext = { requestId, influencerEmail: email };
-        return { section: 'conversation-detail', id: requestId };
     }
     return { section: getParam('section') || 'home', id: null };
 }
@@ -154,26 +156,26 @@ function showSection(name, pushState = true, id = null) {
     
     // Map internal sections to URL paths
     if (name === 'request-detail' && id) {
-        newUrl.pathname = '/request-detail.html';
-        newUrl.searchParams.set('id', id);
+        newUrl.pathname = `/requests/${encodeURIComponent(id)}`;
+        newUrl.searchParams.delete('id');
     } else if (name === 'conversation-detail' && id) {
-        newUrl.pathname = '/conversation-detail.html';
-        newUrl.searchParams.set('request_id', id);
+        newUrl.pathname = `/conversations/${encodeURIComponent(id)}`;
+        newUrl.searchParams.delete('request_id');
         const ctxEmail = window.__conversationContext && window.__conversationContext.requestId === id
             ? window.__conversationContext.influencerEmail
             : null;
         if (ctxEmail) newUrl.searchParams.set('email', ctxEmail);
     } else if (name === 'home') {
-        newUrl.pathname = '/index.html';
+        newUrl.pathname = '/';
     } else {
         const pagePaths = {
-            analytics: '/analytics.html',
-            campaigns: '/requests.html',
-            influencers: '/claims.html',
-            conversations: '/conversations.html',
-            merchant: '/brands.html'
+            analytics: '/analytics',
+            campaigns: '/requests',
+            influencers: '/claims',
+            conversations: '/conversations',
+            merchant: '/brands'
         };
-        newUrl.pathname = pagePaths[name] || '/index.html';
+        newUrl.pathname = pagePaths[name] || '/';
     }
     
     newUrl.searchParams.delete('section');
@@ -380,11 +382,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ['authToken','tokenType','accessToken','expiresIn','brandInfo'].forEach(k => localStorage.removeItem(k));
         document.body.classList.remove('fade-in');
         document.body.classList.add('fade-out');
-        setTimeout(() => { window.location.href = `/login.html?lang=${getCurrentLang()}`; }, 300);
+        setTimeout(() => { window.location.href = `/login?lang=${getCurrentLang()}`; }, 300); 
     });
 
     // ── Initial section render ───────────────────────────────────
-    const isSPA = window.location.pathname.includes('index.html') || window.location.pathname === '/';
+    const isSPA = window.location.pathname.includes('index.html')
+        || window.location.pathname === '/'
+        || /^\/(analytics|requests|claims|conversations|brands)(\/|$)/.test(window.location.pathname);
     if (isSPA) {
         const currentInit = getCurrentSectionInfo();
         showSection(currentInit.section, false, currentInit.id);   // replaceState so it won't break back button

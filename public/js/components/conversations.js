@@ -103,7 +103,7 @@ function renderConversationCard(conversation, lang) {
     if (request.id) {
         const campaignLink = document.createElement('a');
         const langParam = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('lang') || 'zh';
-        campaignLink.href = `/request-detail.html?id=${encodeURIComponent(request.id)}&lang=${encodeURIComponent(langParam)}`;
+        campaignLink.href = `/requests/${encodeURIComponent(request.id)}?lang=${encodeURIComponent(langParam)}`;
         campaignLink.textContent = labels.viewCampaign;
         campaignLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;padding:8px 16px;background:rgba(102,126,234,.15);border:1px solid rgba(102,126,234,.3);border-radius:8px;color:#818cf8;cursor:pointer;font-family:inherit;font-size:.85rem;line-height:1.2;text-decoration:none;white-space:nowrap;';
         campaignLink.addEventListener('click', event => {
@@ -119,8 +119,7 @@ function renderConversationCard(conversation, lang) {
     if (threadRequestId && threadEmail) {
         const conversationLink = document.createElement('a');
         const langParam = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('lang') || 'zh';
-        const detailUrl = new URL('/conversation-detail.html', window.location.origin);
-        detailUrl.searchParams.set('request_id', threadRequestId);
+        const detailUrl = new URL(`/conversations/${encodeURIComponent(threadRequestId)}`, window.location.origin);
         detailUrl.searchParams.set('lang', langParam);
         detailUrl.searchParams.set('email', threadEmail);
         conversationLink.href = detailUrl.toString();

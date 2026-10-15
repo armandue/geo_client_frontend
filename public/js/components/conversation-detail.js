@@ -104,7 +104,7 @@ async function loadConversationDetailPage(requestIdFromRoute) {
     const form = document.getElementById('conversationSendForm');
     const input = document.getElementById('conversationInput');
 
-    if (backLink) backLink.href = `/conversations.html?lang=${encodeURIComponent(lang)}`;
+    if (backLink) backLink.href = `/conversations?lang=${encodeURIComponent(lang)}`;
     document.title = `${labels.title} - GeoMedia`;
     if (creatorElement) creatorElement.textContent = ctx.influencerName || labels.title;
     if (requestElement) requestElement.textContent = `${labels.request}: ${ctx.requestTitle || ''}`;

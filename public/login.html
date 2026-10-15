@@ -385,7 +385,7 @@
                     const currentLang = localStorage.getItem('lang') || 'zh';
                     document.body.classList.add('fade-out');
                     setTimeout(() => {
-                        window.location.href = `/index.html?lang=${currentLang}`;
+                        window.location.href = `/?lang=${currentLang}`;
                     }, 300);
                 } else {
                     throw new Error(loginResult.message || '登录失败');

@@ -453,7 +453,7 @@ window.registerPageComponent('request-detail', function (root) {
     root.dataset.componentScript = 'request-detail';
     root.querySelector('#detailBackBtn')?.addEventListener('click', () => {
         if (typeof window.showSection === 'function') window.showSection('campaigns', true);
-        else window.location.href = '/requests.html';
+        else window.location.href = '/requests';
     });
     const imageHeader = root.querySelector('#detailImagesCard h4')?.parentElement;
     let deleteAllButton = root.querySelector('#deleteAllImagesBtn');
@@ -1027,7 +1027,7 @@ function renderClaimPostsFromDetail(posts, container, lang, claim) {
         if (claim?.influencerEmail && window.currentDetailRequestId) {
             const langParam = localStorage.getItem('lang') || 'zh';
             const conversationLink = document.createElement('a');
-            conversationLink.href = `/conversation-detail.html?request_id=${encodeURIComponent(window.currentDetailRequestId)}&lang=${encodeURIComponent(langParam)}&email=${encodeURIComponent(claim.influencerEmail)}`;
+            conversationLink.href = `/conversations/${encodeURIComponent(window.currentDetailRequestId)}?lang=${encodeURIComponent(langParam)}&email=${encodeURIComponent(claim.influencerEmail)}`;
             conversationLink.target = '_self';
             conversationLink.textContent = t.openConversation;
             conversationLink.style.cssText = 'padding:6px 12px;border:1px solid rgba(102,126,234,.3);border-radius:6px;background:rgba(102,126,234,.12);color:#667eea;font-size:.78rem;text-decoration:none;';

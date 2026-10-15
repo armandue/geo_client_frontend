@@ -79,7 +79,7 @@ function renderClaimCard(claim, lang) {
     if (claim.requestId) {
         const requestLink = document.createElement('a');
         const langQuery = new URLSearchParams(window.location.search).get('lang');
-        requestLink.href = `/request-detail.html?id=${encodeURIComponent(claim.requestId)}${langQuery ? `&lang=${encodeURIComponent(langQuery)}` : ''}`;
+        requestLink.href = `/requests/${encodeURIComponent(claim.requestId)}${langQuery ? `?lang=${encodeURIComponent(langQuery)}` : ''}`;
         requestLink.textContent = requestTitleText;
         requestLink.style.cssText = 'color:var(--primary-color);text-decoration:none;';
         requestLink.addEventListener('mouseenter', () => { requestLink.style.textDecoration = 'underline'; });
@@ -107,7 +107,7 @@ function renderClaimCard(claim, lang) {
     if (claim.id) {
         const conversationLink = document.createElement('a');
         const langQuery = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('lang') || 'zh';
-        conversationLink.href = `/conversation-detail.html?request_id=${encodeURIComponent(claim.id)}&lang=${encodeURIComponent(langQuery)}`;
+        conversationLink.href = `/conversations/${encodeURIComponent(claim.id)}?lang=${encodeURIComponent(langQuery)}`;
         conversationLink.textContent = labels.openConversation;
         conversationLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;background:rgba(102,126,234,.15);border:1px solid rgba(102,126,234,.3);border-radius:8px;color:#818cf8;cursor:pointer;font-family:inherit;font-size:.82rem;line-height:1.2;text-decoration:none;white-space:nowrap;';
         conversationLink.addEventListener('click', event => {

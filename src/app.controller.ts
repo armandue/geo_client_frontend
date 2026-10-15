@@ -20,52 +20,62 @@ export class AppController {
     };
   }
 
-  /**
-   * SPA fallback: /index.html and /index.html/* all serve index.html
-   * so the frontend router (pushState) handles the routing.
-   */
+  private serveSpa(res: Response) {
+    res.sendFile(join(__dirname, '..', 'public', 'index.html'));
+  }
+
+  @Get('login')
+  loginRoute(@Res() res: Response) {
+    res.sendFile(join(__dirname, '..', 'public', 'login.html'));
+  }
+
+  @Get()
+  homeRoute(@Res() res: Response) {
+    this.serveSpa(res);
+  }
+
   @Get('index.html')
   spaRoot(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', 'public', 'index.html'));
+    this.serveSpa(res);
   }
 
   @Get('index.html/*')
   spaFallback(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', 'public', 'index.html'));
+    this.serveSpa(res);
   }
 
-  @Get('analytics.html')
-  analyticsPage(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', 'public', 'pages', 'analytics.html'));
+  @Get('analytics')
+  analyticsRoute(@Res() res: Response) {
+    this.serveSpa(res);
   }
 
-  @Get('requests.html')
-  requestsPage(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', 'public', 'pages', 'requests.html'));
+  @Get('requests')
+  requestsRoute(@Res() res: Response) {
+    this.serveSpa(res);
   }
 
-  @Get('claims.html')
-  claimsPage(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', 'public', 'pages', 'claims.html'));
+  @Get('requests/:id')
+  requestDetailRoute(@Res() res: Response) {
+    this.serveSpa(res);
   }
 
-  @Get('conversations.html')
-  conversationsPage(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', 'public', 'pages', 'conversations.html'));
+  @Get('claims')
+  claimsRoute(@Res() res: Response) {
+    this.serveSpa(res);
   }
 
-  @Get('conversation-detail.html')
-  conversationDetailPage(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', 'public', 'pages', 'conversation-detail.html'));
+  @Get('conversations')
+  conversationsRoute(@Res() res: Response) {
+    this.serveSpa(res);
   }
 
-  @Get('brands.html')
-  brandsPage(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', 'public', 'pages', 'brands.html'));
+  @Get('conversations/:requestId')
+  conversationDetailRoute(@Res() res: Response) {
+    this.serveSpa(res);
   }
 
-  @Get('request-detail.html')
-  requestDetailPage(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', 'public', 'pages', 'request-detail.html'));
+  @Get('brands')
+  brandsRoute(@Res() res: Response) {
+    this.serveSpa(res);
   }
 }

@@ -3,7 +3,7 @@
  * URL scheme: /index.html/<name>?lang=<zh|en>
  */
 
-const API_BASE_URL = 'https://geoclientbackend.shandong-buxie.workers.dev';
+const API_BASE_URL = 'https://geo-client-backend.shandong-buxie.workers.dev';
 
 function redirectToLogin() {
     if (window.__authRedirecting) return;

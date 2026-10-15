@@ -1,4 +1,4 @@
-const claimsApiBaseUrl = 'https://geoclientbackend.shandong-buxie.workers.dev';
+const claimsApiBaseUrl = 'https://geo-client-backend.shandong-buxie.workers.dev';
 
 function claimsPageText(lang) {
     return lang === 'en'

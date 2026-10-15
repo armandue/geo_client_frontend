@@ -1,4 +1,4 @@
-const homeOverviewApiBaseUrl = 'https://geoclientbackend.shandong-buxie.workers.dev';
+const homeOverviewApiBaseUrl = 'https://geo-client-backend.shandong-buxie.workers.dev';
 
 async function loadHomeOverview() {
     const token = localStorage.getItem('authToken');

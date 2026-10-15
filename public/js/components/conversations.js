@@ -1,4 +1,4 @@
-const conversationsApiBaseUrl = 'https://geoclientbackend.shandong-buxie.workers.dev';
+const conversationsApiBaseUrl = 'https://geo-client-backend.shandong-buxie.workers.dev';
 let conversationsRequestInProgress = false;
 let conversationsPageInitialized = false;
 

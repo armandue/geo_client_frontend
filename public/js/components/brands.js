@@ -1,5 +1,5 @@
 /* Merchant page — brand profile + store management (brand_stores CRUD). */
-const merchantApiBaseUrl = 'https://geoclientbackend.shandong-buxie.workers.dev';
+const merchantApiBaseUrl = 'https://geo-client-backend.shandong-buxie.workers.dev';
 
 function merchantText(lang) {
     return lang === 'en'

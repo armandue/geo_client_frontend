@@ -1,7 +1,7 @@
 /* Conversation detail — request-scoped chat with one influencer.
  * Backend contract (v3): GET/POST /api/requests/:id/conversation?influencer_email=
  * and POST /api/requests/:id/conversation/read */
-const conversationDetailApiBaseUrl = 'https://geoclientbackend.shandong-buxie.workers.dev';
+const conversationDetailApiBaseUrl = 'https://geo-client-backend.shandong-buxie.workers.dev';
 
 function conversationDetailText(lang) {
     return lang === 'en'

@@ -525,7 +525,8 @@ function requestDetailPageText(lang) {
     return lang === 'en'
         ? {
             loading: 'Loading campaign...', loadError: 'Could not load campaign',
-            edit: 'Edit', cancelCampaign: 'Cancel campaign', completeCampaign: 'Mark complete', reopenCampaign: 'Reopen',
+            edit: 'Edit', publishCampaign: 'Publish campaign', cancelCampaign: 'Cancel campaign', completeCampaign: 'Mark complete', reopenCampaign: 'Reopen',
+            confirmPublish: 'Publish this campaign? Creators will be able to apply.',
             confirmCancel: 'Cancel this campaign? Creators will no longer be able to apply.',
             confirmComplete: 'Mark this campaign as complete?',
             confirmReopen: 'Reopen this campaign for applications?',
@@ -534,6 +535,7 @@ function requestDetailPageText(lang) {
             title: 'Title', description: 'Description', rewardType: 'Reward type', budget: 'Budget (£)',
             perks: 'Perks', startDate: 'Start date', endDate: 'End date',
             requirements: 'Platform requirements', platform: 'Platform', creators: 'Creators', contentType: 'Content',
+            minFollowers: 'Min followers', minLikes: 'Min likes', minCollects: 'Min collects', extraNote: 'Extra requirements',
             addRequirement: '+ Add requirement', remove: 'Remove',
             stores: 'Stores', noStores: 'No stores linked',
             dateError: 'Start date must be before or equal to end date.',
@@ -550,7 +552,8 @@ function requestDetailPageText(lang) {
         }
         : {
             loading: '正在加载活动...', loadError: '无法加载活动',
-            edit: '编辑', cancelCampaign: '取消活动', completeCampaign: '标记完成', reopenCampaign: '重新开放',
+            edit: '编辑', publishCampaign: '发布活动', cancelCampaign: '取消活动', completeCampaign: '标记完成', reopenCampaign: '重新开放',
+            confirmPublish: '确定发布该活动吗？发布后达人即可报名。',
             confirmCancel: '确定取消该活动吗？取消后达人将无法继续报名。',
             confirmComplete: '确定将该活动标记为完成吗？',
             confirmReopen: '确定重新开放该活动吗？',
@@ -559,6 +562,7 @@ function requestDetailPageText(lang) {
             title: '标题', description: '活动描述', rewardType: '奖励类型', budget: '预算金额（£）',
             perks: '福利', startDate: '开始日期', endDate: '结束日期',
             requirements: '平台招募要求', platform: '平台', creators: '人数', contentType: '内容形式',
+            minFollowers: '最低粉丝', minLikes: '最低点赞', minCollects: '最低收藏', extraNote: '附加要求',
             addRequirement: '+ 添加要求', remove: '删除',
             stores: '关联门店', noStores: '未关联门店',
             dateError: '开始日期不能晚于结束日期。',
@@ -713,14 +717,23 @@ function renderRequestDetailHeader(request) {
             return;
         }
         list.innerHTML = reqs.map(r => {
-            const extra = r.extraRequirements && typeof r.extraRequirements === 'object'
-                ? Object.entries(r.extraRequirements).filter(([, v]) => v !== '' && v != null).map(([k, v]) => `${requestDetailEscapeHtml(k)}: ${requestDetailEscapeHtml(v)}`).join(' · ')
-                : '';
+            let extra = r.extraRequirements || {};
+            if (typeof extra === 'string') { try { extra = JSON.parse(extra); } catch (e) { extra = {}; } }
+            const parts = [];
+            const nf = Number(r.minFollowers) || Number(extra.minFollowers) || 0;
+            const nl = Number(r.minLikes) || 0;
+            const nc = Number(r.minCollects) || 0;
+            if (nf > 0) parts.push(`${t.minFollowers}: ${nf}`);
+            if (nl > 0) parts.push(`${t.minLikes}: ${nl}`);
+            if (nc > 0) parts.push(`${t.minCollects}: ${nc}`);
+            if (extra.note) parts.push(`${t.extraNote}: ${extra.note}`);
+            Object.entries(extra).filter(([k, v]) => k !== 'note' && k !== 'minFollowers' && v !== '' && v != null).forEach(([k, v]) => parts.push(`${k}: ${v}`));
+            const extraText = parts.length ? parts.map(p => requestDetailEscapeHtml(p)).join(' · ') : '';
             return `<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--border-color);font-size:.86rem;">`
                 + `<strong style="color:var(--text-main);">${requestDetailEscapeHtml(platformNameOf(platforms, r.platformKey, lang))}</strong>`
                 + `<span style="color:var(--text-muted);">${t.creators}: ${Number(r.influencerCount) || 1}</span>`
                 + `<span style="color:var(--text-muted);">${t.contentType}: ${t.contentTypes[r.contentType] || r.contentType || '—'}</span>`
-                + (extra ? `<span style="color:var(--text-muted);font-size:.78rem;">${extra}</span>` : '')
+                + (extraText ? `<span style="color:var(--text-muted);font-size:.78rem;">${extraText}</span>` : '')
                 + `</div>`;
         }).join('');
     });
@@ -768,6 +781,12 @@ function renderRequestDetailActions(request) {
     const danger = 'padding:8px 16px;border:1px solid #fecaca;border-radius:8px;background:#fff;color:#dc2626;font-size:.85rem;cursor:pointer;';
 
     mkBtn(t.edit, primary, () => openRequestEditModal(request));
+    if (status === 'draft') {
+        mkBtn(t.publishCampaign, primary, async () => {
+            if (!await openRequestActionModal(t.publishCampaign, t.confirmPublish, t.publishCampaign, t.close)) return;
+            await updateRequestStatus(request.id, 'open');
+        });
+    }
     if (status === 'open' || status === 'draft') {
         mkBtn(t.completeCampaign, ghost, async () => {
             if (!await openRequestActionModal(t.completeCampaign, t.confirmComplete, t.completeCampaign, t.close)) return;
@@ -818,13 +837,27 @@ function requirementRowHtml(platforms, lang, req) {
         return `<option value="${requestDetailEscapeHtml(p.platformKey)}"${sel}>${requestDetailEscapeHtml(name || p.platformKey)}</option>`;
     }).join('');
     const ct = req.contentType || 'both';
-    return `<div data-req-row style="display:grid;grid-template-columns:1fr 90px 120px 32px;gap:8px;margin-bottom:8px;align-items:center;">`
-        + `<select data-req-platform style="padding:8px;border:1px solid var(--border-color);border-radius:6px;">${options}</select>`
-        + `<input data-req-count type="number" min="1" value="${Number(req.influencerCount) || 1}" style="padding:8px;border:1px solid var(--border-color);border-radius:6px;">`
-        + `<select data-req-content style="padding:8px;border:1px solid var(--border-color);border-radius:6px;">`
+    let extra = req.extraRequirements || {};
+    if (typeof extra === 'string') { try { extra = JSON.parse(extra); } catch (e) { extra = {}; } }
+    const cell = 'padding:8px;border:1px solid var(--border-color);border-radius:6px;';
+    const num = v => Math.max(0, Number(v) || 0);
+    return `<div data-req-row data-req-extra="${requestDetailEscapeHtml(JSON.stringify(extra))}" style="border:1px solid var(--border-color);border-radius:8px;padding:10px;margin-bottom:8px;">`
+        + `<div style="display:grid;grid-template-columns:1fr 90px 120px 32px;gap:8px;align-items:center;">`
+        + `<select data-req-platform style="${cell}">${options}</select>`
+        + `<input data-req-count type="number" min="1" value="${Number(req.influencerCount) || 1}" style="${cell}">`
+        + `<select data-req-content style="${cell}">`
         + ['video', 'image', 'both'].map(k => `<option value="${k}"${k === ct ? ' selected' : ''}>${t.contentTypes[k]}</option>`).join('')
         + `</select>`
         + `<button type="button" data-req-remove style="border:0;background:none;color:#dc2626;cursor:pointer;font-size:1rem;">✕</button>`
+        + `</div>`
+        + `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:center;margin-top:8px;">`
+        + `<input data-req-followers type="number" min="0" placeholder="${t.minFollowers}" value="${num(req.minFollowers) || ''}" style="${cell}">`
+        + `<input data-req-likes type="number" min="0" placeholder="${t.minLikes}" value="${num(req.minLikes) || ''}" style="${cell}">`
+        + `<input data-req-collects type="number" min="0" placeholder="${t.minCollects}" value="${num(req.minCollects) || ''}" style="${cell}">`
+        + `</div>`
+        + `<div style="margin-top:8px;">`
+        + `<input data-req-note type="text" placeholder="${t.extraNote}" value="${requestDetailEscapeHtml(extra.note || '')}" style="${cell}width:100%;box-sizing:border-box;">`
+        + `</div>`
         + `</div>`;
 }
 
@@ -889,12 +922,21 @@ async function openRequestEditModal(request) {
         errEl.style.display = 'none';
         if (!title || !description || !startDate || !endDate) { errEl.textContent = t.required; errEl.style.display = 'block'; return; }
         if (Date.parse(startDate) > Date.parse(endDate)) { errEl.textContent = t.dateError; errEl.style.display = 'block'; return; }
-        const requirements = Array.from(reqList.querySelectorAll('[data-req-row]')).map(row => ({
-            platformKey: row.querySelector('[data-req-platform]').value,
-            influencerCount: Math.max(1, parseInt(row.querySelector('[data-req-count]').value, 10) || 1),
-            contentType: row.querySelector('[data-req-content]').value,
-            extraRequirements: {}
-        })).filter(r => r.platformKey);
+        const requirements = Array.from(reqList.querySelectorAll('[data-req-row]')).map(row => {
+            let extra = {};
+            try { extra = JSON.parse(row.dataset.reqExtra || '{}') || {}; } catch (e) { extra = {}; }
+            const note = row.querySelector('[data-req-note]')?.value.trim();
+            if (note) extra.note = note; else delete extra.note;
+            return {
+                platformKey: row.querySelector('[data-req-platform]').value,
+                influencerCount: Math.max(1, parseInt(row.querySelector('[data-req-count]').value, 10) || 1),
+                contentType: row.querySelector('[data-req-content]').value,
+                minFollowers: Math.max(0, parseInt(row.querySelector('[data-req-followers]')?.value, 10) || 0),
+                minLikes: Math.max(0, parseInt(row.querySelector('[data-req-likes]')?.value, 10) || 0),
+                minCollects: Math.max(0, parseInt(row.querySelector('[data-req-collects]')?.value, 10) || 0),
+                extraRequirements: extra
+            };
+        }).filter(r => r.platformKey);
         const storeIds = Array.from(overlay.querySelectorAll('[data-store-id]:checked')).map(el => el.dataset.storeId);
 
         btn.disabled = true;

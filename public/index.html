@@ -739,13 +739,18 @@
                         const pName = getPlatformDisplayName(r.platformKey, lang);
                         const cName = cNames[r.contentType] || r.contentType;
 
-                        // 处理 extraRequirements (minFollowers & note)
+                        // 处理最低粉丝/点赞/收藏 & extraRequirements (note)
                         let extraObj = r.extraRequirements || {};
                         if (typeof extraObj === 'string') {
                             try { extraObj = JSON.parse(extraObj); } catch(e) { extraObj = {}; }
                         }
                         const extraBadges = [];
-                        if (extraObj.minFollowers) extraBadges.push(`🎯 ${lang==='en'?'Min Followers:':'最低粉丝:'} ${Number(extraObj.minFollowers).toLocaleString()}`);
+                        const minFollowers = Number(r.minFollowers) || Number(extraObj.minFollowers) || 0;
+                        const minLikes = Number(r.minLikes) || 0;
+                        const minCollects = Number(r.minCollects) || 0;
+                        if (minFollowers) extraBadges.push(`🎯 ${lang==='en'?'Min Followers:':'最低粉丝:'} ${minFollowers.toLocaleString()}`);
+                        if (minLikes) extraBadges.push(`❤️ ${lang==='en'?'Min Likes:':'最低点赞:'} ${minLikes.toLocaleString()}`);
+                        if (minCollects) extraBadges.push(`⭐ ${lang==='en'?'Min Collects:':'最低收藏:'} ${minCollects.toLocaleString()}`);
                         if (extraObj.note) extraBadges.push(`📌 ${lang==='en'?'Note:':'附加要求:'} ${escHtml(extraObj.note)}`);
 
                         const extraHTML = extraBadges.length ? `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border-color);font-size:0.83rem;color:var(--primary-color);display:flex;gap:12px;flex-wrap:wrap;">${extraBadges.map(b=>`<span>${b}</span>`).join('')}</div>` : '';
@@ -867,24 +872,40 @@
 
             topRow.appendChild(selP); topRow.appendChild(inpC); topRow.appendChild(selC); topRow.appendChild(del);
 
-            // 第二行：extraRequirements (最低粉丝数 + 额外要求/定位)
+            // 第二行：最低粉丝/点赞/收藏
             const bottomRow = document.createElement('div');
-            bottomRow.style.cssText = 'display:grid;grid-template-columns:1fr 2fr;gap:8px;align-items:center;';
+            bottomRow.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:center;';
 
             const inpFollowers = document.createElement('input');
-            inpFollowers.type = 'number'; inpFollowers.min = '0'; inpFollowers.placeholder = '最低粉丝数 (例: 10000)';
+            inpFollowers.type = 'number'; inpFollowers.min = '0'; inpFollowers.placeholder = '最低粉丝数';
             inpFollowers.className = 'req-extra-followers';
             inpFollowers.style.cssText = is;
+
+            const inpLikes = document.createElement('input');
+            inpLikes.type = 'number'; inpLikes.min = '0'; inpLikes.placeholder = '最低点赞数';
+            inpLikes.className = 'req-extra-likes';
+            inpLikes.style.cssText = is;
+
+            const inpCollects = document.createElement('input');
+            inpCollects.type = 'number'; inpCollects.min = '0'; inpCollects.placeholder = '最低收藏数';
+            inpCollects.className = 'req-extra-collects';
+            inpCollects.style.cssText = is;
+
+            bottomRow.appendChild(inpFollowers); bottomRow.appendChild(inpLikes); bottomRow.appendChild(inpCollects);
+
+            // 第三行：附加要求
+            const noteRow = document.createElement('div');
 
             const inpExtraNote = document.createElement('input');
             inpExtraNote.type = 'text'; inpExtraNote.placeholder = '附加要求 (例: 粉丝地域伦敦, 性别不限)';
             inpExtraNote.className = 'req-extra-note';
             inpExtraNote.style.cssText = is;
 
-            bottomRow.appendChild(inpFollowers); bottomRow.appendChild(inpExtraNote);
+            noteRow.appendChild(inpExtraNote);
 
             row.appendChild(topRow);
             row.appendChild(bottomRow);
+            row.appendChild(noteRow);
             reqList.appendChild(row);
         }
 
@@ -896,22 +917,24 @@
                 const inpC = row.querySelector('input[type="number"]');
 
                 const inpFollowers = row.querySelector('.req-extra-followers');
+                const inpLikes = row.querySelector('.req-extra-likes');
+                const inpCollects = row.querySelector('.req-extra-collects');
                 const inpExtraNote = row.querySelector('.req-extra-note');
 
                 const platformKey = selP.value;
                 const influencerCount = parseInt(inpC.value) || 1;
                 const contentType = selC.value;
 
+                const minFollowers = inpFollowers ? (parseInt(inpFollowers.value) || 0) : 0;
+                const minLikes = inpLikes ? (parseInt(inpLikes.value) || 0) : 0;
+                const minCollects = inpCollects ? (parseInt(inpCollects.value) || 0) : 0;
+
                 const extraRequirements = {};
-                if (inpFollowers && inpFollowers.value) {
-                    const mf = parseInt(inpFollowers.value);
-                    if (mf > 0) extraRequirements.minFollowers = mf;
-                }
                 if (inpExtraNote && inpExtraNote.value.trim()) {
                     extraRequirements.note = inpExtraNote.value.trim();
                 }
 
-                return { platformKey, influencerCount, contentType, extraRequirements };
+                return { platformKey, influencerCount, contentType, minFollowers, minLikes, minCollects, extraRequirements };
             }).filter(r => r.platformKey);
         }
 

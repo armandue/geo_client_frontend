@@ -440,27 +440,27 @@
 
     <!-- ===== 发起新活动 Modal ===== -->
     <div id="createCampaignModal" style="display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); overflow-y:auto;">
-        <div style="margin: 40px auto; max-width:600px; background:#1a1f2e; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:32px; position:relative;">
-            <button id="closeModalBtn" style="position:absolute;top:16px;right:16px;background:transparent;border:none;color:#9ca3af;cursor:pointer;font-size:20px;line-height:1;">✕</button>
+        <div style="margin: 40px auto; max-width:600px; background:#ffffff; border:1px solid var(--border-color); border-radius:16px; padding:32px; position:relative; color:var(--text-main);">
+            <button id="closeModalBtn" style="position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:20px;line-height:1;">✕</button>
 
-            <h3 style="margin:0 0 6px; font-size:1.2rem; color:#f9fafb;">发起新活动</h3>
-            <p style="margin:0 0 24px; color:#6b7280; font-size:0.85rem;">填写以下信息创建一个品牌达人招募活动</p>
+            <h3 style="margin:0 0 6px; font-size:1.2rem; color:var(--text-main);">发起新活动</h3>
+            <p style="margin:0 0 24px; color:var(--text-muted); font-size:0.85rem;">填写以下信息创建活动，保存后将作为草稿（draft），可在详情页发布</p>
 
             <form id="createCampaignForm" autocomplete="off">
                 <div style="margin-bottom:16px;">
-                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">活动标题 *</label>
-                    <input id="fieldTitle" type="text" required placeholder="例：夏日探店体验招募" style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:var(--text-main);">活动标题 *</label>
+                    <input id="fieldTitle" type="text" required placeholder="例：夏日探店体验招募" style="width:100%;box-sizing:border-box;padding:10px 14px;background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);font-size:0.9rem;outline:none;">
                 </div>
 
                 <div style="margin-bottom:16px;">
-                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">活动描述 *</label>
-                    <textarea id="fieldDesc" required rows="3" placeholder="描述活动目标、达人要求、发布内容等..." style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;resize:vertical;"></textarea>
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:var(--text-main);">活动描述 *</label>
+                    <textarea id="fieldDesc" required rows="3" placeholder="描述活动目标、达人要求、发布内容等..." style="width:100%;box-sizing:border-box;padding:10px 14px;background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);font-size:0.9rem;outline:none;resize:vertical;"></textarea>
                 </div>
 
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
                     <div>
-                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">奖励类型</label>
-                        <select id="fieldReward" style="width:100%;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:var(--text-main);">奖励类型</label>
+                        <select id="fieldReward" style="width:100%;padding:10px 14px;background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);font-size:0.9rem;outline:none;">
                             <option value="free_meal">免费餐饮</option>
                             <option value="cash">现金红包</option>
                             <option value="discount">折扣优惠</option>
@@ -468,44 +468,43 @@
                         </select>
                     </div>
                     <div>
-                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">预算金额（元）</label>
-                        <input id="fieldBudget" type="number" min="0" value="0" style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;">
+                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:var(--text-main);">预算金额（元）</label>
+                        <input id="fieldBudget" type="number" min="0" value="0" style="width:100%;box-sizing:border-box;padding:10px 14px;background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);font-size:0.9rem;outline:none;">
                     </div>
                 </div>
 
                 <div style="margin-bottom:16px;">
-                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;" id="labelPerks">福利说明（可选）</label>
-                    <textarea id="fieldPerks" rows="3" placeholder="例：双人套餐+指定菜品免费、专属折扣券、优先体验新品..." style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;resize:vertical;"></textarea>
+                    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:var(--text-main);" id="labelPerks">福利说明（可选）</label>
+                    <textarea id="fieldPerks" rows="3" placeholder="例：双人套餐+指定菜品免费、专属折扣券、优先体验新品..." style="width:100%;box-sizing:border-box;padding:10px 14px;background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);font-size:0.9rem;outline:none;resize:vertical;"></textarea>
                 </div>
 
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-                    <div>
-                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">开始日期 *</label>
-                        <input id="fieldStart" type="date" required style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;color-scheme:dark;">
+                <!-- 活动日期（必填，可分段） -->
+                <div style="margin-bottom:24px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                        <label style="font-size:0.85rem;color:var(--text-main);">活动日期 *（可分段添加）</label>
+                        <button type="button" id="addDateBtn" style="padding:4px 12px;background:rgba(102,126,234,0.15);border:1px solid rgba(102,126,234,0.4);border-radius:6px;color:var(--primary-color);cursor:pointer;font-size:0.8rem;">+ 添加日期段</button>
                     </div>
-                    <div>
-                        <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#d1d5db;">结束日期 *</label>
-                        <input id="fieldEnd" type="date" required style="width:100%;box-sizing:border-box;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f9fafb;font-size:0.9rem;outline:none;color-scheme:dark;">
-                    </div>
+                    <div id="datesList" style="display:flex;flex-direction:column;gap:10px;"></div>
+                    <div style="margin-top:8px;color:var(--text-muted);font-size:0.75rem;">整体活动区间由各段「最早开始 / 最晚结束」自动计算。</div>
                 </div>
 
                 <!-- 平台招募要求 -->
                 <div style="margin-bottom:24px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-                        <label style="font-size:0.85rem;color:#d1d5db;">平台招募要求（可选）</label>
-                        <button type="button" id="addReqBtn" style="padding:4px 12px;background:rgba(102,126,234,0.15);border:1px solid rgba(102,126,234,0.4);border-radius:6px;color:#818cf8;cursor:pointer;font-size:0.8rem;">+ 添加平台</button>
+                        <label style="font-size:0.85rem;color:var(--text-main);">平台招募要求（可选）</label>
+                        <button type="button" id="addReqBtn" style="padding:4px 12px;background:rgba(102,126,234,0.15);border:1px solid rgba(102,126,234,0.4);border-radius:6px;color:var(--primary-color);cursor:pointer;font-size:0.8rem;">+ 添加平台</button>
                     </div>
                     <div id="requirementsList" style="display:flex;flex-direction:column;gap:10px;"></div>
-                    <div id="reqEmptyHint" style="padding:12px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);border-radius:8px;text-align:center;color:#4b5563;font-size:0.8rem;">
+                    <div id="reqEmptyHint" style="padding:12px;background:var(--bg-page);border:1px dashed var(--border-color);border-radius:8px;text-align:center;color:var(--text-muted);font-size:0.8rem;">
                         点击「+ 添加平台」指定各平台的达人数量与内容类型
                     </div>
                 </div>
 
-                <div id="modalError" style="display:none;padding:10px 14px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#f87171;font-size:0.85rem;margin-bottom:16px;"></div>
+                <div id="modalError" style="display:none;padding:10px 14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#dc2626;font-size:0.85rem;margin-bottom:16px;"></div>
 
                 <div style="display:flex;gap:12px;justify-content:flex-end;">
-                    <button type="button" id="cancelModalBtn" style="padding:10px 20px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#9ca3af;cursor:pointer;font-size:0.9rem;">取消</button>
-                    <button type="submit" id="submitCampaignBtn" style="padding:10px 24px;background:linear-gradient(135deg,#667eea,#764ba2);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:0.9rem;font-weight:600;">发布活动</button>
+                    <button type="button" id="cancelModalBtn" style="padding:10px 20px;background:transparent;border:1px solid var(--border-color);border-radius:8px;color:var(--text-muted);cursor:pointer;font-size:0.9rem;">取消</button>
+                    <button type="submit" id="submitCampaignBtn" style="padding:10px 24px;background:linear-gradient(135deg,#667eea,#764ba2);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:0.9rem;font-weight:600;">保存草稿</button>
                 </div>
             </form>
         </div>
@@ -709,10 +708,12 @@
                 rewardBadge.style.background = rw.bg;
             }
 
-            const start = formatDate(req.startDate);
-            const end   = formatDate(req.endDate);
+            const segments = Array.isArray(req.dates) ? req.dates : [];
             const dateEl = document.getElementById('detailDateRange');
-            if (dateEl) dateEl.textContent = `${start} 至 ${end}`;
+            const rangeSep = lang === 'en' ? '  |  ' : '　|　';
+            if (dateEl) dateEl.textContent = segments.length
+                ? segments.map(d => `${formatDate(d.startDate) || '—'} → ${formatDate(d.endDate) || '—'}`).join(rangeSep)
+                : `${formatDate(req.startDate) || '—'} → ${formatDate(req.endDate) || '—'}`;
 
             const budgetEl = document.getElementById('detailBudget');
             if (budgetEl) budgetEl.textContent = req.budgetAmount ? `￥${req.budgetAmount}` : (lang === 'en' ? 'Free Meal / Flexible' : '免费餐饮 / 无硬性预算');
@@ -721,7 +722,7 @@
             if (perksEl) perksEl.textContent = req.perks || (lang === 'en' ? 'None' : '无');
 
             const createdEl = document.getElementById('detailCreatedAt');
-            if (createdEl) createdEl.textContent = req.createdAt || (start ? start : '-');
+            if (createdEl) createdEl.textContent = req.createdAt ? formatDate(req.createdAt) : '-';
 
             const descEl = document.getElementById('detailDescription');
             if (descEl) descEl.textContent = req.description || (lang === 'en' ? 'No detailed description.' : '暂无详细描述。');
@@ -820,6 +821,7 @@
         const submitBtn = document.getElementById('submitCampaignBtn');
         const reqList = document.getElementById('requirementsList');
         const reqEmptyHint = document.getElementById('reqEmptyHint');
+        const datesList = document.getElementById('datesList');
 
         const DEFAULT_PLATFORMS = [
             { platformKey: 'xiaohongshu', nameZh: '小红书', nameEn: 'Xiaohongshu' },
@@ -839,9 +841,9 @@
             reqEmptyHint.style.display = 'none';
             const row = document.createElement('div');
             row.className = 'req-row';
-            row.style.cssText = 'background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;';
+            row.style.cssText = 'background:var(--bg-page);border:1px solid var(--border-color);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;';
 
-            const is = 'padding:7px 10px;background:#0f1421;border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#f9fafb;font-size:0.82rem;outline:none;width:100%;box-sizing:border-box;';
+            const is = 'padding:7px 10px;background:#fff;border:1px solid var(--border-color);border-radius:6px;color:var(--text-main);font-size:0.82rem;outline:none;width:100%;box-sizing:border-box;';
 
             // 第一行：平台、数量、形式、删除按钮
             const topRow = document.createElement('div');
@@ -867,7 +869,7 @@
             CONTENT_TYPES.forEach(c => { const o = document.createElement('option'); o.value = c.value; o.textContent = c.label; selC.appendChild(o); });
 
             const del = document.createElement('button'); del.type = 'button'; del.textContent = '✕';
-            del.style.cssText = 'background:transparent;border:none;color:#6b7280;cursor:pointer;font-size:16px;padding:0 4px;';
+            del.style.cssText = 'background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:0 4px;';
             del.addEventListener('click', () => { row.remove(); if (!reqList.children.length) reqEmptyHint.style.display = 'block'; });
 
             topRow.appendChild(selP); topRow.appendChild(inpC); topRow.appendChild(selC); topRow.appendChild(del);
@@ -938,10 +940,38 @@
             }).filter(r => r.platformKey);
         }
 
+        function addDateRow() {
+            const row = document.createElement('div');
+            row.className = 'date-range-row';
+            row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;';
+            const isDate = 'padding:7px 10px;background:#fff;border:1px solid var(--border-color);border-radius:6px;color:var(--text-main);font-size:0.82rem;outline:none;width:100%;box-sizing:border-box;color-scheme:light;';
+
+            const start = document.createElement('input');
+            start.type = 'date'; start.className = 'date-range-start'; start.style.cssText = isDate;
+
+            const end = document.createElement('input');
+            end.type = 'date'; end.className = 'date-range-end'; end.style.cssText = isDate;
+
+            const del = document.createElement('button');
+            del.type = 'button'; del.textContent = '✕';
+            del.style.cssText = 'background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:0 4px;';
+            del.addEventListener('click', () => row.remove());
+
+            row.appendChild(start); row.appendChild(end); row.appendChild(del);
+            datesList.appendChild(row);
+        }
+
+        function collectDates() {
+            return Array.from(datesList.querySelectorAll('.date-range-row')).map(row => ({
+                startDate: row.querySelector('.date-range-start').value,
+                endDate: row.querySelector('.date-range-end').value
+            })).filter(d => d.startDate && d.endDate);
+        }
+
         function openModal() {
             loadPlatformsFromApi();
-            form.reset(); reqList.innerHTML = ''; reqEmptyHint.style.display = 'block';
-            errorBox.style.display = 'none'; submitBtn.disabled = false; submitBtn.textContent = '发布活动';
+            form.reset(); reqList.innerHTML = ''; reqEmptyHint.style.display = 'block'; datesList.innerHTML = ''; addDateRow();
+            errorBox.style.display = 'none'; submitBtn.disabled = false; submitBtn.textContent = '保存草稿';
             modal.style.display = 'block';
         }
         function closeModal() { modal.style.display = 'none'; }
@@ -950,6 +980,7 @@
         document.getElementById('closeModalBtn').addEventListener('click', closeModal);
         document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
         document.getElementById('addReqBtn').addEventListener('click', addRequirementRow);
+        document.getElementById('addDateBtn').addEventListener('click', addDateRow);
         modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
 
         form.addEventListener('submit', async function(e) {
@@ -960,15 +991,15 @@
             const rewardType = document.getElementById('fieldReward').value;
             const budgetAmount = parseFloat(document.getElementById('fieldBudget').value) || 0;
             const perks = document.getElementById('fieldPerks').value.trim() || undefined;
-            const startDate = document.getElementById('fieldStart').value;
-            const endDate = document.getElementById('fieldEnd').value;
             const requirements = collectRequirements();
+            const dates = collectDates();
 
-            if (!title || !description || !startDate || !endDate) {
-                errorBox.textContent = '请填写所有必填项（标题、描述、开始/结束日期）';
+            if (!title || !description) {
+                errorBox.textContent = '请填写所有必填项（标题、描述）';
                 errorBox.style.display = 'block'; return;
             }
-            if (endDate < startDate) { errorBox.textContent = '结束日期不能早于开始日期'; errorBox.style.display = 'block'; return; }
+            if (!dates.length) { errorBox.textContent = '请至少添加一个有效的活动日期段'; errorBox.style.display = 'block'; return; }
+            if (dates.some(d => d.endDate < d.startDate)) { errorBox.textContent = '日期段的结束日期不能早于开始日期'; errorBox.style.display = 'block'; return; }
             const token = localStorage.getItem('authToken');
             if (!token) { errorBox.textContent = '登录状态已过期，请重新登录'; errorBox.style.display = 'block'; return; }
 
@@ -977,7 +1008,7 @@
                 const resp = await fetch(`${API_BASE_URL}/api/requests`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': token },
-                    body: JSON.stringify({ title, description, rewardType, budgetAmount, perks, startDate, endDate, requirements: requirements.length ? requirements : undefined })
+                    body: JSON.stringify({ title, description, rewardType, budgetAmount, perks, status: 'draft', dates, requirements: requirements.length ? requirements : undefined })
                 });
                 const data = await resp.json();
                 if (!resp.ok || !data.success) throw new Error(data.error || `服务器错误 (${resp.status})`);
@@ -989,7 +1020,7 @@
                 }
             } catch (err) {
                 errorBox.textContent = err.message || '提交失败，请稍后重试';
-                errorBox.style.display = 'block'; submitBtn.disabled = false; submitBtn.textContent = '发布活动';
+                errorBox.style.display = 'block'; submitBtn.disabled = false; submitBtn.textContent = '保存草稿';
             }
         });
 

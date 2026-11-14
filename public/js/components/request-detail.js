@@ -532,14 +532,16 @@ function requestDetailPageText(lang) {
             confirmReopen: 'Reopen this campaign for applications?',
             statusUpdated: 'Status updated', updateFailed: 'Update failed',
             save: 'Save', saving: 'Saving...', close: 'Close',
-            title: 'Title', description: 'Description', rewardType: 'Reward type', budget: 'Budget (£)',
+            title: 'Title', description: 'Description', status: 'Status', rewardType: 'Reward type', budget: 'Budget (£)',
             perks: 'Perks', startDate: 'Start date', endDate: 'End date',
+            dates: 'Date ranges', addDate: 'Add date range',
             requirements: 'Platform requirements', platform: 'Platform', creators: 'Creators', contentType: 'Content',
             minFollowers: 'Min followers', minLikes: 'Min likes', minCollects: 'Min collects', extraNote: 'Extra requirements',
             addRequirement: '+ Add requirement', remove: 'Remove',
             stores: 'Stores', noStores: 'No stores linked',
             dateError: 'Start date must be before or equal to end date.',
-            required: 'Title, description, start and end dates are required.',
+            required: 'Title, description and campaign dates are required.',
+            datesRequired: 'Please add at least one valid campaign date range.',
             rewardTypes: { free_meal: 'Free meal', paid: 'Paid', commission: 'Commission', mixed: 'Mixed' },
             contentTypes: { video: 'Video', image: 'Image', both: 'Both' },
             statuses: { draft: '🟡 Draft', open: '🟢 Recruiting', completed: '✅ Completed', cancelled: '⚫ Cancelled', closed: '🔴 Closed' },
@@ -559,14 +561,16 @@ function requestDetailPageText(lang) {
             confirmReopen: '确定重新开放该活动吗？',
             statusUpdated: '状态已更新', updateFailed: '更新失败',
             save: '保存', saving: '保存中...', close: '关闭',
-            title: '标题', description: '活动描述', rewardType: '奖励类型', budget: '预算金额（£）',
+            title: '标题', description: '活动描述', status: '活动状态', rewardType: '奖励类型', budget: '预算金额（£）',
             perks: '福利', startDate: '开始日期', endDate: '结束日期',
+            dates: '分段活动日期', addDate: '添加日期段',
             requirements: '平台招募要求', platform: '平台', creators: '人数', contentType: '内容形式',
             minFollowers: '最低粉丝', minLikes: '最低点赞', minCollects: '最低收藏', extraNote: '附加要求',
             addRequirement: '+ 添加要求', remove: '删除',
             stores: '关联门店', noStores: '未关联门店',
             dateError: '开始日期不能晚于结束日期。',
-            required: '标题、描述、开始和结束日期为必填。',
+            required: '标题、描述与活动日期为必填。',
+            datesRequired: '请至少添加一个有效的活动日期段。',
             rewardTypes: { free_meal: '免费餐饮', paid: '付费', commission: '佣金', mixed: '混合' },
             contentTypes: { video: '视频', image: '图文', both: '视频+图文' },
             statuses: { draft: '🟡 草稿', open: '🟢 招募中', completed: '✅ 已完成', cancelled: '⚫ 已取消', closed: '🔴 已关闭' },
@@ -701,7 +705,10 @@ function renderRequestDetailHeader(request) {
         const icons = { free_meal: '🍽️', paid: '💰', commission: '🤝', mixed: '🎁' };
         rewardIcon.textContent = icons[request.rewardType] || '🎁';
     }
-    set('detailDateRange', `${requestDetailDate(request.startDate)} → ${requestDetailDate(request.endDate)}`);
+    const segments = Array.isArray(request.dates) ? request.dates : [];
+    set('detailDateRange', segments.length
+        ? segments.map(d => `${requestDetailDate(d.startDate)} → ${requestDetailDate(d.endDate)}`).join('　|　')
+        : `${requestDetailDate(request.startDate)} → ${requestDetailDate(request.endDate)}`);
     const budget = Number(request.budgetAmount || 0);
     set('detailBudget', budget > 0 ? `£${budget.toLocaleString()}` : '—');
     set('detailCreatedAt', requestDetailDate(request.createdAt));
@@ -870,11 +877,11 @@ async function openRequestEditModal(request) {
 
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;';
-    const input = 'width:100%;padding:10px 14px;background:#0f1421;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#f9fafb;font-size:.9rem;box-sizing:border-box;outline:none;';
-    const label = 'display:block;margin:14px 0 6px;font-size:.82rem;color:#d1d5db;font-weight:600;';
+    const input = 'width:100%;padding:10px 14px;background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);font-size:.9rem;box-sizing:border-box;outline:none;';
+    const label = 'display:block;margin:14px 0 6px;font-size:.82rem;color:var(--text-main);font-weight:600;';
     overlay.innerHTML = `
-        <div style="width:min(94vw,620px);background:#1a1f2e;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:32px;color:#f9fafb;margin:auto;position:relative;">
-            <button type="button" data-close-x style="position:absolute;top:16px;right:16px;background:transparent;border:0;color:#9ca3af;cursor:pointer;font-size:20px;line-height:1;">✕</button>
+        <div style="width:min(94vw,620px);background:#fff;border:1px solid var(--border-color);border-radius:16px;padding:32px;color:var(--text-main);margin:auto;position:relative;">
+            <button type="button" data-close-x style="position:absolute;top:16px;right:16px;background:transparent;border:0;color:var(--text-muted);cursor:pointer;font-size:20px;line-height:1;">✕</button>
             <h3 style="margin:0 0 6px;font-size:1.2rem;">${t.edit}</h3>
             <label style="${label}">${t.title} *</label><input data-f="title" value="${requestDetailEscapeHtml(request.title)}" style="${input}">
             <label style="${label}">${t.description} *</label><textarea data-f="description" rows="4" style="${input}resize:vertical;">${requestDetailEscapeHtml(request.description)}</textarea>
@@ -882,17 +889,17 @@ async function openRequestEditModal(request) {
                 <div><label style="${label}">${t.rewardType}</label><select data-f="rewardType" style="${input}">${Object.entries(t.rewardTypes).map(([k, v]) => `<option value="${k}"${request.rewardType === k ? ' selected' : ''}>${v}</option>`).join('')}</select></div>
                 <div><label style="${label}">${t.budget}</label><input data-f="budgetAmount" type="number" min="0" step="0.01" value="${Number(request.budgetAmount) || 0}" style="${input}"></div>
             </div>
+            <label style="${label}">${t.status}</label><select data-f="status" style="${input}">${Object.entries(t.statuses).map(([k, v]) => `<option value="${k}"${String(request.status || '').toLowerCase() === k ? ' selected' : ''}>${v}</option>`).join('')}</select>
             <label style="${label}">${t.perks}</label><input data-f="perks" value="${requestDetailEscapeHtml(request.perks || '')}" style="${input}">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                <div><label style="${label}">${t.startDate} *</label><input data-f="startDate" type="date" value="${requestDetailDate(request.startDate) === '—' ? '' : requestDetailDate(request.startDate)}" style="${input}"></div>
-                <div><label style="${label}">${t.endDate} *</label><input data-f="endDate" type="date" value="${requestDetailDate(request.endDate) === '—' ? '' : requestDetailDate(request.endDate)}" style="${input}"></div>
-            </div>
+            <label style="${label}">${t.dates} *</label>
+            <div data-date-list></div>
+            <button type="button" data-date-add style="border:1px dashed var(--border-color);background:#fff;border-radius:8px;padding:7px 12px;font-size:.82rem;color:var(--primary-color);cursor:pointer;">${t.addDate}</button>
             <label style="${label}">${t.requirements}</label>
             <div data-req-list></div>
             <button type="button" data-req-add style="border:1px dashed var(--border-color);background:#fff;border-radius:8px;padding:7px 12px;font-size:.82rem;color:var(--primary-color);cursor:pointer;">${t.addRequirement}</button>
             ${stores.length ? `<label style="${label}">${t.stores}</label><div data-store-list style="display:flex;flex-direction:column;gap:6px;max-height:150px;overflow-y:auto;">${stores.filter(s => s.status === 'active').map(s => `<label style="display:flex;gap:8px;align-items:center;font-size:.85rem;"><input type="checkbox" data-store-id="${requestDetailEscapeHtml(s.id)}"${linkedStoreIds.has(s.id) ? ' checked' : ''}> ${requestDetailEscapeHtml(s.storeName)} <span style="color:var(--text-muted);">${requestDetailEscapeHtml(s.address || '')}</span></label>`).join('')}</div>` : ''}
             <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;">
-                <button type="button" data-close style="padding:10px 18px;background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#9ca3af;cursor:pointer;">${t.close}</button>
+                <button type="button" data-close style="padding:10px 18px;background:transparent;border:1px solid var(--border-color);border-radius:8px;color:var(--text-muted);cursor:pointer;">${t.close}</button>
                 <button type="button" data-save style="padding:10px 22px;background:linear-gradient(135deg,#667eea,#764ba2);border:0;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;">${t.save}</button>
             </div>
             <p data-error style="display:none;margin:12px 0 0;color:#dc2626;font-size:.82rem;"></p>
@@ -912,16 +919,36 @@ async function openRequestEditModal(request) {
     };
     (request.requirements && request.requirements.length ? request.requirements : [{}]).forEach(addRow);
     overlay.querySelector('[data-req-add]').addEventListener('click', () => addRow({}));
+
+    const dateList = overlay.querySelector('[data-date-list]');
+    const addDateRow = (d) => {
+        d = d || {};
+        const row = document.createElement('div');
+        row.dataset.dateRow = '';
+        row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;align-items:center;margin-bottom:8px;';
+        row.innerHTML = `<input data-date-start type="date" value="${requestDetailDate(d.startDate) === '—' ? '' : requestDetailDate(d.startDate)}" style="${input}">`
+            + `<input data-date-end type="date" value="${requestDetailDate(d.endDate) === '—' ? '' : requestDetailDate(d.endDate)}" style="${input}">`
+            + `<button type="button" data-date-remove style="border:0;background:none;color:#dc2626;cursor:pointer;font-size:1rem;">✕</button>`;
+        row.querySelector('[data-date-remove]').addEventListener('click', () => row.remove());
+        dateList.appendChild(row);
+    };
+    (Array.isArray(request.dates) && request.dates.length ? request.dates : [{}]).forEach(addDateRow);
+    overlay.querySelector('[data-date-add]').addEventListener('click', () => addDateRow({}));
     overlay.querySelector('[data-close]').addEventListener('click', close);
 
     overlay.querySelector('[data-save]').addEventListener('click', async (e) => {
         const btn = e.currentTarget;
         const errEl = overlay.querySelector('[data-error]');
         const val = k => overlay.querySelector(`[data-f="${k}"]`).value.trim();
-        const title = val('title'), description = val('description'), startDate = val('startDate'), endDate = val('endDate');
+        const title = val('title'), description = val('description');
         errEl.style.display = 'none';
-        if (!title || !description || !startDate || !endDate) { errEl.textContent = t.required; errEl.style.display = 'block'; return; }
-        if (Date.parse(startDate) > Date.parse(endDate)) { errEl.textContent = t.dateError; errEl.style.display = 'block'; return; }
+        if (!title || !description) { errEl.textContent = t.required; errEl.style.display = 'block'; return; }
+        const dates = Array.from(dateList.querySelectorAll('[data-date-row]')).map(row => ({
+            startDate: row.querySelector('[data-date-start]').value,
+            endDate: row.querySelector('[data-date-end]').value
+        })).filter(d => d.startDate && d.endDate);
+        if (!dates.length) { errEl.textContent = t.datesRequired; errEl.style.display = 'block'; return; }
+        if (dates.some(d => Date.parse(d.startDate) > Date.parse(d.endDate))) { errEl.textContent = t.dateError; errEl.style.display = 'block'; return; }
         const requirements = Array.from(reqList.querySelectorAll('[data-req-row]')).map(row => {
             let extra = {};
             try { extra = JSON.parse(row.dataset.reqExtra || '{}') || {}; } catch (e) { extra = {}; }
@@ -947,10 +974,11 @@ async function openRequestEditModal(request) {
                 headers: { Authorization: localStorage.getItem('authToken'), 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     title, description,
+                    status: val('status'),
                     rewardType: overlay.querySelector('[data-f="rewardType"]').value,
                     budgetAmount: Math.max(0, parseFloat(val('budgetAmount')) || 0),
                     perks: val('perks') || null,
-                    startDate, endDate,
+                    dates,
                     requirements,
                     ...(overlay.querySelector('[data-store-list]') ? { storeIds } : {})
                 })
